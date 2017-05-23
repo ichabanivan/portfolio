@@ -27,6 +27,7 @@ let
 let
   postcssImport   = require('postcss-import'),
   partialImport   = require('postcss-partial-import'),
+  precss          = require('precss'),
   pxtorem         = require('postcss-pxtorem')({
     rootValue: 16,               // (Number) The root element font size.
     unitPrecision: 5,            // (Number) The decimal numbers to allow the REM units to grow to.
@@ -52,7 +53,7 @@ let
   flexbugs        = require('postcss-flexbugs-fixes');
 
 const processors = [
-  postcssImport, partialImport, cssnext, pxtorem, assets, short, mqpacker, sorting, flexbugs, discardComments
+  postcssImport, partialImport, precss, cssnext, pxtorem, assets, short, mqpacker, sorting, flexbugs, discardComments
 ];
 
 gulp.task('postcss', () => {

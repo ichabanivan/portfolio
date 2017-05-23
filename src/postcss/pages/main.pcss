@@ -1,1 +1,47 @@
 @import "../_base.pcss";
+@import "../components/sandwich.pcss";
+@import "../components/social.pcss";
+@import "../components/home.pcss";
+@import "../components/portfolio.pcss";
+@import "../components/menu.pcss";
+@import "../components/about.pcss";
+@import "../components/skills.pcss";
+@import "../components/contact.pcss";
+@import "../components/experience.pcss";
+
+.home,
+.about,
+.experience,
+.skills,
+.portfolio,
+.contacts {
+  position: relative 0 0 0 0;
+  display: none;
+}
+
+.current {
+  display: flex;
+}
+
+.content {
+  height: 100%;
+}
+
+.header {
+  position: fixed 0 0 * 0;
+  z-index: 100;
+  width: 100%;
+  height: 120px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.logo {
+  font-size: 80px;
+  line-height: 120px;
+  font-weight: bold;
+  font-family: var(--bebas-font);
+  color: var(--main);
+  padding-left: 40px;
+  visibility: hidden;
+}

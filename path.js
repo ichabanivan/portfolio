@@ -23,7 +23,7 @@ module.exports = {
         libs: dirname + 'src/postcss/libs.{css,pcss,scss}'
       },
       pages: {
-        files: dirname + 'src/postcss/pages/*.{css,pcss,scss}'
+        files: dirname + 'src/postcss/pages/*.pcss'
       }
     },
     js: {

@@ -1,0 +1,12 @@
+.contacts
+  .contacts__center
+    h2.contacts__h2 Contacts
+    form.form
+      input(placeholder="e-mail").form__email
+      input(placeholder="name").form__name
+      textarea(placeholder="message", rows="4").form__message
+      .button
+        button.button__submit
+          svg.sent-mail
+            use(xlink:href='./img/symbols.svg#sent-mail')
+          span Send

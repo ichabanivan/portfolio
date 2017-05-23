@@ -1,0 +1,43 @@
+.experience {
+  size: 100%;
+  display: flex;
+  
+  @media screen and (width <= 768px) {
+    padding-left: 20px;
+  }
+  
+  &__center{
+    margin: auto;
+    width: 100%;
+    max-width: 720px;
+    height: 100%;
+    border-left: 1px solid var(--main);
+   
+  }
+  &__h2 {
+    padding-top: 120px;
+    font-family: var(--bebas-font);
+    font-size: 48px;
+    font-weight: bold;
+    letter-spacing: 3.6px;
+    text-align: left;
+    padding-left: 20px;
+    color: var(--main);
+  }
+  p {
+    &:before{
+      content: '';
+      display: block;
+      position: absolute;
+      size: 12px;
+      border-radius: 50%;
+      background-color: var(--main);
+      top: 7px;
+      left: -7px;
+    }
+  }
+}
+.skills__text {
+
+  position: relative;
+}

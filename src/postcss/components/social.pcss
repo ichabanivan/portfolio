@@ -1,0 +1,29 @@
+.social {
+  position: absolute 0 0 0 0;
+  display: flex;
+  width: 100px;
+  height: 100%;
+  
+  @media screen and (width <= 768px) {
+    display: none;
+  }
+
+  &__list {
+    padding: 0;
+    margin: 0;
+    align-self: center;
+  }
+  &__item {
+    display: block;
+    size: 100px;
+    line-height: 100px;
+    text-align: center;
+    transform: rotate(-90deg);
+  }
+  &__link {
+    font-size: 14px;
+    color: var(--white);
+    font-family: var(--roboto-font);
+    text-decoration: none;
+  }
+}
