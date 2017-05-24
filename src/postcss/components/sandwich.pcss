@@ -1,24 +1,28 @@
 // Sandwich
 
 .sandwich {
-  height: 100%;
-  width: 72px;
+  box-sizing: content-box;
+  height: 35px;
+  width: 50px;
   display: flex;
-  margin-right: 42px;
+  margin-right: 10px;
+  margin-top: 20px;
+  padding: 10px;
   position: relative;
   z-index: 100;
   cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.8);
 }
 
 .hamburger-menu {
   position: absolute;
-  top: 42px;
-  left: 0;
+  top: 10px;
+  left: 10px;
   right: 0;
   bottom: 0;
-  margin: auto;
   width: var(--bar-width);
-  height: var(--bar-height) + calc(var(--bar-spacing)*2);
+  //height: calc(var(--bar-height) + var(--bar-spacing)*2); 
+  height: 35px;
   cursor: pointer;
 }
 
