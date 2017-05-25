@@ -36,7 +36,7 @@
 
     position: relative;
     z-index: 2;
-    @media screen and (width <= 480px) {
+    @media screen and (width <= 768px) {
       line-height: 1.0;
       margin-left: 0;
     }
@@ -70,7 +70,7 @@
 }
 
 .parallax {
-  //position: absolute 0 0 0 0;
+  position: absolute 0 0 0 0;
 
   border: none;
   size: 100vh;
@@ -79,7 +79,7 @@
   @media screen and (orientation: portrait) {
     /* Стили для портретной ориентации шаблона */
     size: 100vw;
-    top: 30%;
+    top: 40%;
   } 
   /* Ландшафтная ориентация шаблона*/
   @media screen and (orientation: landscape) {

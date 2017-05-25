@@ -136,4 +136,51 @@ $(function () {
   (window.addEventListener
     ? window.addEventListener('load', initParticleSlider, false)
     : window.onload = initParticleSlider));
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  // HOme page
+
+  $(window).on('mousemove', function (e) { // Навешиваем событие перемещени мыши на window, первым аргументом в функцию-обработчик события отправляется ссылка на объект события
+    var y = (e.pageY); // Узнаем положение мышки по Y
+    var height100percent = window.innerHeight; // Сколько пикселей в 100% высоты
+    var heightHover = y/(height100percent/100); // Ховер на % от верхней части
+    // 1 полоса
+    let height1before = heightHover/3 + '%';
+    let height1after = 100-(30+heightHover/3) + '%';
+    TweenLite.to('.parallax__before--1', 1, {height: height1before});
+    TweenLite.to('.parallax__after--1', 1, {height: height1after});
+    // 2 полоса
+    let height2before = heightHover/7 + '%';
+    let height2after = 100-(75+heightHover/7) + '%';
+    TweenLite.to('.parallax__before--2', 1, {height: height2before});
+    TweenLite.to('.parallax__after--2', 1, {height: height2after});
+    // 3 полоса
+    let height3before = 10+heightHover/10 + '%';
+    let height3after = 100-(85+heightHover/10) + '%';
+    TweenLite.to('.parallax__before--3', 1, {height: height3before});
+    TweenLite.to('.parallax__after--3', 1, {height: height3after});
+    // 4 полоса
+    let height4before = 10+heightHover/15 + '%';
+    let height4after = 100-(95+heightHover/15) + '%';
+    TweenLite.to('.parallax__before--4', 1, {height: height4before});
+    TweenLite.to('.parallax__after--4', 1, {height: height4after});
+    // 5 полоса
+    let height5before = 20+heightHover/8 + '%';
+    let height5after = 100-(85+heightHover/8) + '%';
+    TweenLite.to('.parallax__before--5', 1, {height: height5before});
+    TweenLite.to('.parallax__after--5', 1, {height: height5after});
+  });
+
 });

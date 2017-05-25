@@ -33,5 +33,5 @@ gulp.task('es6', () => {
       rev.manifest('es6.json'),
       gulp.dest(PATH.src.manifest.folder)
     )))
-    .pipe(gulp.dest(PATH.build.js.folder))
+    .pipe(gulp.dest(PATH.build.js.folder));
 });
