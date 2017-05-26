@@ -153,7 +153,8 @@ $(function () {
   // HOme page
 
   $(window).on('mousemove', function (e) { // Навешиваем событие перемещени мыши на window, первым аргументом в функцию-обработчик события отправляется ссылка на объект события
-    var y = (e.pageY); // Узнаем положение мышки по Y
+    // var y = (e.pageY); // Узнаем положение мышки по Y
+    var y = (e.clientY); // Узнаем положение мышки по Y
     var height100percent = window.innerHeight; // Сколько пикселей в 100% высоты
     var heightHover = y/(height100percent/100); // Ховер на % от верхней части
     // 1 полоса
@@ -182,5 +183,101 @@ $(function () {
     TweenLite.to('.parallax__before--5', 1, {height: height5before});
     TweenLite.to('.parallax__after--5', 1, {height: height5after});
   });
+
+  // функция проверки полной видимости элемента
+  function checkPosition(){
+    // координаты дива
+    var div_position = $('.parallax').offset();
+    // отступ сверху
+    var div_top = div_position.top;
+    // отступ слева
+    var div_left = div_position.left;
+    // ширина
+    var div_width = $('.parallax').width();
+    // высота
+    var div_height = $('.parallax').height();
+
+    // проскроллено сверху 
+    var top_scroll = $(document).scrollTop();
+    // проскроллено слева
+    var left_scroll = $(document).scrollLeft();
+    // ширина видимой страницы
+    var screen_width = $(window).width();
+    // высота видимой страницы
+    var screen_height = $(window).height();
+
+    // координаты углов видимой области
+    var see_x1 = left_scroll;
+    var see_x2 = screen_width + left_scroll;
+    var see_y1 = top_scroll;
+    var see_y2 = screen_height + top_scroll;
+
+    // координаты углов искомого элемента
+    var div_x1 = div_left;
+    var div_x2 = div_left + div_height;
+    var div_y1 = div_top;
+    var div_y2 = div_top + div_width;
+
+    // проверка - виден див полностью или нет
+    if( div_x1 >= see_x1 && div_x2 <= see_x2 && div_y1 >= see_y1 && div_y2 <= see_y2 ){
+      // если виден
+      // $('.parallax').css({'top': '0%', 'left': '40%'});
+      console.log(1)
+    }else{
+      // если не виден
+      // $('.parallax').css({'top': '50%', 'left': '0%'});
+      // console.log(2)
+    }
+  }
+
+
+
+    $(document).scroll(function(){
+      // при скролле страницы делаем проверку
+      checkPosition();
+    });
+
+    // после загрузки страницы сразу проверяем
+    checkPosition();
+    checkParallax ()
+
+    // проверка при масштабировании и изменении размера страницы
+    $(window).resize(function(){
+      checkPosition();
+
+      // Если елемент снизу то социалки вниз
+      checkParallax()
+    });
+
+    function checkParallax () {
+      if (document.querySelector('.home__photo').getBoundingClientRect().top > 0) {
+        $('.content').css({
+          'flex-direction': 'column'
+        })
+        $('.social').css({
+          'order': 1
+        })
+        $('.social__item').css({
+          'transform': 'rotate(0deg)'
+        })
+        $('.social__list').css({
+          'flex-direction': 'row'
+        })
+      } else {
+        $('.content').css({
+          'flex-direction': 'row'
+        })
+        $('.social').css({
+          'order': -1
+        })
+        $('.social__item').css({
+          'transform': 'rotate(90deg)'
+        })
+        $('.social__list').css({
+          'flex-direction': 'column'
+        })
+      }
+    }
+
 
 });

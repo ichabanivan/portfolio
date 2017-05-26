@@ -1,26 +1,45 @@
 .social {
-  position: absolute 0 0 0 0;
   display: flex;
-  width: 100px;
-  height: 100%;
-  
+  //align-items: center;
+  order: -1;
+
   @media screen and (width <= 768px) {
-    display: none;
+    order: 1;
   }
+  //position: absolute 0 0 0 0;
+  //display: flex;
+  //width: 100px;
+  //height: 100%;
+  
+  //@media screen and (width <= 768px) {
+  //  //display: none;
+  //}
 
   &__list {
     padding: 0;
-    margin: 0;
+    margin: auto;
     align-self: center;
+    display: flex;
+    flex-direction: column;
+    @media screen and (width <= 768px) {
+      flex-direction: row;
+    }
   }
   &__item {
-    display: block;
+    display: flex;
     size: 100px;
     line-height: 100px;
     text-align: center;
     transform: rotate(-90deg);
+
+    @media screen and (width <= 768px) {
+      transform: rotate(0deg);
+      //float: left;
+      flex-direction: column;
+    }
   }
   &__link {
+    margin: auto;
     font-size: 14px;
     color: var(--white);
     font-family: var(--roboto-font);
