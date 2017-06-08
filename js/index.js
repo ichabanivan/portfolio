@@ -1,143 +1,112 @@
 'use strict';
 
-$(function () {
-  var page = void 0,
-      $hamburgerMenu = $('.hamburger-menu'),
-      $bar = $('.bar'),
-      $nav = $('.nav'),
-      menuIsOpen = void 0;
+function checkParallax() {
+  if ($('.home__photo').offset().top > 0) {
+    $('body').removeClass('landscape');
+    $('body').addClass('portrait');
+  } else {
+    $('body').removeClass('portrait');
+    $('body').addClass('landscape');
+  }
+}
+
+window.onload = function () {
+  var prevPage = void 0,
+      page = void 0;
+  // $hamburgerMenu = $('.hamburger-menu'),
+  // $bar = $('.bar'),
+  // $nav = $('.nav'),
+  // menuIsOpen;
 
   function defineThePage() {
     var hashes = location.hash.split('/');
     var hash = hashes[0];
     if (hash === '/' || hash === '' || hash === '#home') {
-      var newPage = 'home';
-      setState(newPage);
+      page = 'home';
+      setState(page);
     } else if (hash === '#menu') {
-      var _newPage = 'home';
-      setState(_newPage);
+      page = 'home';
+      setState(page);
     } else if (hash === '#about') {
-      var _newPage2 = 'about';
-      setState(_newPage2);
+      page = 'about';
+      setState(page);
     } else if (hash === '#experience') {
-      var _newPage3 = 'experience';
-      setState(_newPage3);
+      page = 'experience';
+      setState(page);
     } else if (hash === '#skills') {
-      var _newPage4 = 'skills';
-      setState(_newPage4);
+      page = 'skills';
+      setState(page);
     } else if (hash === '#portfolio') {
-      var _newPage5 = 'portfolio';
-      setState(_newPage5);
+      page = 'portfolio';
+      setState(page);
     } else if (hash === '#contacts') {
-      var _newPage6 = 'contacts';
-      setState(_newPage6);
+      page = 'contacts';
+      setState(page);
     } else {
       console.log('error');
     }
   }
 
-  function showPage(newPage) {
-    $('.' + page).removeClass('current');
-    $('.' + newPage).addClass('current');
-    page = newPage;
-  }
-
-  function showOrHideMenu(show) {
-    if (show) {
-      $nav.show();
-    } else {
-      $nav.hide();
-    }
-  }
-
   defineThePage();
 
-  $('.nav__link').on('click', function (e) {
-    showOrHideMenu(false);
-    setState($(this).parent().data('url'));
-    $bar.toggleClass('animate');
+  $('.menuNew__link').on('click', function (e) {
+    prevPage = page;
+    page = $(this).parent().data('url');
+    setState();
   });
 
-  $hamburgerMenu.on('click', function () {
-    menuIsOpen = $bar.hasClass('animate');
-    $bar.toggleClass('animate');
-
-    // setState(page)
-    showOrHideMenu(!menuIsOpen);
-  });
-
-  function setState(newPage) {
+  function setState() {
     var obj = {
-      page: newPage,
+      page: page,
       data: {}
     };
 
     history.pushState(obj, obj.page, '/#' + obj.page);
-
-    if (obj.page === 'menu') {
-      showOrHideMenu(true);
-    } else {
-      showPage(obj.page);
-    }
+    showPage();
+    checkParallax();
   }
 
-  window.addEventListener('popstate', function (e) {
-    var state = history.state;
-    console.log(state);
-    if (state.page === 'menu') {
-      showOrHideMenu(true);
-    } else {
-      showPage(state.page);
+  function showPage() {
+    var b = '.' + page;
+
+    if (prevPage) {
+      var a = '.' + prevPage;
+      TweenLite.to($(a), 1, { left: '100%' });
+      setTimeout(function () {
+        $('.' + prevPage).removeClass('current');
+      }, 500);
     }
+    setTimeout(function () {
+      $('.' + page).addClass('current');
+      TweenLite.to($(b), 1, { left: '0%' });
+    }, 500);
+    // $('.' + page).addClass('current');
+    // TweenLite.from($(b), 1, {left: '100%'});
+  }
+
+  // window.addEventListener('popstate', function (e) {
+  //   let state = history.state;
+  //
+  //   prevPage = page;
+  //   showPage(state.page, prevPage)
+  //
+  // });
+
+  checkParallax();
+
+  // $(window).resize(function () {
+  //   checkParallax()
+  // });
+
+  window.addEventListener('resize', function () {
+    checkParallax();
   });
-
   // more infos - particleslider.com
-
-  var init = function init() {
-    var isMobile = navigator.userAgent && navigator.userAgent.toLowerCase().indexOf('mobile') >= 0;
-    var isSmall = window.innerWidth < 1000;
-
-    var ps = new ParticleSlider({
-      ptlGap: isMobile || isSmall ? 3 : 0,
-      ptlSize: isMobile || isSmall ? 3 : 1,
-      width: 1e9,
-      height: 1e9
-    });
-
-    var gui = new dat.GUI();
-    gui.add(ps, 'ptlGap').min(0).max(5).step(1).onChange(function () {
-      ps.init(true);
-    });
-    gui.add(ps, 'ptlSize').min(1).max(5).step(1).onChange(function () {
-      ps.init(true);
-    });
-    gui.add(ps, 'restless');
-    gui.addColor(ps, 'color').onChange(function (value) {
-      ps.monochrome = true;
-      ps.setColor(value);
-      ps.init(true);
-    });
-
-    window.addEventListener ? window.addEventListener('click', function () {
-      ps.init(true);
-    }, false) : window.onclick = function () {
-      ps.init(true);
-    };
-  };
-
-  var initParticleSlider = function () {
-    var psScript = document.createElement('script');
-    psScript.addEventListener ? psScript.addEventListener('load', init, false) : psScript.onload = init;
-    psScript.src = 'http://particleslider.com/js/particleslider/current/particleslider.js';
-    psScript.setAttribute('type', 'text/javascript');
-    document.body.appendChild(psScript);
-  }(window.addEventListener ? window.addEventListener('load', initParticleSlider, false) : window.onload = initParticleSlider);
 
   // HOme page
 
   $(window).on('mousemove', function (e) {
     // Навешиваем событие перемещени мыши на window, первым аргументом в функцию-обработчик события отправляется ссылка на объект события
-    // var y = (e.pageY); // Узнаем положение мышки по Y
     var y = e.clientY; // Узнаем положение мышки по Y
     var height100percent = window.innerHeight; // Сколько пикселей в 100% высоты
     var heightHover = y / (height100percent / 100); // Ховер на % от верхней части
@@ -168,96 +137,97 @@ $(function () {
     TweenLite.to('.parallax__after--5', 1, { height: height5after });
   });
 
-  // функция проверки полной видимости элемента
-  function checkPosition() {
-    // координаты дива
-    var div_position = $('.parallax').offset();
-    // отступ сверху
-    var div_top = div_position.top;
-    // отступ слева
-    var div_left = div_position.left;
-    // ширина
-    var div_width = $('.parallax').width();
-    // высота
-    var div_height = $('.parallax').height();
-
-    // проскроллено сверху 
-    var top_scroll = $(document).scrollTop();
-    // проскроллено слева
-    var left_scroll = $(document).scrollLeft();
-    // ширина видимой страницы
-    var screen_width = $(window).width();
-    // высота видимой страницы
-    var screen_height = $(window).height();
-
-    // координаты углов видимой области
-    var see_x1 = left_scroll;
-    var see_x2 = screen_width + left_scroll;
-    var see_y1 = top_scroll;
-    var see_y2 = screen_height + top_scroll;
-
-    // координаты углов искомого элемента
-    var div_x1 = div_left;
-    var div_x2 = div_left + div_height;
-    var div_y1 = div_top;
-    var div_y2 = div_top + div_width;
-
-    // проверка - виден див полностью или нет
-    if (div_x1 >= see_x1 && div_x2 <= see_x2 && div_y1 >= see_y1 && div_y2 <= see_y2) {
-      // если виден
-      // $('.parallax').css({'top': '0%', 'left': '40%'});
-      console.log(1);
-    } else {
-      // если не виден
-      // $('.parallax').css({'top': '50%', 'left': '0%'});
-      // console.log(2)
-    }
-  }
-
-  $(document).scroll(function () {
-    // при скролле страницы делаем проверку
-    checkPosition();
+  //  Contacts
+  $('.form__email').on("focus", function () {
+    TweenLite.to('.form__email-placeholder', 1, {
+      top: '20px',
+      color: '#CD0D2E',
+      fontSize: '0.8rem'
+    });
+    TweenLite.to('.form__email-border', 1, {
+      width: '80%',
+      backgroundColor: "#CD0D2E",
+      opacity: 1
+    });
   });
-
-  // после загрузки страницы сразу проверяем
-  checkPosition();
-  checkParallax();
-
-  // проверка при масштабировании и изменении размера страницы
-  $(window).resize(function () {
-    checkPosition();
-
-    // Если елемент снизу то социалки вниз
-    checkParallax();
-  });
-
-  function checkParallax() {
-    if (document.querySelector('.home__photo').getBoundingClientRect().top > 0) {
-      $('.content').css({
-        'flex-direction': 'column'
-      });
-      $('.social').css({
-        'order': 1
-      });
-      $('.social__item').css({
-        'transform': 'rotate(0deg)'
-      });
-      $('.social__list').css({
-        'flex-direction': 'row'
+  $('.form__email').on("focusout", function () {
+    if (!$('.form__email').val()) {
+      TweenLite.to('.form__email-placeholder', 1, {
+        top: '40px',
+        color: 'rgba(255, 255, 255, 0.84)',
+        fontSize: '1rem'
       });
     } else {
-      $('.content').css({
-        'flex-direction': 'row'
-      });
-      $('.social').css({
-        'order': -1
-      });
-      $('.social__item').css({
-        'transform': 'rotate(90deg)'
-      });
-      $('.social__list').css({
-        'flex-direction': 'column'
+      TweenLite.to('.form__email-placeholder', 1, {
+        color: 'rgba(255, 255, 255, 0.84)'
       });
     }
-  }
-});
+    TweenLite.to('.form__email-border', 1, {
+      width: '0%',
+      backgroundColor: 'rgba(255, 255, 255, 0.84)',
+      opacity: 1
+    });
+  });
+
+  $('.form__name').on("focus", function () {
+    TweenLite.to('.form__name-placeholder', 1, {
+      top: '20px',
+      color: '#CD0D2E',
+      fontSize: '0.8rem'
+    });
+    TweenLite.to('.form__name-border', 1, {
+      width: '80%',
+      backgroundColor: "#CD0D2E",
+      opacity: 1
+    });
+  });
+  $('.form__name').on("focusout", function () {
+    if (!$('.form__name').val()) {
+      TweenLite.to('.form__name-placeholder', 1, {
+        top: '40px',
+        color: 'rgba(255, 255, 255, 0.84)',
+        fontSize: '1rem'
+      });
+    } else {
+      TweenLite.to('.form__name-placeholder', 1, {
+        color: 'rgba(255, 255, 255, 0.84)'
+      });
+    }
+    TweenLite.to('.form__name-border', 1, {
+      width: '0%',
+      backgroundColor: 'rgba(255, 255, 255, 0.84)',
+      opacity: 1
+    });
+  });
+
+  $('.form__message').on("focus", function () {
+    TweenLite.to('.form__message-placeholder', 1, {
+      top: '20px',
+      color: '#CD0D2E',
+      fontSize: '0.8rem'
+    });
+    TweenLite.to('.form__message-border', 1, {
+      width: '80%',
+      backgroundColor: "#CD0D2E",
+      opacity: 1
+    });
+  });
+  $('.form__message').on("focusout", function () {
+    if (!$('.form__message').val()) {
+      TweenLite.to('.form__message-placeholder', 1, {
+        top: '40px',
+        color: 'rgba(255, 255, 255, 0.84)',
+        fontSize: '1rem'
+      });
+    } else {
+      TweenLite.to('.form__message-placeholder', 1, {
+        color: 'rgba(255, 255, 255, 0.84)'
+      });
+    }
+    TweenLite.to('.form__message-border', 1, {
+      width: '0%',
+      backgroundColor: 'rgba(255, 255, 255, 0.84)',
+      opacity: 1
+    });
+  });
+};

@@ -38,7 +38,7 @@
     <div class="content">
       <div class="home">
         <div class="home__text">
-          <h1 class="home__name">Ivan <br> <span class="home__offset">Chaban</span></h1>
+          <h1 class="home__name"><span>Ivan<br></span><span class="home__offset">Chaban</span></h1>
           <p class="home__description">Web-developer</p>
         </div>
         <div class="home__photo">
@@ -80,12 +80,7 @@
       </div>
       <div class="about">
         <div class="about__center">
-          <div class="about__ic" id="particle-slider">
-            <div class="slides"><img class="responsive__img" src="../img/transparent.png">
-              <div class="slide" id="first-slide" data-src=""></div>
-            </div>
-            <canvas class="draw"></canvas>
-          </div>
+          <div class="about__ic" style="height: 420px;"></div>
           <p class="about__text">I started my professional career while studying at the university, having passed the Front-End course. Since 2016 and to this day I'm engaged in web development. I develop sites of various subjects (site business card, Landing Page, etc.), and also I am engaged in Html-layout of pages with connection of Javascript and jQuery libraries. I make up the W3C (valid code) standards, I follow the cross-browser IE 9+, Opera 10+, Chrome, FireFox 3+. I have the experience of designing projects with adaptive design (Responsive Web Design) is when the site design dynamically adapts to different browser window sizes.</p>
         </div>
       </div>
@@ -272,9 +267,18 @@
         <div class="contacts__center">
           <h2 class="contacts__h2">Contacts</h2>
           <form class="form">
-            <input class="form__email" placeholder="e-mail">
-            <input class="form__name" placeholder="name">
-            <textarea class="form__message" placeholder="message" rows="4"></textarea>
+            <div class="form__group">
+              <input class="form__email" type="email"><span class="form__email-placeholder">E-mail</span>
+              <div class="form__email-border"></div>
+            </div>
+            <div class="form__group">
+              <input class="form__name"><span class="form__name-placeholder">Name</span>
+              <div class="form__name-border"></div>
+            </div>
+            <div class="form__group">
+              <textarea class="form__message" rows="4"></textarea><span class="form__message-placeholder">Message</span>
+              <div class="form__message-border"></div>
+            </div>
             <div class="button">
               <button class="button__submit">
                 <svg class="sent-mail">
@@ -285,27 +289,67 @@
           </form>
         </div>
       </div>
-      <nav class="nav" id="menu">
-        <ul class="nav__lists">
-          <li class="nav__item nav__item--selected" data-url="home"> <a class="nav__link" href="#home">Home</a></li>
-          <li class="nav__item" data-url="about"><a class="nav__link" href="#about">About me</a></li>
-          <li class="nav__item" data-url="experience"><a class="nav__link" href="#experience">Education/jobs</a></li>
-          <li class="nav__item" data-url="skills"><a class="nav__link" href="#skills">Skills</a></li>
-          <li class="nav__item" data-url="portfolio"><a class="nav__link" href="#portfolio">Portfolio</a></li>
-          <li class="nav__item" data-url="contacts"><a class="nav__link" href="#contacts">Contacts</a></li>
+      <!--nav.nav#menu-->
+      <!--  ul.nav__lists-->
+      <!--    li(data-url="home").nav__item.nav__item--selected -->
+      <!--      a(href="#home").nav__link Home-->
+      <!--    li(data-url="about").nav__item-->
+      <!--      a(href="#about").nav__link About me-->
+      <!--    li(data-url="experience").nav__item-->
+      <!--      a(href="#experience").nav__link Education/jobs-->
+      <!--    li(data-url="skills").nav__item-->
+      <!--      a(href="#skills").nav__link Skills-->
+      <!--    li(data-url="portfolio").nav__item-->
+      <!--      a(href="#portfolio").nav__link Portfolio-->
+      <!--    li(data-url="contacts").nav__item-->
+      <!--      a(href="#contacts").nav__link Contacts-->
+      <nav class="menuNew">
+        <ul>
+          <li class="active" data-url="home"><a class="menuNew__link" href="#home">
+              <svg class="home-page">
+                <use xlink:href="./img/symbols.svg#home-page"></use>
+              </svg></a></li>
+          <li data-url="about"><a class="menuNew__link" href="#about">
+              <svg class="about-page">
+                <use xlink:href="./img/symbols.svg#about-page"></use>
+              </svg></a></li>
+          <li data-url="experience"><a class="menuNew__link" href="#experience">
+              <svg class="experience-page">
+                <use xlink:href="./img/symbols.svg#experience-page"></use>
+              </svg></a></li>
+          <li data-url="skills"><a class="menuNew__link" href="#skills">
+              <svg class="skills-page">
+                <use xlink:href="./img/symbols.svg#skills-page"></use>
+              </svg></a></li>
+          <li data-url="portfolio"><a class="menuNew__link" href="#portfolio">
+              <svg class="portfolio-page">
+                <use xlink:href="./img/symbols.svg#portfolio-page"></use>
+              </svg></a></li>
+          <li data-url="contacts"><a class="menuNew__link" href="#contacts">
+              <svg class="contacts-page">
+                <use xlink:href="./img/symbols.svg#contacts-page"></use>
+              </svg></a></li>
         </ul>
       </nav>
       <footer class="social">
         <ul class="social__list">
-          <li class="social__item"><a class="social__link" href="https://www.linkedin.com/in/ivan-chaban-402796127/" target="_blank">LinkedIn</a></li>
-          <li class="social__item"><a class="social__link" href="https://github.com/zanusilker" target="_blank">GitHub</a></li>
-          <li class="social__item"><a class="social__link" href="https://vk.com/zanusilker" target="_blank">VKontakte</a></li>
-          <li class="social__item"><a class="social__link" href="https://www.facebook.com/profile.php?id=100012199831078" target="_blank">Facebook</a></li>
+          <li class="social__item ghost-hover">
+            <div class="container"></div><a class="text social__link" href="https://www.linkedin.com/in/ivan-chaban-402796127/" target="_blank">LinkedIn</a>
+          </li>
+          <li class="social__item ghost-hover">
+            <div class="container"></div><a class="text social__link" href="https://github.com/zanusilker" target="_blank">GitHub</a>
+          </li>
+          <li class="social__item ghost-hover">
+            <div class="container"></div><a class="text social__link" href="https://vk.com/zanusilker" target="_blank">VKontakte</a>
+          </li>
+          <li class="social__item ghost-hover">
+            <div class="container"></div><a class="text social__link" href="https://www.facebook.com/profile.php?id=100012199831078" target="_blank">Facebook</a>
+          </li>
         </ul>
       </footer>
     </div>
     <header class="header">
-      <div class="logo">IC</div>
+      <!--.logo IC-->
       <div class="sandwich">
         <div class="hamburger-menu">
           <div class="bar"></div>
@@ -317,7 +361,8 @@
     <script defer src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <!--script(defer src="//cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.js")-->
     <script defer src="//cdnjs.cloudflare.com/ajax/libs/gsap/1.19.0/TweenMax.min.js"></script>
-    <!--script(defer src="http://particleslider.com/js/particleslider/current/particleslider.js")-->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/TweenLite.min.js"></script>-->
+    <script defer src="http://particleslider.com/js/particleslider/current/particleslider.js"></script>
     <script defer src="js/libs.js"></script>
     <script defer src="js/index.js"></script>
     <!-- Loading JS End-->
