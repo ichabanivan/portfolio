@@ -17,15 +17,27 @@
 
 .content {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   size: 100%;
 
   @media screen and (width <= 768px) {
     flex-direction: column;
+
+    .social {
+      order: 1;
+
+      &__item {
+        transform: rotate(0deg);
+      }
+
+      &__list {
+        flex-direction: row;
+      }
+    }
   }
+  
 }
 
-.home,
 .about,
 .experience,
 .skills,
@@ -33,15 +45,20 @@
 .contacts {
   //position: relative 0 0 0 0;
   display: none;
+  left: 100%;
+  &.current {
+    display: flex;
+  }
+}
+.home {
+  visibility: hidden;
+  left: 100%;
+}
+.home.current {
+  visibility: visible;
 }
 
-.current {
-  display: flex;
-}
 
-.content {
-  height: 100%;
-}
 
 .header {
   //position: fixed 0 0 * 0;
@@ -50,6 +67,8 @@
   width: 100%;
   height: 120px;
   display: flex;
+  display: none;
+  flex-direction: row-reverse;
   justify-content: space-between;
 }
 
@@ -62,3 +81,156 @@
   padding-left: 40px;
   visibility: hidden;
 }
+
+.menuNew {
+  display: none;
+}
+// For js
+
+body.landscape {
+  &::before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 2px;
+    position: absolute;
+    bottom: 0; 
+    //top: 0;
+    z-index: 5;
+    background-color: var(--main);
+  }
+}
+
+
+.landscape {
+
+  .home,
+  .about,
+  .experience,
+  .skills,
+  .portfolio,
+  .contacts {
+    padding-left: 100px;
+    position: absolute;
+  }
+
+  .menuNew {
+    position: absolute 0 0 0 0;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 80px;
+    
+    
+    ul {
+      display: flex;
+      flex-direction: column;
+      size: 100%;
+      //align-content: center;
+      justify-content: center;
+      list-style: none;
+      //padding-left: 0;
+      li {
+        text-align: center;
+      }
+    }
+  //color: #fff;
+    svg {
+      margin-top: 50px;
+      fill: #fff;
+      size: 30px;
+    }
+  }
+  
+  .portfolio {
+    position: absolute;
+    top: 0;
+  }
+  
+  .experience {
+    //margin-top: -120px;
+  }
+}
+
+.portrait {
+  
+  .about,
+  .experience,
+  .skills,
+  .portfolio,
+  .contacts {
+    display: flex;
+    margin-top: 40px;
+  }
+  
+  .home {
+    visibility: visible;
+  }
+
+  .contacts {
+    display: flex;
+  }
+  
+  .header {
+    display: none;
+  }
+
+  .home {
+    //margin-top: 40px;
+    text-align: center;
+    //margin-left: -120px;
+    &__name {
+      margin-left: 0;
+      line-height: 1;
+      //padding-right: 120px;
+    }
+    &__offset {
+      padding-left: 0px;
+    }
+    &__description {
+      padding: 0;
+      //padding-right: 120px;
+    }
+  }
+  
+  .parallax {
+    //margin-left: -120px;
+    &__wrapper {
+      left: 20px;
+    }
+  }
+
+  .content {
+    flex-direction: column;
+  }
+
+  .social {
+    display: flex;
+    order: 1;
+
+    &__item {
+      transform: rotate(0deg);
+    }
+
+    &__list {
+      flex-direction: row;
+    }
+  }
+  
+}
+
+.menuNew {
+  svg{
+    transition: fill .3s ease;
+    &:hover {
+      fill: var(--main);
+    }
+  }
+  li.active {
+    svg {
+      fill: var(--main);
+    }
+    
+  }
+}
+

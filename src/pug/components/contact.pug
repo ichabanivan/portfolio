@@ -2,9 +2,18 @@
   .contacts__center
     h2.contacts__h2 Contacts
     form.form
-      input(placeholder="e-mail").form__email
-      input(placeholder="name").form__name
-      textarea(placeholder="message", rows="4").form__message
+      .form__group
+        input(type="email").form__email
+        span.form__email-placeholder E-mail
+        .form__email-border
+      .form__group
+        input.form__name
+        span.form__name-placeholder Name
+        .form__name-border
+      .form__group
+        textarea(rows="4").form__message
+        span.form__message-placeholder Message
+        .form__message-border
       .button
         button.button__submit
           svg.sent-mail

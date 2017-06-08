@@ -3,21 +3,18 @@
   min-height: 100vh;
   display: flex;
   overflow: hidden;
-  
-  
+
   @media screen and (width <= 768px) {
-    //margin-left: 20px;
-    //margin-right: -20px;
     padding-left: 20px;
   }
-  
+
   &__center{
     margin: auto;
     width: 100%;
     max-width: 720px;
-    height: 100%;
     position: relative;
     padding-bottom: 40px;
+    
     &::before {
       content: "";
       display: block;
@@ -27,12 +24,10 @@
       position: absolute -100% 0 0 -1px;
       z-index: 3;
     }
-    //border-left: 1px solid var(--main);
-    
-   
   }
+  
   &__h2 {
-    padding-top: 10%;
+    //padding-top: 10%;
     font-family: var(--bebas-font);
     font-size: 48px;
     font-weight: bold;
@@ -41,6 +36,7 @@
     padding-left: 20px;
     color: var(--main);
   }
+  
   p {
     &:before{
       content: '';
@@ -54,7 +50,28 @@
     }
   }
 }
-.skills__text {
 
+.skills__text {
   position: relative;
 }
+
+.ghost-hover .text {
+  background: -webkit-linear-gradient(left, #333 0%, #eee 33%, #eee 66%, #333 100%);
+  background: linear-gradient(90deg, #333 0%, #eee 33%, #eee 66%, #333 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 300%;
+  background-position: -100%;
+  -webkit-transition: 2s ease all;
+  transition: 2s ease all;
+}
+.ghost-hover .text:hover {
+  background-position: 50%;
+}
+.ghost-hover .text.hidden {
+  opacity: 0;
+  background-size: 900%;
+  -webkit-transition: 1.5s ease all;
+  transition: 1.5s ease all;
+}
+

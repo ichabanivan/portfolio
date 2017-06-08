@@ -5,6 +5,7 @@
   border: 15px solid rgba(0,0,0,0);
   z-index: -1;
 }
+
 .responsive__img {
   width: 100%;
   height: auto;
@@ -12,17 +13,18 @@
 
 .about {
   size: 100%;
+  min-height: 100vh;
   display: flex;
   padding: 10px;
 
-  @media screen and (width <= 768px) {
-    padding-top: 120px;
-  }
-  
-  @media screen and (width <= 480px) {
-    padding-top: 80px;
-  }
-  
+  //@media screen and (width <= 768px) {
+  //  padding-top: 120px;
+  //}
+  //
+  //@media screen and (width <= 480px) {
+  //  padding-top: 80px;
+  //}
+
   &__center {
     margin: auto;
   }
@@ -31,11 +33,13 @@
     width: 100%;
     max-width: 720px;
     height: 100%;
-    max-height: 420px;
+    max-height: 435px;
     box-shadow: 0px 3px 10.7px 1.3px #2f2f2f;
     border: solid 15px var(--main);
     position: relative;
     margin: auto;
+    color: #fff;
+    
     &:before {
       content: 'About';
       text-transform: uppercase;

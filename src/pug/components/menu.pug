@@ -1,14 +1,42 @@
-nav.nav#menu
-  ul.nav__lists
-    li(data-url="home").nav__item.nav__item--selected 
-      a(href="#home").nav__link Home
-    li(data-url="about").nav__item
-      a(href="#about").nav__link About me
-    li(data-url="experience").nav__item
-      a(href="#experience").nav__link Education/jobs
-    li(data-url="skills").nav__item
-      a(href="#skills").nav__link Skills
-    li(data-url="portfolio").nav__item
-      a(href="#portfolio").nav__link Portfolio
-    li(data-url="contacts").nav__item
-      a(href="#contacts").nav__link Contacts
+//nav.nav#menu
+//  ul.nav__lists
+//    li(data-url="home").nav__item.nav__item--selected 
+//      a(href="#home").nav__link Home
+//    li(data-url="about").nav__item
+//      a(href="#about").nav__link About me
+//    li(data-url="experience").nav__item
+//      a(href="#experience").nav__link Education/jobs
+//    li(data-url="skills").nav__item
+//      a(href="#skills").nav__link Skills
+//    li(data-url="portfolio").nav__item
+//      a(href="#portfolio").nav__link Portfolio
+//    li(data-url="contacts").nav__item
+//      a(href="#contacts").nav__link Contacts
+
+nav.menuNew
+  ul
+    li(data-url="home").active
+      a(href="#home").menuNew__link
+        svg.home-page
+          use(xlink:href='./img/symbols.svg#home-page')
+    li(data-url="about")
+      a(href="#about").menuNew__link
+        svg.about-page
+          use(xlink:href='./img/symbols.svg#about-page')
+    li(data-url="experience")
+      a(href="#experience").menuNew__link
+        svg.experience-page
+          use(xlink:href='./img/symbols.svg#experience-page')
+    li(data-url="skills")
+      a(href="#skills").menuNew__link
+        svg.skills-page
+          use(xlink:href='./img/symbols.svg#skills-page')
+    li(data-url="portfolio")
+      a(href="#portfolio").menuNew__link
+        svg.portfolio-page
+          use(xlink:href='./img/symbols.svg#portfolio-page')
+    li(data-url="contacts")
+      a(href="#contacts").menuNew__link
+        svg.contacts-page
+          use(xlink:href='./img/symbols.svg#contacts-page')
+  
