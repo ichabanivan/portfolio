@@ -1,23 +1,23 @@
 'use strict';
 
-function checkParallax() {
-  if ($('.home__photo').offset().top > 0) {
-    $('body').removeClass('landscape');
-    $('body').addClass('portrait');
-  } else {
-    $('body').removeClass('portrait');
-    $('body').addClass('landscape');
-  }
-}
-
 window.onload = function () {
   var prevPage = void 0,
       page = void 0;
-  // $hamburgerMenu = $('.hamburger-menu'),
-  // $bar = $('.bar'),
-  // $nav = $('.nav'),
-  // menuIsOpen;
 
+  // Портретная или ландшафтная
+  function checkParallax() {
+    if ($('.home__photo').offset().top > 0) {
+      $('body').removeClass('landscape');
+      $('body').addClass('portrait');
+    } else {
+      $('body').removeClass('portrait');
+      $('body').addClass('landscape');
+    }
+  }
+  // Проверка при загрузке
+  checkParallax();
+
+  // Какая сейчас страница
   function defineThePage() {
     var hashes = location.hash.split('/');
     var hash = hashes[0];
@@ -46,10 +46,17 @@ window.onload = function () {
       console.log('error');
     }
   }
-
+  // проверка при загрузке
   defineThePage();
 
-  $('.menuNew__link').on('click', function (e) {
+  function menuActiveItem(that) {
+    $('.menu .menu__link').removeClass('active');
+    $(that).addClass('active');
+  }
+
+  $('.menu__link').on('click', function (e) {
+    menuActiveItem(this);
+
     prevPage = page;
     page = $(this).parent().data('url');
     setState();
@@ -63,12 +70,10 @@ window.onload = function () {
 
     history.pushState(obj, obj.page, '/#' + obj.page);
     showPage();
-    checkParallax();
   }
 
   function showPage() {
     var b = '.' + page;
-
     if (prevPage) {
       var a = '.' + prevPage;
       TweenLite.to($(a), 1, { left: '100%' });
@@ -84,24 +89,16 @@ window.onload = function () {
     // TweenLite.from($(b), 1, {left: '100%'});
   }
 
-  // window.addEventListener('popstate', function (e) {
-  //   let state = history.state;
-  //
-  //   prevPage = page;
-  //   showPage(state.page, prevPage)
-  //
-  // });
+  window.addEventListener('popstate', function (e) {
+    var state = history.state;
 
-  checkParallax();
-
-  // $(window).resize(function () {
-  //   checkParallax()
-  // });
+    prevPage = page;
+    showPage();
+  });
 
   window.addEventListener('resize', function () {
     checkParallax();
   });
-  // more infos - particleslider.com
 
   // HOme page
 
@@ -138,7 +135,7 @@ window.onload = function () {
   });
 
   //  Contacts
-  $('.form__email').on("focus", function () {
+  $('.form__email').on('focus', function () {
     TweenLite.to('.form__email-placeholder', 1, {
       top: '20px',
       color: '#CD0D2E',
@@ -146,11 +143,11 @@ window.onload = function () {
     });
     TweenLite.to('.form__email-border', 1, {
       width: '80%',
-      backgroundColor: "#CD0D2E",
+      backgroundColor: '#CD0D2E',
       opacity: 1
     });
   });
-  $('.form__email').on("focusout", function () {
+  $('.form__email').on('focusout', function () {
     if (!$('.form__email').val()) {
       TweenLite.to('.form__email-placeholder', 1, {
         top: '40px',
@@ -169,7 +166,7 @@ window.onload = function () {
     });
   });
 
-  $('.form__name').on("focus", function () {
+  $('.form__name').on('focus', function () {
     TweenLite.to('.form__name-placeholder', 1, {
       top: '20px',
       color: '#CD0D2E',
@@ -177,11 +174,11 @@ window.onload = function () {
     });
     TweenLite.to('.form__name-border', 1, {
       width: '80%',
-      backgroundColor: "#CD0D2E",
+      backgroundColor: '#CD0D2E',
       opacity: 1
     });
   });
-  $('.form__name').on("focusout", function () {
+  $('.form__name').on('focusout', function () {
     if (!$('.form__name').val()) {
       TweenLite.to('.form__name-placeholder', 1, {
         top: '40px',
@@ -200,7 +197,7 @@ window.onload = function () {
     });
   });
 
-  $('.form__message').on("focus", function () {
+  $('.form__message').on('focus', function () {
     TweenLite.to('.form__message-placeholder', 1, {
       top: '20px',
       color: '#CD0D2E',
@@ -208,11 +205,11 @@ window.onload = function () {
     });
     TweenLite.to('.form__message-border', 1, {
       width: '80%',
-      backgroundColor: "#CD0D2E",
+      backgroundColor: '#CD0D2E',
       opacity: 1
     });
   });
-  $('.form__message').on("focusout", function () {
+  $('.form__message').on('focusout', function () {
     if (!$('.form__message').val()) {
       TweenLite.to('.form__message-placeholder', 1, {
         top: '40px',
@@ -230,4 +227,44 @@ window.onload = function () {
       opacity: 1
     });
   });
+  //
+  // let top = {
+  //   home:  $('.home').height(),
+  //   about: $('.about').height(),
+  //   experience: $('.experience').height(),
+  //   skills: $('.skills').height()
+  // }
+  //
+  //
+  // $('.home').css({
+  //   position: "absolute",
+  //   top: 0,
+  //   zIndex: 100,
+  //   left: 0
+  // })
+  // $('.about').css({
+  //   position: "absolute",
+  //   top: top.home,
+  //   zIndex: 100,
+  //   left: 0
+  // })
+  //
+  // $('.experience').css({
+  //   position: "absolute",
+  //   top: top.home + top.about,
+  //   zIndex: 100,
+  //   left: 0
+  // })
+  // $('.skills').css({
+  //   position: "absolute",
+  //   top: top.home + top.about + top.experience,
+  //   zIndex: 100,
+  //   left: 0
+  // })
+  // $('.contacts').css({
+  //   position: "absolute",
+  //   top: top.skills + top.home + top.about + top.experience,
+  //   zIndex: 100,
+  //   left: 0
+  // })
 };

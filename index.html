@@ -247,8 +247,10 @@
       <div class="portfolio">
         <div class="description">
           <h2 class="description__h2">Portfolio</h2>
-          <h3 class="description__h3">Title</h3>
-          <p class="description__p">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco q </p>
+          <div class="description__item">
+            <h3 class="description__h3">Title</h3>
+            <p class="description__p">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco q </p>
+          </div>
         </div>
         <div class="navigation">
           <div class="navigation__score"><span>01</span><span> / </span><span>05</span></div>
@@ -261,7 +263,19 @@
         <div class="progress">
           <div class="progress__bar"></div>
         </div>
-        <div class="slider"><a class="slider__item slider__item--1" href=""></a></div>
+        <div class="slider">
+          <!--a.slider__item.slider__item--1-->
+          <!--  h3.work1 A-->
+          <!--a.slider__item.slider__item--2-->
+          <!--  h3.work2 НАЙДИ СЕБЯ В IT: «ЖИЗНЬ ПРОЕКТА»-->
+          <!--a.slider__item.slider__item--3-->
+          <!--  h3.work2 Portfolio of web developer-->
+          <!--a.slider__item.slider__item--4-->
+          <!--  h3.work2 Cuda-->
+          <!--a.slider__item.slider__item--5.selected-->
+          <!--  h3.work2 Фотокнига-->
+          <!--a(href="").slider__item.slider__item--1 А-->
+        </div>
       </div>
       <div class="contacts">
         <div class="contacts__center">
@@ -283,49 +297,35 @@
               <button class="button__submit">
                 <svg class="sent-mail">
                   <use xlink:href="./img/symbols.svg#sent-mail"></use>
-                </svg><span>Send</span>
+                </svg><span class="button__submit--padding">Send</span>
               </button>
             </div>
           </form>
         </div>
       </div>
-      <!--nav.nav#menu-->
-      <!--  ul.nav__lists-->
-      <!--    li(data-url="home").nav__item.nav__item--selected -->
-      <!--      a(href="#home").nav__link Home-->
-      <!--    li(data-url="about").nav__item-->
-      <!--      a(href="#about").nav__link About me-->
-      <!--    li(data-url="experience").nav__item-->
-      <!--      a(href="#experience").nav__link Education/jobs-->
-      <!--    li(data-url="skills").nav__item-->
-      <!--      a(href="#skills").nav__link Skills-->
-      <!--    li(data-url="portfolio").nav__item-->
-      <!--      a(href="#portfolio").nav__link Portfolio-->
-      <!--    li(data-url="contacts").nav__item-->
-      <!--      a(href="#contacts").nav__link Contacts-->
-      <nav class="menuNew">
+      <nav class="menu">
         <ul>
-          <li class="active" data-url="home"><a class="menuNew__link" href="#home">
+          <li class="active" data-url="home"><a class="menu__link" href="#home">
               <svg class="home-page">
                 <use xlink:href="./img/symbols.svg#home-page"></use>
               </svg></a></li>
-          <li data-url="about"><a class="menuNew__link" href="#about">
+          <li data-url="about"><a class="menu__link" href="#about">
               <svg class="about-page">
                 <use xlink:href="./img/symbols.svg#about-page"></use>
               </svg></a></li>
-          <li data-url="experience"><a class="menuNew__link" href="#experience">
+          <li data-url="experience"><a class="menu__link" href="#experience">
               <svg class="experience-page">
                 <use xlink:href="./img/symbols.svg#experience-page"></use>
               </svg></a></li>
-          <li data-url="skills"><a class="menuNew__link" href="#skills">
+          <li data-url="skills"><a class="menu__link" href="#skills">
               <svg class="skills-page">
                 <use xlink:href="./img/symbols.svg#skills-page"></use>
               </svg></a></li>
-          <li data-url="portfolio"><a class="menuNew__link" href="#portfolio">
+          <li data-url="portfolio"><a class="menu__link" href="#portfolio">
               <svg class="portfolio-page">
                 <use xlink:href="./img/symbols.svg#portfolio-page"></use>
               </svg></a></li>
-          <li data-url="contacts"><a class="menuNew__link" href="#contacts">
+          <li data-url="contacts"><a class="menu__link" href="#contacts">
               <svg class="contacts-page">
                 <use xlink:href="./img/symbols.svg#contacts-page"></use>
               </svg></a></li>
@@ -348,21 +348,17 @@
         </ul>
       </footer>
     </div>
-    <header class="header">
-      <!--.logo IC-->
-      <div class="sandwich">
-        <div class="hamburger-menu">
-          <div class="bar"></div>
-        </div>
-      </div>
-    </header>
+    <!--header.header-->
+    <!--  //.logo IC-->
+    <!--  .sandwich-->
+    <!--    .hamburger-menu-->
+    <!--      .bar-->
     <!-- Custom HTML End-->
     <!-- Loading JS Start-->
     <script defer src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <!--script(defer src="//cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.js")-->
     <script defer src="//cdnjs.cloudflare.com/ajax/libs/gsap/1.19.0/TweenMax.min.js"></script>
-    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/TweenLite.min.js"></script>-->
-    <script defer src="http://particleslider.com/js/particleslider/current/particleslider.js"></script>
+    <!--script(defer src="http://particleslider.com/js/particleslider/current/particleslider.js")-->
+    <script defer src="//cdn.jsdelivr.net/jquery.nicescroll/3.6.8/jquery.nicescroll.min.js"></script>
     <script defer src="js/libs.js"></script>
     <script defer src="js/index.js"></script>
     <!-- Loading JS End-->
