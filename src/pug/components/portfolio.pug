@@ -1,8 +1,12 @@
 .portfolio
   .description
-    h2.description__h2 Portfolio
-    h3.description__h3 Title
-    p.description__p Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco q 
+    .description__top
+      h2.description__h2 Portfolio
+        .description__item
+          h3.description__h3 Title
+          p.description__p Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco q
+    .description__bottom
+      a.description__view(href='#', title='#') View index
   .navigation
     .navigation__score
       span 01
@@ -16,4 +20,14 @@
   .progress
     .progress__bar
   .slider
-    a(href="").slider__item.slider__item--1
+    a.slider__item.slider__item--1
+      h3.slider__one A
+    //a.slider__item.slider__item--2
+    //  h3.work2 НАЙДИ СЕБЯ В IT: «ЖИЗНЬ ПРОЕКТА»
+    //a.slider__item.slider__item--3
+    //  h3.work2 Portfolio of web developer
+    //a.slider__item.slider__item--4
+    //  h3.work2 Cuda
+    //a.slider__item.slider__item--5.selected
+    //  h3.work2 Фотокнига
+    //a(href="").slider__item.slider__item--1 А

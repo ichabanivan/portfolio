@@ -1,22 +1,42 @@
-function checkParallax () {
-  if ($('.home__photo').offset().top > 0) {
-    $('body').removeClass('landscape')
-    $('body').addClass('portrait')
-  } else {
-    $('body').removeClass('portrait')
-    $('body').addClass('landscape')
-  }
-}
-
 window.onload = function () {
   let
+    screenOrientation,
+    navigation = ['home', 'about', 'experience', 'skills', 'portfolio', 'contacts'],
     prevPage,
     page;
-    // $hamburgerMenu = $('.hamburger-menu'),
-    // $bar = $('.bar'),
-    // $nav = $('.nav'),
-    // menuIsOpen;
 
+
+
+  // Портретная или ландшафтная
+  function checkParallax () {
+    if (window.innerWidth <= 992) {
+      $('body').removeClass('landscape')
+      $('body').addClass('portrait')
+      screenOrientation = 'portrait'
+    } else {
+      console.log($('.home__wrapper').offset().left)
+      if ($('.home__photo').offset().top > 0 || $('.home__wrapper').offset().left < 170) {
+        $('body').removeClass('landscape')
+        $('body').addClass('portrait')
+        screenOrientation = 'portrait'
+        if (!($('.home__photo').offset().top > 0)) {
+          $('body').removeClass('column')
+          $('body').addClass('row')
+        } else {
+          $('body').removeClass('row')
+          $('body').addClass('column')
+        }
+      } else {
+        $('body').removeClass('portrait')
+        $('body').addClass('landscape')
+        screenOrientation = 'landscape'
+      }
+    }
+  }
+  // Проверка при загрузке
+  checkParallax()
+
+  // Какая сейчас страница
   function defineThePage () {
     let hashes = location.hash.split('/');
     let hash = hashes[0];
@@ -45,10 +65,24 @@ window.onload = function () {
       console.log('error');
     }
   }
-
+  // проверка при загрузке
   defineThePage();
 
-  $('.menuNew__link').on('click', function (e) {
+  function menuActiveItem(that) {
+    $('.menu .menu__link').removeClass('active')
+    $(that).addClass('active')
+  }
+
+  // console.log($(`.menu__link[href='#${page}']`))
+  // $(`.menu__link[href='#${page}']`).addClass('active');
+  // $(`.menu__link[href='#${page}']`).addClass('active');
+  // $(`.menu__link[href='#${prevPage}']`).addClass('active');
+
+  // document.querySelector('.menu__link.active').click()
+
+  $('.menu__link').on('click', function (e) {
+    // menuActiveItem(this)
+    debugger
     prevPage = page;
     page = $(this).parent().data('url')
     setState()
@@ -62,47 +96,41 @@ window.onload = function () {
 
     history.pushState(obj, obj.page, `/#${obj.page}`);
     showPage()
-    checkParallax()
   }
 
   function showPage () {
     let b = '.' + page;
-
     if (prevPage) {
       let a = '.' + prevPage;
       TweenLite.to($(a), 1, {left: '100%'});
       setTimeout(function () {
-        $('.' + prevPage).removeClass('current');
+        // $('.' + prevPage).removeClass('current');
+        $('.content > div').removeClass('current');
       }, 500)
     }
     setTimeout(function () {
       $('.' + page).addClass('current');
       TweenLite.to($(b), 1, {left: '0%'});
     }, 500)
+
+    $(`.menu__link[href='#${prevPage}']`).removeClass('active');
+    $(`.menu__link[href='#${page}']`).addClass('active');
     // $('.' + page).addClass('current');
     // TweenLite.from($(b), 1, {left: '100%'});
   }
 
-  // window.addEventListener('popstate', function (e) {
-  //   let state = history.state;
-  //
-  //   prevPage = page;
-  //   showPage(state.page, prevPage)
-  //
-  // });
-
-  checkParallax()
-
-  // $(window).resize(function () {
-  //   checkParallax()
-  // });
+  window.addEventListener('popstate', function (e) {
+    let state = history.state;
+    prevPage = page;
+    page = state.page;
+    showPage()
+  });
 
   window.addEventListener('resize', function () {
     checkParallax()
   });
-  // more infos - particleslider.com
 
-  // HOme page
+  // Parallax on photo on home page
 
   $(window).on('mousemove', function (e) {
     // Навешиваем событие перемещени мыши на window, первым аргументом в функцию-обработчик события отправляется ссылка на объект события
@@ -135,9 +163,9 @@ window.onload = function () {
     TweenLite.to('.parallax__before--5', 1, {height: height5before});
     TweenLite.to('.parallax__after--5', 1, {height: height5after});
   });
-  
-//  Contacts
-  $('.form__email').on("focus", function () {
+
+  //  Contacts Animation
+  $('.form__email').on('focus', function () {
     TweenLite.to('.form__email-placeholder', 1, {
       top: '20px',
       color: '#CD0D2E',
@@ -145,11 +173,11 @@ window.onload = function () {
     });
     TweenLite.to('.form__email-border', 1, {
       width: '80%',
-      backgroundColor: "#CD0D2E",
+      backgroundColor: '#CD0D2E',
       opacity: 1
     });
   })
-  $('.form__email').on("focusout", function () {
+  $('.form__email').on('focusout', function () {
     if (!($('.form__email').val())) {
       TweenLite.to('.form__email-placeholder', 1, {
         top: '40px',
@@ -168,7 +196,7 @@ window.onload = function () {
     });
   })
 
-  $('.form__name').on("focus", function () {
+  $('.form__name').on('focus', function () {
     TweenLite.to('.form__name-placeholder', 1, {
       top: '20px',
       color: '#CD0D2E',
@@ -176,11 +204,11 @@ window.onload = function () {
     });
     TweenLite.to('.form__name-border', 1, {
       width: '80%',
-      backgroundColor: "#CD0D2E",
+      backgroundColor: '#CD0D2E',
       opacity: 1
     });
   })
-  $('.form__name').on("focusout", function () {
+  $('.form__name').on('focusout', function () {
     if (!($('.form__name').val())) {
       TweenLite.to('.form__name-placeholder', 1, {
         top: '40px',
@@ -199,7 +227,7 @@ window.onload = function () {
     });
   })
 
-  $('.form__message').on("focus", function () {
+  $('.form__message').on('focus', function () {
     TweenLite.to('.form__message-placeholder', 1, {
       top: '20px',
       color: '#CD0D2E',
@@ -207,11 +235,11 @@ window.onload = function () {
     });
     TweenLite.to('.form__message-border', 1, {
       width: '80%',
-      backgroundColor: "#CD0D2E",
+      backgroundColor: '#CD0D2E',
       opacity: 1
     });
   })
-  $('.form__message').on("focusout", function () {
+  $('.form__message').on('focusout', function () {
     if (!($('.form__message').val())) {
       TweenLite.to('.form__message-placeholder', 1, {
         top: '40px',
@@ -229,5 +257,71 @@ window.onload = function () {
       opacity: 1
     });
   })
-  
+
+
+
+
+  if (screenOrientation === "landscape") {
+    // Прокрутка
+    var html = document.querySelector('html');
+    var delta = 0;
+    let percent = 0;
+
+    if (html.addEventListener) {
+      if ('onwheel' in document) {
+        // IE9+, FF17+
+        html.addEventListener("wheel", onWheel);
+      } else if ('onmousewheel' in document) {
+        // устаревший вариант события
+        html.addEventListener("mousewheel", onWheel);
+      } else {
+        // Firefox < 17
+        html.addEventListener("MozMousePixelScroll", onWheel);
+      }
+    } else { // IE8-
+      html.attachEvent("onmousewheel", onWheel);
+    }
+
+    // Это решение предусматривает поддержку IE8-
+    function onWheel(e) {
+      e = e || window.event;
+
+      // deltaY, detail содержат пиксели
+      // wheelDelta не дает возможность узнать количество пикселей
+      // onwheel || MozMousePixelScroll || onmousewheel
+
+      delta += e.deltaY || e.detail || e.wheelDelta;
+      if (delta < 0) {
+        delta = 50;
+      }
+      progressBar()
+      e.preventDefault ? e.preventDefault() : (e.returnValue = false);
+    }
+
+    function progressBar () {
+      var number = navigation.indexOf(page);
+
+
+
+      percent = (100*delta)/6000;
+      TweenLite.to('.landscape .progress-bar', 1, {
+        width: percent + '%'
+      });
+      if (delta >= 6000) {
+        delta = 0;
+        percent = 0;
+        TweenLite.to('.landscape .progress-bar', 1, {
+          width: percent + '%'
+        });
+
+        prevPage = navigation[number]; // this page // "home"
+        if (number == navigation.length - 1) {
+          number = -1;
+        }
+        let numberNewPage = number + 1;
+        page = navigation[numberNewPage];
+        setState()
+      }
+    }
+  }
 };

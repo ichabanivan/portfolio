@@ -1,5 +1,4 @@
 @import "../_base.pcss";
-@import "../components/sandwich.pcss";
 @import "../components/social.pcss";
 @import "../components/home.pcss";
 @import "../components/portfolio.pcss";
@@ -9,100 +8,14 @@
 @import "../components/contact.pcss";
 @import "../components/experience.pcss";
 
-.body {
-  display: flex;
-  flex-direction: column;
-  size: 100%;
-}
-
-.content {
-  display: flex;
-  flex-direction: column;
-  size: 100%;
-
-  @media screen and (width <= 768px) {
-    flex-direction: column;
-
-    .social {
-      order: 1;
-
-      &__item {
-        transform: rotate(0deg);
-      }
-
-      &__list {
-        flex-direction: row;
-      }
-    }
-  }
-  
-}
-
-.about,
-.experience,
-.skills,
-.portfolio,
-.contacts {
-  //position: relative 0 0 0 0;
-  display: none;
-  left: 100%;
-  &.current {
-    display: flex;
-  }
-}
-.home {
-  visibility: hidden;
-  left: 100%;
-}
-.home.current {
-  visibility: visible;
-}
-
-
-
-.header {
-  //position: fixed 0 0 * 0;
-  //z-index: 100;
-  order: -1;
-  width: 100%;
-  height: 120px;
-  display: flex;
-  display: none;
-  flex-direction: row-reverse;
-  justify-content: space-between;
-}
-
-.logo {
-  font-size: 80px;
-  line-height: 120px;
-  font-weight: bold;
-  font-family: var(--bebas-font);
-  color: var(--main);
-  padding-left: 40px;
-  visibility: hidden;
-}
-
-.menuNew {
-  display: none;
-}
-// For js
-
-body.landscape {
-  &::before {
-    content: '';
-    display: block;
-    width: 100%;
+.landscape {
+  .progress-bar {
+    position: absolute * 0 0 0;
     height: 2px;
-    position: absolute;
-    bottom: 0; 
-    //top: 0;
-    z-index: 5;
+    width: 0%;
+    display: block;
     background-color: var(--main);
   }
-}
-
-
-.landscape {
 
   .home,
   .about,
@@ -110,98 +23,201 @@ body.landscape {
   .skills,
   .portfolio,
   .contacts {
-    padding-left: 100px;
+    padding: 0;
+    display: none;
     position: absolute;
+    size: 100%;
+
+    &.current {
+      display: flex;
+    }
   }
 
-  .menuNew {
+  .social {
+    display: none;
+  }
+  .menu {
     position: absolute 0 0 0 0;
     display: flex;
     flex-direction: column;
     height: 100%;
     width: 80px;
-    
-    
+
+    @media screen and (width <= 992px) {
+      display: none;
+    }
+
+
     ul {
       display: flex;
       flex-direction: column;
       size: 100%;
-      //align-content: center;
       justify-content: center;
       list-style: none;
-      //padding-left: 0;
+      margin-top: 0;
       li {
         text-align: center;
       }
     }
-  //color: #fff;
     svg {
       margin-top: 50px;
       fill: #fff;
       size: 30px;
     }
   }
-  
-  .portfolio {
-    position: absolute;
-    top: 0;
-  }
-  
-  .experience {
-    //margin-top: -120px;
-  }
 }
 
 .portrait {
-  
+  .progress-bar {
+    display: none;
+  }
+
+  .parallax {
+    margin: auto;
+  }
+
+  .menu {
+    display: none;
+  }
+  .portfolio {
+    flex-direction: column;
+  }
+
+  .description {
+    width: 100%;
+    text-align: center;
+    padding-left: 0;
+    height: 450px;
+
+    &__p {
+      padding-left: 20%;
+    }
+  }
+
+  .navigation {
+    flex-direction: row;
+    height: 60px;
+    min-height: 60px;
+    width: 100%;
+
+    &__next {
+      align-self: center;
+      margin: 0;
+      margin-left: 12px;
+    }
+
+    &__line {
+      height: 1px;
+      width: 30px;
+      align-self: center;
+      margin: 0;
+      margin-left: 22px;
+    }
+
+    &__this {
+      align-self: center;
+      margin: 0;
+      margin-left: 20px;
+    }
+
+    &__score {
+      transform: rotate(0deg);
+      margin: 0;
+      margin-left: 15%;
+    }
+  }
+
+  .progress {
+    width: 100%;
+    border: none;
+    height: 1px;
+    min-height: 1px;
+
+    &__bar {
+      width: 100%;
+      height: 1px;
+    }
+  }
+
+  .slider {
+    width: 100%;
+  }
+
+  .home,
   .about,
   .experience,
   .skills,
   .portfolio,
   .contacts {
     display: flex;
+    padding-left: 0;
     margin-top: 40px;
-  }
-  
-  .home {
-    visibility: visible;
-  }
+    min-height: 100%;
 
-  .contacts {
-    display: flex;
-  }
-  
-  .header {
-    display: none;
-  }
-
-  .home {
-    //margin-top: 40px;
-    text-align: center;
-    //margin-left: -120px;
-    &__name {
-      margin-left: 0;
-      line-height: 1;
-      //padding-right: 120px;
+    @media screen and (width <= 768px) {
+      padding: 10px;
     }
+  }
+
+  .home {
+    margin-top: 0;
+
+    &__text {
+      height: auto;
+    }
+    &__name {
+    //  padding: 0;
+    //  margin: 0;
+     margin-top: 40px;
+      text-align: center;
+    }
+    //&__wrapper {
+    //  @media screen and (width <= 768px) {
+    //    padding: * 30px;
+    //  }
+    //}
     &__offset {
-      padding-left: 0px;
+      padding: 40px *;
+      //margin: 0;
+      //padding: 30px *;
+      text-align: center;
+
+
     }
     &__description {
-      padding: 0;
-      //padding-right: 120px;
+      margin-top: 10px;
+      margin-bottom: 40px;
+      //margin-left: -15%;
+      //margin-right: -15%;
     }
-  }
-  
-  .parallax {
-    //margin-left: -120px;
-    &__wrapper {
-      left: 20px;
-    }
+
   }
 
-  .content {
-    flex-direction: column;
+  .about {
+    margin-top: 100px;
+  }
+
+  .skills__h2 {
+    margin: 0;
+  }
+  .experience {
+    &__wrapper {
+      display: block;
+      margin: auto;
+    }
+
+    &__center {
+      padding-bottom: 0;
+    }
+  }
+  .description {
+    padding-top: 0;
+  }
+  .slider {
+    height: 80vmin;
+  }
+  .about {
+    margin-top: 100px;
   }
 
   .social {
@@ -216,21 +232,62 @@ body.landscape {
       flex-direction: row;
     }
   }
-  
+
+}
+.row.portrait {
+  .home__offset {
+    padding: 0;
+    line-height: 1.5;
+  }
+  .home__text {
+    margin: auto;
+  }
+}
+.column.portrait {
+  .home__offset {
+    padding: 0;
+    line-height: 1.5;
+  }
 }
 
-.menuNew {
+.menu {
   svg{
     transition: fill .3s ease;
     &:hover {
       fill: var(--main);
     }
   }
-  li.active {
-    svg {
-      fill: var(--main);
+  &__link {
+    display: block;
+    height: 100%;
+    width: 100%;
+    &.active {
+      svg {
+        fill: var(--main);
+      }
     }
-    
   }
 }
+
+
+.ghost-hover .text {
+  background: -webkit-linear-gradient(left, #333 0%, #eee 33%, #eee 66%, #333 100%);
+  background: linear-gradient(90deg, #333 0%, #eee 33%, #eee 66%, #333 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 300%;
+  background-position: -100%;
+  -webkit-transition: 2s ease all;
+  transition: 2s ease all;
+}
+.ghost-hover .text:hover {
+  background-position: 50%;
+}
+.ghost-hover .text.hidden {
+  opacity: 0;
+  background-size: 900%;
+  -webkit-transition: 1.5s ease all;
+  transition: 1.5s ease all;
+}
+
 
