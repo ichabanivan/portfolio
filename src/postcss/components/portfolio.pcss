@@ -1,5 +1,3 @@
-// Portfolio
-
 .portfolio {
   display: flex;
   flex-direction: row;
@@ -20,6 +18,14 @@
   justify-content: space-between;
   flex-direction: column;
 
+  &__item {
+    display: none;
+
+    &--current {
+      display: block;
+    }
+  }
+
   &__bottom {
     display: flex;
     flex-direction: row-reverse;
@@ -38,11 +44,13 @@
     color: var(--main);
     margin: 0;
   }
+
   &__h3{
     font-family: var(--bebas-font);
     font-size: 48px;
     color: var(--main);
   }
+
   &__p{
     font-family: var(--roboto-font);
     font-size: 14px;
@@ -51,17 +59,17 @@
     padding-right: 40px;
   }
 }
+
 .progress {
-  width: 1px;
+  width: 2px;
   height: 100%;
-  background-color: #fff;
   position: relative;
 
   &__bar {
     position: absolute;
     top: 0;
-    height: 50%;
-    width: 1px;
+    height: 100%;
+    width: 2px;
     z-index: 5;
     background-color: var(--main);
   }
@@ -72,13 +80,15 @@
   flex-direction: column;
   width: 60px;
 
-  &__next {
+  &__btn {
     size: 12px;
     border: solid 1px var(--main);
     border-radius: 50%;
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 12px;
+    margin-top: 12px;
+    cursor: pointer;
 
     &--06 {
       opacity: 0.6;
@@ -87,25 +97,30 @@
     &--03 {
       opacity: 0.3;
     }
+
+    &--current {
+      size: 28px;
+      border-radius: 50%;
+      border: 8px solid var(--main);
+      margin-bottom: 20px;
+      margin-left: auto;
+      margin-right: auto;
+    }
   }
 
   &__line {
-    height: 30px;
+    height: 10px;
     width: 1px;
     background-color: var(--main);
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 22px;
+
+    &--active {
+      height: 30px;
+    }
   }
 
-  &__this {
-    size: 28px;
-    border-radius: 50%;
-    border: 8px solid var(--main);
-    margin-bottom: 20px;
-    margin-left: auto;
-    margin-right: auto;
-  }
+
 
   &__score {
     text-align: center;
@@ -129,34 +144,42 @@
   background-color: #151515;
   position: relative;
 
-  //&__item.selected {
-  //  top: 0%;
-  //}
   &__item {
     height: 100%;
     width: 100%;
     cursor: pointer;
-    //top: -100%;
     position: absolute;
-  //
-  //  &--1 {
-  //
-  //  }
-  //
-  //  &--2 {
-  //    display: flex;
-  //    size: 100%;
-  //    background: url(https://zanusilker.github.io/works/alevel/img/header.png);
-  //    background-size: cover;
-  //  }
-  }
-  //&__item--1 {
-  //  font-size: 700px;
-  //  color: #FF3300;
-  //  font-family: Arial;
-  //  font-weight: 600;
-  //  text-decoration: none;
-  //}
+    display: none;
+
+    &--current {
+      display: flex;
+    }
+
+    &--1 {
+      background: url(../img/a-level.jpg);
+      background-size: cover;
+    }
+    &--2 {
+      background: url(../img/life.png);
+      background-size: 100% ;
+    }
+    &--3 {
+      background: url(../img/portf.jpg);
+      background-size: cover;
+    }
+
+    &--4 {
+      background-color: #fff;
+      img {
+        max-width: width('../img/cuda-template.jpg');
+        width: auto; // наоборот в портретной ориентациии
+        height: 100%;
+        margin: auto;
+      }
+    }
+
+    }
+
   &__one {
     margin: 0;
     font-size: 80vmin;
@@ -166,16 +189,3 @@
     text-align: center;
   }
 }
-
-
-//
-//
-//.work2 {
-//  margin: auto;
-//  font-size: 70px;
-//  font-weight: 700;
-//  color: #ff3300;
-//  font-family: Arial;
-//  text-align: center;
-//  text-shadow: 0 0 10px rgba(0,0,0,0.3);
-//}

@@ -3,31 +3,44 @@
     .description__top
       h2.description__h2 Portfolio
         .description__item
-          h3.description__h3 Title
+          h3.description__h3 A-level Ukraine
+          p.description__p Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco q
+        .description__item
+          h3.description__h3 Сайт конференции для неайтишников
+          p.description__p Найди себя в IT: «ЖИЗНЬ ПРОЕКТА». Бесплатная конференция для неайтишников и новичков в IT
+          p.description__p Лендинг для мероприятия
+        .description__item
+          h3.description__h3 Web Developer's portfolio
+          p.description__p Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco q
+        .description__item.description__item--current
+          h3.description__h3 Cuda
+          p.description__p Front-end разработка – это созданием клиентской части сайта. Front-end разработчик занимается версткой шаблона сайта и созданием пользовательского интерфейса. Обычно front-end разработчик – это мастер на все руки. Он просто обязан обладать талантом дизайнера, быть искусным верстальщиком и хорошим программистом.
+        .description__item
+          h3.description__h3 My old portfolio
           p.description__p Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco q
     .description__bottom
       a.description__view(href='#', title='#') View index
   .navigation
     .navigation__score
-      span 01
+      span.navigation__current 01
       span  / 
-      span 05
-    button.navigation__this
+      span.navigation__amount
+    button.navigation__btn.navigation__btn--current(data-number="1")
+    .navigation__line.navigation__line--active
+    button.navigation__btn(data-number="2")
     .navigation__line
-    button.navigation__next.navigation__next--10
-    button.navigation__next.navigation__next--06
-    button.navigation__next.navigation__next--03
+    button.navigation__btn(data-number="3")
+    .navigation__line
+    button.navigation__btn(data-number="4")
+    .navigation__line
+    button.navigation__btn(data-number="5")
   .progress
     .progress__bar
   .slider
-    a.slider__item.slider__item--1
-      h3.slider__one A
-    //a.slider__item.slider__item--2
-    //  h3.work2 НАЙДИ СЕБЯ В IT: «ЖИЗНЬ ПРОЕКТА»
-    //a.slider__item.slider__item--3
-    //  h3.work2 Portfolio of web developer
-    //a.slider__item.slider__item--4
-    //  h3.work2 Cuda
-    //a.slider__item.slider__item--5.selected
-    //  h3.work2 Фотокнига
-    //a(href="").slider__item.slider__item--1 А
+    a.slider__item.slider__item--1.slider__item--current
+    a.slider__item.slider__item--2
+    a.slider__item.slider__item--3
+    a.slider__item.slider__item--4
+      img(src="img/cuda-template.jpg")
+    a.slider__item.slider__item--5
+

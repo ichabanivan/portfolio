@@ -2,12 +2,16 @@
   .contacts__center
     h2.contacts__h2 Contacts
     form.form
+      <!-- Hidden Required Fields -->
+      <input type="hidden" name="project_name" value="Portfolio">
+      <input type="hidden" name="admin_email" value="zanusilker@gmail.com">
+      <input type="hidden" name="form_subject" value="Feedback">
       .form__group
-        input(type="email").form__email
+        input(type="email" name="Name").form__email
         span.form__email-placeholder E-mail
         .form__email-border
       .form__group
-        input.form__name
+        input(name="E-mail").form__name
         span.form__name-placeholder Name
         .form__name-border
       .form__group

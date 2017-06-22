@@ -82,7 +82,6 @@ window.onload = function () {
 
   $('.menu__link').on('click', function (e) {
     // menuActiveItem(this)
-    debugger
     prevPage = page;
     page = $(this).parent().data('url')
     setState()
@@ -300,9 +299,6 @@ window.onload = function () {
 
     function progressBar () {
       var number = navigation.indexOf(page);
-
-
-
       percent = (100*delta)/6000;
       TweenLite.to('.landscape .progress-bar', 1, {
         width: percent + '%'
@@ -324,4 +320,67 @@ window.onload = function () {
       }
     }
   }
+
 };
+
+let heightLine;
+$(function() {
+  let lengthItems = $('.navigation__btn').length;
+  console.log(lengthItems)
+
+  heightLine = (100 * ($('.navigation__btn--current').data().number)) / $('.navigation__btn').length
+  $('.navigation__amount').text("0" + lengthItems)
+  TweenLite.to($('.progress'), 1, {height: heightLine + '%'});
+})
+
+function changeItem(number) {
+  console.log(number)
+  let items = $('.description__item');
+
+  items.removeClass('description__item--current');
+  let d = number - 1;
+  console.log(d)
+  $(items[d]).addClass('description__item--current')
+
+  $('.slider__item').removeClass('slider__item--current')
+  $($('.slider__item')[d]).addClass('slider__item--current')
+}
+
+$('.navigation__btn').on('click', function (e) {
+  $('.navigation__btn').removeClass('navigation__btn--current')
+  $('.navigation__line').removeClass('navigation__line--active')
+  $(this).addClass('navigation__btn--current')
+
+  let elem = $(this).data().number;
+
+  $('.navigation__current').text("0" + elem)
+  $(this).prev().addClass('navigation__line--active')
+  $(this).next().addClass('navigation__line--active')
+
+  let heightLine = (100*($('.navigation__btn--current').data().number))/$('.navigation__btn').length;
+  TweenLite.to($('.progress'), 1, {height: heightLine + '%'});
+
+  changeItem(elem);
+});
+
+
+$(document).ready(function() {
+
+  //E-mail Ajax Send
+  $("form").submit(function() { //Change
+    var th = $(this);
+    $.ajax({
+      type: "POST",
+      url: "mail.php", //Change
+      data: th.serialize()
+    }).done(function() {
+      alert("Thank you!");
+      setTimeout(function() {
+        // Done Functions
+        th.trigger("reset");
+      }, 1000);
+    });
+    return false;
+  });
+
+});
