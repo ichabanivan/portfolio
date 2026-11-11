@@ -30,3 +30,13 @@ gulpfile.js/temp
 
 # Optional npm cache directory
 .npm
+
+# OS files
+.DS_Store
+
+# Private CV source (contains phone number)
+src/files/
+
+# Astro
+dist
+.astro

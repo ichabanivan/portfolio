@@ -1,7 +1,7 @@
 window.onload = function () {
   let
     screenOrientation,
-    navigation = ['home', 'about', 'experience', 'skills', 'portfolio', 'contacts'],
+    navigation = ['home', 'about', 'experience', 'skills', 'contacts'],
     prevPage,
     page;
 
@@ -54,9 +54,6 @@ window.onload = function () {
       setState(page)
     } else if (hash === '#skills') {
       page = 'skills'
-      setState(page)
-    } else if (hash === '#portfolio') {
-      page = 'portfolio'
       setState(page)
     } else if (hash === '#contacts') {
       page = 'contacts';

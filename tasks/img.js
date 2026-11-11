@@ -11,6 +11,9 @@ const
   plumber     = require('gulp-plumber'),  // Prevent pipe breaking caused by errors from gulp plugins
   notify      = require('gulp-notify'),   // Gulp plugin to send messages based on Vinyl Files or Errors to Mac OS X, Linux or Windows using the node-notifier module. Fallbacks to Growl or simply logging
 
+  environments = require('gulp-environments'),
+  gulpif      = require('gulp-if'),
+
   PATH = require('../path');
 
 gulp.task('img', () => {
@@ -24,12 +27,12 @@ gulp.task('img', () => {
       })
     }))
     .pipe(newer(PATH.build.img.folder))
-    .pipe(cache(imagemin([
+    .pipe(gulpif(!environments.development(), cache(imagemin([
       imagemin.gifsicle({interlaced: true}),
       imagemin.jpegtran({progressive: true}),
       imagemin.optipng({optimizationLevel: 3}),
       imagemin.svgo({plugins: [{removeViewBox: true}]})
-    ])))
+    ]))))
     .pipe(gulp.dest(PATH.build.img.folder))
     .pipe(browserSync.reload({stream: true}));
 });
