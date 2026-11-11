@@ -2,15 +2,6 @@ import { globalStyle, style } from '@vanilla-extract/css';
 import { vars } from './theme.css';
 import { media } from './media';
 
-/*
- * The few rules that cannot be expressed as <Box> props: pseudo-elements, attribute and
- * open/closed states set by scripts, and generated content. Everything else is a prop.
- */
-
-/**
- * Blurred header bar. A pseudo-element, because a backdrop-filter on the header itself would make
- * it the containing block for the fixed mobile menu. `is-scrolled` / `is-open` come from main.ts.
- */
 export const headerBar = style({
   selectors: {
     '&::before': {
@@ -28,10 +19,6 @@ export const headerBar = style({
   },
 });
 
-/**
- * Below `lg` the menu is a full-screen panel, shown while the header has `is-open`.
- * From `lg` up it is an ordinary inline nav.
- */
 export const navMenu = style({
   opacity: 0,
   visibility: 'hidden',
@@ -43,7 +30,6 @@ export const navMenu = style({
   },
 });
 
-/** Underline for the section that is in view (aria-current is set by scroll.ts). */
 export const navLink = style({
   selectors: {
     '&::after': {
@@ -57,13 +43,12 @@ export const navLink = style({
       transformOrigin: 'left',
       transition: `transform 0.4s ${vars.ease}`,
     },
-    "&[aria-current='true']": { color: '#fff' },
+    "&[aria-current='true']": { color: vars.color.white },
     "&[aria-current='true']::after": { transform: 'scaleX(1)' },
   },
   '@media': { [media.lg]: { selectors: { '&::after': { display: 'block' } } } },
 });
 
-/** The two menu bars turn into a cross while the menu is open. */
 export const menuBar = style({
   selectors: {
     '.is-open &:first-child': { transform: 'translateY(5px) rotate(45deg)' },
@@ -71,10 +56,6 @@ export const menuBar = style({
   },
 });
 
-/**
- * Marquee words are generated content read from data-word: generated content cannot be selected,
- * so the outlined letters stay visible when page text is selected.
- */
 export const marqueeWord = style({
   selectors: {
     '&::before': { content: 'attr(data-word)' },
@@ -87,7 +68,6 @@ export const marqueeWord = style({
   },
 });
 
-/** Native <dialog>: laid out only while open, with a dimmed backdrop. */
 export const dialog = style({
   selectors: {
     '&[open]': { display: 'grid', placeItems: 'center' },
@@ -95,5 +75,4 @@ export const dialog = style({
   },
 });
 
-// Outlined marquee text has no Box prop
 globalStyle(`[data-marquee-track]`, { WebkitTextStroke: '1px rgba(255, 255, 255, 0.36)' });

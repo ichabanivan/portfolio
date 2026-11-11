@@ -68,10 +68,6 @@ const jsonLd = {
 
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
-    <!--
-      Content is only hidden for reveal animations when JS is running and motion is allowed.
-      If the animation bundle never starts, the class is removed so everything stays readable.
-    -->
     <script is:inline>
       (function () {
         var root = document.documentElement;
@@ -93,7 +89,7 @@ const jsonLd = {
       zIndex={100}
       padding="3 4"
       background={vars.color.accent}
-      color="#fff"
+      color={vars.color.white}
       borderRadius={8}
       transform={{ default: 'translateY(-200%)', hover: 'none' }}
       display={{ print: 'none' }}

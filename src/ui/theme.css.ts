@@ -1,8 +1,6 @@
 import { createGlobalTheme, globalFontFace, globalStyle } from '@vanilla-extract/css';
 import { media } from './media';
 
-const print = media.print;
-
 const bebas = 'Bebas Neue';
 
 globalFontFace(bebas, {
@@ -20,8 +18,12 @@ export const vars = createGlobalTheme(':root', {
     line: 'rgba(255, 255, 255, 0.1)',
     text: '#ececee',
     muted: '#a1a1aa',
+    white: '#fff',
+    paper: '#fff',
+    lineHover: 'rgba(255, 255, 255, 0.5)',
     accent: '#cd0d2e',
-    // Lighter red for small text on dark, passes 4.5:1
+    accentHover: '#e3123a',
+    accentLine: 'rgba(205, 13, 46, 0.6)',
     accentText: '#ff4d67',
   },
   font: {
@@ -38,11 +40,9 @@ export const vars = createGlobalTheme(':root', {
   ease: 'cubic-bezier(0.22, 1, 0.36, 1)',
 });
 
-// Printing the page produces a plain single-column CV on white paper.
 globalStyle(':root', {
   '@media': {
-    [print]: {
-      // The site is dark-only on screen; without this the page margins print dark too
+    [media.print]: {
       colorScheme: 'light',
       vars: {
         [vars.color.bg]: '#fff',

@@ -1,10 +1,6 @@
 import { marquee } from '../data/cv';
 import { Box, effects, vars } from '../ui';
 
-// Decorative only: the same technologies are listed as text in the skills section.
-// The words are drawn by CSS (::before reads data-word) instead of being real text. Generated
-// content cannot be selected, so the outlined letters stay visible when page text is selected;
-// a browser stops drawing the text outline of real text while it is selected.
 const ROW = [...marquee, ...marquee];
 
 function Track({ words, direction }: { words: string[]; direction: 1 | -1 }) {

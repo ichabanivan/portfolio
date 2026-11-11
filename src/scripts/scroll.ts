@@ -3,14 +3,12 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 
 export function initScroll(): void {
-  // Reading progress bar in the header
   gsap.to('[data-progress]', {
     scaleX: 1,
     ease: 'none',
     scrollTrigger: { start: 0, end: 'max', scrub: 0.3 },
   });
 
-  // Section headings: letters rise in
   gsap.utils.toArray<HTMLElement>('[data-split]').forEach((heading) => {
     const split = SplitText.create(heading, { type: 'words,chars' });
     gsap.set(heading, { visibility: 'visible' });
@@ -24,7 +22,6 @@ export function initScroll(): void {
     });
   });
 
-  // Blocks fade up, staggered when several enter together
   gsap.set('[data-reveal]', { y: 32 });
   ScrollTrigger.batch('[data-reveal]', {
     start: 'top 90%',
@@ -40,7 +37,6 @@ export function initScroll(): void {
       }),
   });
 
-  // Technology marquee moves with the scroll, rows in opposite directions
   gsap.utils.toArray<HTMLElement>('[data-marquee-track]').forEach((track) => {
     const direction = Number(track.dataset.marqueeTrack);
     gsap.fromTo(
@@ -59,7 +55,6 @@ export function initScroll(): void {
     );
   });
 
-  // Experience timeline line draws as you read
   const timeline = document.querySelector('[data-timeline]');
   if (timeline) {
     gsap.from('[data-timeline-line]', {
@@ -69,7 +64,6 @@ export function initScroll(): void {
     });
   }
 
-  // Highlight the current section in the navigation
   const links = gsap.utils.toArray<HTMLAnchorElement>('[data-nav-link]');
   const setCurrent = (id: string | null) => {
     links.forEach((link) => {
@@ -78,7 +72,6 @@ export function initScroll(): void {
     });
   };
   gsap.utils.toArray<HTMLElement>('[data-section]').forEach((section) => {
-    // "Additional information" belongs to the Education nav item
     const id = section.id === 'additional' ? 'education' : section.id;
     ScrollTrigger.create({
       trigger: section,

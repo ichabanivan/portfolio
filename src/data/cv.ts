@@ -1,5 +1,3 @@
-// Single source of truth for the page. Content mirrors "CV - ATS.txt".
-
 export interface Project {
   name: string;
   description: string;
@@ -9,7 +7,6 @@ export interface Project {
 
 export type LogoKey = 'fiverr' | 'auto1' | 'intelliceed' | 'brightgrove' | 'alevel';
 
-/** Keys of the certificate and diploma scans in src/assets (see src/lib/documents.ts). */
 export type DocumentKey =
   | 'efset'
   | 'htmlCss'
@@ -21,7 +18,6 @@ export type DocumentKey =
 
 export interface Role {
   company: string;
-  /** Optional: a role without a logo simply shows the company name. */
   logo?: LogoKey;
   location: string;
   title: string;
@@ -40,10 +36,10 @@ export const profile = {
   title: 'Senior Software Engineer',
   location: 'Poznań, Poland',
   email: 'ichabanivan@gmail.com',
-  // Set to a string such as '+48 ...' to show the phone number on the page.
   phone: null as string | null,
   linkedin: 'https://www.linkedin.com/in/ivanchaban/',
-  cvDoc: 'https://docs.google.com/document/d/1MK_L2FU4hosFpplFxnm-wJyn8X-SpZWBd6DNlu_4K70/edit?tab=t.0',
+  cvDoc:
+    'https://docs.google.com/document/d/1MK_L2FU4hosFpplFxnm-wJyn8X-SpZWBd6DNlu_4K70/edit?tab=t.0',
   github: 'https://github.com/ichabanivan',
   summary: [
     'Senior Software Engineer building web products since 2016, currently at Fiverr. I work across the stack with React, TypeScript, Node.js, NestJS and Next.js, with a focus on scalable front-end architecture, design systems and measurable product impact.',
@@ -335,7 +331,6 @@ export interface Certification {
   title: string;
   issuer: string;
   year?: number;
-  /** Public verification page at the issuer. */
   url?: string;
   image?: DocumentKey;
 }

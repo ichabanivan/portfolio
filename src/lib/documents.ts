@@ -1,4 +1,3 @@
-// Build-time only (uses astro:assets). Import it from .astro files, not from client components.
 import { getImage } from 'astro:assets';
 import type { DocumentKey, LogoKey } from '../data/cv';
 
@@ -27,9 +26,7 @@ const SOURCES: Record<DocumentKey, ImageMetadata> = {
 };
 
 export interface DocumentImage {
-  /** Small preview shown on the page */
   thumb: string;
-  /** Larger version opened in the modal */
   full: string;
   width: number;
   height: number;
@@ -40,17 +37,18 @@ export type DocumentImages = Record<DocumentKey, DocumentImage>;
 const THUMB_WIDTH = 640;
 const FULL_WIDTH = 1800;
 
-/**
- * The scans are large (the diplomas are about 10 MB each), so the originals are never published.
- * Each one is converted to a WebP thumbnail and a WebP sized for the modal.
- */
 export async function getDocumentImages(): Promise<DocumentImages> {
   const entries = await Promise.all(
     (Object.keys(SOURCES) as DocumentKey[]).map(async (key) => {
       const source = SOURCES[key];
       const fullWidth = Math.min(FULL_WIDTH, source.width);
       const [thumb, full] = await Promise.all([
-        getImage({ src: source, width: Math.min(THUMB_WIDTH, source.width), format: 'webp', quality: 72 }),
+        getImage({
+          src: source,
+          width: Math.min(THUMB_WIDTH, source.width),
+          format: 'webp',
+          quality: 72,
+        }),
         getImage({ src: source, width: fullWidth, format: 'webp', quality: 82 }),
       ]);
       const image: DocumentImage = {
@@ -69,7 +67,6 @@ export interface Logo {
   src: string;
   width: number;
   height: number;
-  /** Height on the page in px, for logos that are not a single line of lettering (default 22) */
   displayHeight?: number;
 }
 
@@ -80,6 +77,5 @@ export const logos: Logos = {
   auto1: { src: auto1.src, width: auto1.width, height: auto1.height },
   intelliceed: { src: intelliceed.src, width: intelliceed.width, height: intelliceed.height },
   brightgrove: { src: brightgrove.src, width: brightgrove.width, height: brightgrove.height },
-  // Symbol plus two lines of text, so it needs more height than the one-line wordmarks
   alevel: { src: alevel.src, width: alevel.width, height: alevel.height, displayHeight: 36 },
 };

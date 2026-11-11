@@ -4,7 +4,6 @@ import { media, reducedMotion } from './media';
 
 const print = media.print;
 
-/* ---------- Base ---------- */
 globalStyle('*, *::before, *::after', { boxSizing: 'border-box' });
 
 globalStyle('html', {
@@ -37,9 +36,8 @@ globalStyle(':focus-visible', {
   borderRadius: 4,
 });
 
-globalStyle('::selection', { background: vars.color.accent, color: '#fff' });
+globalStyle('::selection', { background: vars.color.accent, color: vars.color.white });
 
-/* ---------- Motion: initial states, only while JS animation is active ---------- */
 globalStyle('.js [data-reveal], .js [data-hero-item]', { opacity: 0 });
 globalStyle('.js [data-stage], .js [data-hero-name], .js [data-split]', { visibility: 'hidden' });
 
@@ -47,14 +45,12 @@ globalStyle('*', {
   '@media': { [reducedMotion]: { transitionDuration: '0.01ms !important' } },
 });
 
-/* ---------- Print ---------- */
 globalStyle('html, body', {
   '@media': {
-    [print]: { background: '#fff', color: '#000', fontSize: '10.5pt', lineHeight: 1.4 },
+    [print]: { background: vars.color.white, color: '#000', fontSize: '10.5pt', lineHeight: 1.4 },
   },
 });
 
-// Undo any animation state
 globalStyle(
   '[data-reveal], [data-hero-item], [data-hero-name], [data-hero-name] *, [data-split], [data-split] *',
   {

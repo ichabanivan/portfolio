@@ -1,16 +1,24 @@
-import type { ReactNode } from 'react';
+import { tenure } from '../lib/tenure';
 import { Box, Text, vars } from '../ui';
 
-interface Props {
-  dates: ReactNode;
-  duration?: ReactNode;
-  /** Pass-through for the live duration refresh in src/lib/tenure.ts */
-  tenure?: { start: string; end?: string };
-  location: string;
+export const PERIOD_WIDTH = '260px';
+
+interface DateLabel {
+  label: string;
+  iso?: string;
 }
 
-/** Left column of a timeline entry: dates, time spent and place. Sticks while the entry scrolls. */
-export default function Period({ dates, duration, tenure, location }: Props) {
+interface Props {
+  start: Required<DateLabel>;
+  end: DateLabel;
+  location: string;
+  showDuration?: boolean;
+}
+
+const Time = ({ date }: { date: DateLabel }) =>
+  date.iso ? <time dateTime={date.iso}>{date.label}</time> : <>{date.label}</>;
+
+export default function Period({ start, end, location, showDuration }: Props) {
   return (
     <Box
       position={{ default: 'static', lg: 'sticky', print: 'static' }}
@@ -26,17 +34,17 @@ export default function Period({ dates, duration, tenure, location }: Props) {
         textTransform="uppercase"
         color={vars.color.accentText}
       >
-        {dates}
+        <Time date={start} /> - <Time date={end} />
       </Text>
-      {duration && (
+      {showDuration && (
         <Text
           fontSize={14}
           fontWeight={600}
           color={vars.color.text}
-          data-tenure-start={tenure?.start}
-          data-tenure-end={tenure?.end}
+          data-tenure-start={start.iso}
+          data-tenure-end={end.iso}
         >
-          {duration}
+          {tenure(start.iso, end.iso)}
         </Text>
       )}
       <Text variant="meta">{location}</Text>

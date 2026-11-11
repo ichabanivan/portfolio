@@ -33,7 +33,7 @@ export default function Contact({ cvHref, year }: Props) {
           letterSpacing="0.02em"
           textTransform={{ default: 'uppercase', print: 'none' }}
           overflowWrap="anywhere"
-          color={{ default: '#fff', hover: vars.color.accentText }}
+          color={{ default: vars.color.white, hover: vars.color.accentText }}
           background={{ default: underline('3px'), print: 'none' }}
           transition="color 0.3s"
         >

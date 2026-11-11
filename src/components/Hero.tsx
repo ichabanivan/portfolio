@@ -1,10 +1,10 @@
-import { useRef, type CSSProperties, type ReactNode } from 'react';
+import { useRef, type CSSProperties } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 import { profile } from '../data/cv';
-import { Box, Button, Text, vars, type BoxProps } from '../ui';
+import { Box, Button, PrintOnly, Text, vars, type BoxProps } from '../ui';
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
 
@@ -20,11 +20,6 @@ interface Props {
   cvHref: string | null;
 }
 
-/**
- * Strip geometry carried over from the original design: left offset and width in % of the stage,
- * plus the top and bottom edges at rest. The photo itself never moves; the animation slides the
- * strip edges up and down, following the pointer and the scroll position.
- */
 const STRIPS = [
   { l: 14.4, w: 10.6, t: 16.7, b: 46.7 },
   { l: 28, w: 18.9, t: 7.1, b: 82.1 },
@@ -34,10 +29,6 @@ const STRIPS = [
 ];
 const ACCENT_STRIP = { l: 89.5, w: 1, t: 30, b: 74 };
 
-/**
- * `h` is the pointer position in % of the viewport height. Each strip maps it to its own visible
- * window, using the ratios of the old version of the site. The last entry is the red accent strip.
- */
 const WINDOWS: { top: (h: number) => number; bottom: (h: number) => number }[] = [
   { top: (h) => h / 3, bottom: (h) => 30 + h / 3 },
   { top: (h) => h / 7, bottom: (h) => 75 + h / 7 },
@@ -58,8 +49,6 @@ export default function Hero({ photo, cvHref }: Props) {
   useGSAP(
     () => {
       const hero = root.current;
-      // The "js" class is set in <head> only when motion is allowed; without it the hero stays
-      // in its server-rendered resting state.
       if (!hero || !document.documentElement.classList.contains('js')) return;
 
       const stage = hero.querySelector<HTMLElement>('[data-stage]');
@@ -79,7 +68,6 @@ export default function Hero({ photo, cvHref }: Props) {
           const top = win.top(state.h);
           const bottom = Math.min(100, win.bottom(state.h));
           const r = reveal[i].r;
-          // Intro wipe: odd strips grow down from their top edge, even ones grow up from the bottom.
           const t = i % 2 ? top : bottom - (bottom - top) * r;
           const b = i % 2 ? top + (bottom - top) * r : bottom;
           strip.style.setProperty('--t', t.toFixed(2));
@@ -93,14 +81,11 @@ export default function Hero({ photo, cvHref }: Props) {
       render();
       gsap.set(stage, { visibility: 'visible' });
 
-      // Intro
       const intro = gsap.timeline({ defaults: { ease: 'expo.out' } });
       intro.to(reveal, { r: 1, duration: 1.5, stagger: 0.09 }, 0.1);
 
       const name = hero.querySelector<HTMLElement>('[data-hero-name]');
       if (name) {
-        // Each line is split on its own. The heading keeps one accessible name while the
-        // per-letter boxes stay out of the accessibility tree.
         const lines = gsap.utils.toArray<HTMLElement>('[data-hero-line]', name);
         const split = SplitText.create(lines, { type: 'chars', aria: 'none' });
         lines.forEach((line) => line.setAttribute('aria-hidden', 'true'));
@@ -122,7 +107,6 @@ export default function Hero({ photo, cvHref }: Props) {
       if (finePointer) window.addEventListener('pointermove', onPointerMove, { passive: true });
       else update();
 
-      // Scrolling continues the movement (and is the only driver on touch screens)
       ScrollTrigger.create({
         trigger: hero,
         start: 'top top',
@@ -133,7 +117,6 @@ export default function Hero({ photo, cvHref }: Props) {
         },
       });
 
-      // Rendering stops once the hero is off screen
       gsap.ticker.add(render);
       const observer = new IntersectionObserver(([entry]) => {
         gsap.ticker.remove(render);
@@ -141,7 +124,6 @@ export default function Hero({ photo, cvHref }: Props) {
       });
       observer.observe(hero);
 
-      // Tweens, the ScrollTrigger and SplitText are reverted by useGSAP; the rest is cleaned here.
       return () => {
         window.removeEventListener('pointermove', onPointerMove);
         gsap.ticker.remove(render);
@@ -163,7 +145,11 @@ export default function Hero({ photo, cvHref }: Props) {
       gridTemplateColumns={{ default: 'minmax(0, 1fr)', lg: 'repeat(12, minmax(0, 1fr))' }}
       alignItems={{ default: 'start', lg: 'center' }}
       minHeight={{ default: 0, lg: '100svh', print: 0 }}
-      padding={{ default: `${vars.space.headerH} 0 6`, lg: `${vars.space.headerH} 0 0`, print: '0' }}
+      padding={{
+        default: `${vars.space.headerH} 0 6`,
+        lg: `${vars.space.headerH} 0 0`,
+        print: '0',
+      }}
       overflow="hidden"
     >
       <Box
@@ -191,7 +177,6 @@ export default function Hero({ photo, cvHref }: Props) {
           color={vars.color.accent}
         >
           <NameLine>{profile.firstName}</NameLine>{' '}
-          {/* Second line is pushed right, as in the original design */}
           <NameLine paddingLeft={{ default: '0.5em', lg: '0.85em', print: '0' }}>
             {profile.lastName}
           </NameLine>
@@ -203,7 +188,7 @@ export default function Hero({ photo, cvHref }: Props) {
           fontWeight={300}
           letterSpacing={{ default: '0.16em', lg: '0.22em', print: '0.05em' }}
           textTransform="uppercase"
-          color="#fff"
+          color={vars.color.white}
         >
           {profile.title}
         </Text>
@@ -259,7 +244,6 @@ export default function Hero({ photo, cvHref }: Props) {
         width={{ default: 'min(100%, 70svh)', lg: 'min(100%, 94svh)' }}
         aspectRatio={1}
         display={{ print: 'none' }}
-        // Horizontal lean of the strips, in % of stage width (about -18deg on a square)
         style={{ '--k': 32.5 } as CSSProperties}
       >
         {STRIPS.map((strip, i) => (
@@ -278,13 +262,11 @@ export default function Hero({ photo, cvHref }: Props) {
               width="100%"
               height="100%"
               objectFit="cover"
-              // Frames the face and keeps the bottom of the photo out of view
               objectPosition="50% 28%"
             />
           </Strip>
         ))}
         <Strip style={stripStyle(ACCENT_STRIP)} background={vars.color.accent} aria-hidden />
-        {/* Fades the bottom of the photo into the page */}
         <Box
           aria-hidden
           position="absolute"
@@ -297,14 +279,12 @@ export default function Hero({ photo, cvHref }: Props) {
   );
 }
 
-/** One line of the name; the intro animation splits it into letters, the overflow masks them. */
 function NameLine(props: BoxProps<'span'>) {
   return (
     <Box
       as="span"
       data-hero-line
       display={{ default: 'block', print: 'inline' }}
-      // Room for the reveal mask so glyph tops are not cut
       paddingTop={{ default: '0.06em', print: '0' }}
       overflow="hidden"
       {...props}
@@ -313,19 +293,9 @@ function NameLine(props: BoxProps<'span'>) {
 }
 
 function ContactLink(props: BoxProps<'a'>) {
-  return <Box as="a" color={{ hover: '#fff' }} {...props} />;
+  return <Box as="a" color={{ hover: vars.color.white }} {...props} />;
 }
 
-const PrintOnly = ({ children }: { children: ReactNode }) => (
-  <Box as="span" display={{ default: 'none', print: 'inline' }}>
-    {children}
-  </Box>
-);
-
-/*
- * Each strip is a slanted window onto the same photo. --l and --w (left edge and width) are set
- * inline; --t and --b (top and bottom edges) are animated by the hero. All are % of the stage.
- */
 const STRIP_CLIP = `polygon(
   calc((var(--l) + var(--k) * (50 - var(--t)) / 100) * 1%) calc(var(--t) * 1%),
   calc((var(--l) + var(--w) + var(--k) * (50 - var(--t)) / 100) * 1%) calc(var(--t) * 1%),

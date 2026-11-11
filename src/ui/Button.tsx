@@ -6,7 +6,6 @@ type Props = BoxProps<'a'> & {
   size?: 'medium' | 'small';
 };
 
-/** Pill-shaped call to action. Always a link: every button on the site navigates somewhere. */
 export function Button({ variant = 'secondary', size = 'medium', ...props }: Props) {
   const primary = variant === 'primary';
   const small = size === 'small';
@@ -22,12 +21,14 @@ export function Button({ variant = 'secondary', size = 'medium', ...props }: Pro
       border="1px solid"
       borderColor={
         primary
-          ? { default: vars.color.accent, hover: '#e3123a' }
-          : { default: vars.color.line, hover: 'rgba(255, 255, 255, 0.5)' }
+          ? { default: vars.color.accent, hover: vars.color.accentHover }
+          : { default: vars.color.line, hover: vars.color.lineHover }
       }
       borderRadius={999}
-      background={primary ? { default: vars.color.accent, hover: '#e3123a' } : undefined}
-      color={primary ? '#fff' : undefined}
+      background={
+        primary ? { default: vars.color.accent, hover: vars.color.accentHover } : undefined
+      }
+      color={primary ? vars.color.white : undefined}
       fontSize={small ? 14 : 15}
       fontWeight={600}
       letterSpacing="0.01em"

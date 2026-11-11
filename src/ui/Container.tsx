@@ -2,7 +2,6 @@ import type { ElementType } from 'react';
 import { Box, type BoxProps } from './Box';
 import { vars } from './theme.css';
 
-/** Centred page column with side gutters. */
 export function Container<E extends ElementType = 'div'>(props: BoxProps<E>) {
   return (
     <Box

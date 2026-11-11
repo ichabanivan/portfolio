@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type MouseEvent as ReactMouseEvent,
+} from 'react';
 import gsap from 'gsap';
 import { Box, TextLink, effects, vars, type BoxProps, type StyleProps } from '../ui';
 
@@ -20,13 +26,6 @@ const toItem = (link: HTMLAnchorElement): Item => ({
   height: Number(link.dataset.height) || undefined,
 });
 
-/**
- * Modal viewer for certificate and diploma scans.
- *
- * The thumbnails on the page are ordinary links to the large image (so they work without
- * JavaScript). This component intercepts clicks on them and shows the image in a native <dialog>,
- * which provides Escape-to-close, focus trapping and the backdrop.
- */
 export default function Lightbox() {
   const dialog = useRef<HTMLDialogElement>(null);
   const figure = useRef<HTMLElement>(null);
@@ -44,7 +43,6 @@ export default function Lightbox() {
     [items.length],
   );
 
-  // Open from any thumbnail on the page
   useEffect(() => {
     const onClick = (event: MouseEvent) => {
       if (event.defaultPrevented || event.button !== 0) return;
@@ -60,7 +58,6 @@ export default function Lightbox() {
     return () => document.removeEventListener('click', onClick);
   }, []);
 
-  // Keep the <dialog> in sync with state
   useEffect(() => {
     const el = dialog.current;
     if (!el) return;
@@ -68,7 +65,6 @@ export default function Lightbox() {
     if (index === null && el.open) el.close();
   }, [index]);
 
-  // Entrance for each image, skipped when the visitor prefers reduced motion
   useEffect(() => {
     if (index === null || !figure.current) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -82,7 +78,6 @@ export default function Lightbox() {
     };
   }, [index]);
 
-  // Arrow keys move between documents
   useEffect(() => {
     if (index === null || !many) return;
     const onKey = (event: KeyboardEvent) => {
@@ -100,7 +95,6 @@ export default function Lightbox() {
       className={effects.dialog}
       aria-label={item?.caption || 'Document'}
       onClose={() => setIndex(null)}
-      // A click on the dialog element itself is a click on the backdrop
       onClick={(event: ReactMouseEvent<HTMLDialogElement>) => {
         if (event.target === dialog.current) setIndex(null);
       }}
@@ -137,7 +131,7 @@ export default function Lightbox() {
             height="auto"
             maxHeight="calc(100dvh - 190px)"
             borderRadius={8}
-            background="#fff"
+            background={vars.color.paper}
           />
           <Box
             as="figcaption"
@@ -175,7 +169,6 @@ export default function Lightbox() {
   );
 }
 
-// Previous/next sit at mid-height on wide screens and drop to the bottom corners on small ones
 const SIDE = {
   top: { default: 'auto', lg: '50%' },
   bottom: { default: 12, lg: 'auto' },
@@ -197,7 +190,7 @@ function RoundButton(props: BoxProps<'button'>) {
       borderColor={{ default: vars.color.line, hover: vars.color.accent }}
       borderRadius="50%"
       background={{ default: 'rgba(20, 20, 22, 0.9)', hover: vars.color.accent }}
-      color="#fff"
+      color={vars.color.white}
       fontSize={26}
       lineHeight={1}
       cursor="pointer"

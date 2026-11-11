@@ -26,7 +26,9 @@ function initHeader(): void {
     document.body.style.overflow = open ? 'hidden' : '';
   };
   toggle?.addEventListener('click', () => setOpen(!header.classList.contains('is-open')));
-  header.querySelectorAll('nav a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+  header
+    .querySelectorAll('nav a')
+    .forEach((a) => a.addEventListener('click', () => setOpen(false)));
   window.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') setOpen(false);
   });
@@ -36,15 +38,11 @@ function initHeader(): void {
 initHeader();
 refreshTenures();
 
-// Scroll animations run only when the visitor has not asked for reduced motion.
-// The hero animation lives in its React component (src/components/Hero.tsx).
-// The inline script in <head> adds the "js" class under the same condition.
 if (document.documentElement.classList.contains('js')) {
   gsap.registerPlugin(ScrollTrigger, SplitText);
   window.__motionReady = true;
 
   initScroll();
 
-  // Web fonts change text metrics, so trigger positions are measured again once they load.
   document.fonts?.ready.then(() => ScrollTrigger.refresh());
 }

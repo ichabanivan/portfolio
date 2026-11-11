@@ -1,15 +1,12 @@
 import type { ReactNode } from 'react';
 import Section from './Section';
-import Period from './Period';
+import Period, { PERIOD_WIDTH } from './Period';
 import { experience, type Role } from '../data/cv';
 import type { Logos } from '../lib/documents';
-import { tenure } from '../lib/tenure';
 import { Box, Card, Text, vars } from '../ui';
 
-// The dates column and the gap after it place the timeline line and its dots
-const META_WIDTH = '260px';
 const COLUMN_GAP = 'clamp(24px, 4vw, 56px)';
-const LINE_LEFT = `calc(${META_WIDTH} + ${COLUMN_GAP} / 2)`;
+const LINE_LEFT = `calc(${PERIOD_WIDTH} + ${COLUMN_GAP} / 2)`;
 
 const Strong = ({ children }: { children: ReactNode }) => (
   <Box as="strong" color={vars.color.text} fontWeight={600}>
@@ -26,12 +23,11 @@ function RoleCard({ role, logos, last }: { role: Role; logos: Logos; last: boole
       group
       position="relative"
       display={{ default: 'grid', print: 'block' }}
-      gridTemplateColumns={{ default: 'minmax(0, 1fr)', lg: `${META_WIDTH} minmax(0, 1fr)` }}
+      gridTemplateColumns={{ default: 'minmax(0, 1fr)', lg: `${PERIOD_WIDTH} minmax(0, 1fr)` }}
       gap={{ default: '4', lg: COLUMN_GAP }}
       paddingLeft={{ default: '8', lg: '0', print: '0' }}
       paddingBottom={{ default: last ? '0' : 'clamp(48px, 7vw, 96px)', print: '3' }}
     >
-      {/* Timeline dot */}
       <Box
         aria-hidden
         position="absolute"
@@ -44,21 +40,8 @@ function RoleCard({ role, logos, last }: { role: Role; logos: Logos; last: boole
         border={`2px solid ${vars.color.accent}`}
         display={{ print: 'none' }}
       />
-      <Period
-        dates={
-          <>
-            <time dateTime={role.start.iso}>{role.start.label}</time>
-            {' - '}
-            {role.end.iso ? <time dateTime={role.end.iso}>{role.end.label}</time> : role.end.label}
-          </>
-        }
-        duration={tenure(role.start.iso, role.end.iso)}
-        tenure={{ start: role.start.iso, end: role.end.iso }}
-        location={role.location}
-      />
+      <Period start={role.start} end={role.end} location={role.location} showDuration />
       <div>
-        {/* Company name on the left, its logo on the right. The logo files are dark-page versions
-            (light lettering), so they sit directly on the background with no tile. */}
         <Box
           display="flex"
           flexWrap="wrap"
@@ -73,7 +56,6 @@ function RoleCard({ role, logos, last }: { role: Role; logos: Logos; last: boole
           >
             {role.company}
           </Text>
-          {/* Decorative: the company name is already in the heading */}
           {logo && (
             <Box
               as="img"
@@ -143,7 +125,7 @@ function RoleCard({ role, logos, last }: { role: Role; logos: Logos; last: boole
                 padding={{ default: '5', print: '0' }}
                 breakInside={{ print: 'avoid-page' }}
               >
-                <Text as="h4" fontSize={17} fontWeight={600} color="#fff">
+                <Text as="h4" fontSize={17} fontWeight={600} color={vars.color.white}>
                   {project.name}
                 </Text>
                 <Text marginTop="2" color={vars.color.muted}>

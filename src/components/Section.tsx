@@ -8,7 +8,6 @@ type Props = StyleProps & {
   children: ReactNode;
 };
 
-/** A page section with its numbered heading. Heading text matches standard CV section names. */
 export default function Section({ id, index, title, children, ...style }: Props) {
   const titleId = `${id}-title`;
   return (

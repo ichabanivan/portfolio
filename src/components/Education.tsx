@@ -1,21 +1,9 @@
 import type { ReactNode } from 'react';
 import Section from './Section';
-import Period from './Period';
-import {
-  education,
-  certifications,
-  volunteering,
-  languages,
-  type Certification,
-} from '../data/cv';
+import Period, { PERIOD_WIDTH } from './Period';
+import { education, certifications, volunteering, languages, type Certification } from '../data/cv';
 import type { DocumentImage, DocumentImages } from '../lib/documents';
-import { Box, Card, Text, TextLink, vars, type StyleProps } from '../ui';
-
-const PrintOnly = ({ children }: { children: ReactNode }) => (
-  <Box as="span" display={{ default: 'none', print: 'inline' }}>
-    {children}
-  </Box>
-);
+import { Box, Card, PrintOnly, ScreenOnly, Text, TextLink, vars, type StyleProps } from '../ui';
 
 type ThumbProps = StyleProps & {
   image: DocumentImage;
@@ -23,10 +11,6 @@ type ThumbProps = StyleProps & {
   verify?: string;
 };
 
-/**
- * A scan preview. It is a plain link to the large image; Lightbox.tsx upgrades the click to a
- * modal when JavaScript is available.
- */
 function DocumentThumb({ image, caption, verify, ...style }: ThumbProps) {
   return (
     <Box
@@ -45,10 +29,9 @@ function DocumentThumb({ image, caption, verify, ...style }: ThumbProps) {
       display={{ default: 'block', print: 'none' }}
       aspectRatio="16 / 10"
       border="1px solid"
-      borderColor={{ default: vars.color.line, hover: 'rgba(205, 13, 46, 0.7)' }}
+      borderColor={{ default: vars.color.line, hover: vars.color.accentLine }}
       borderRadius={10}
-      // Some scans have transparent edges, so they sit on white like paper
-      background="#fff"
+      background={vars.color.paper}
       overflow="hidden"
       cursor="zoom-in"
       transform={{ hover: 'translateY(-3px)' }}
@@ -77,7 +60,7 @@ function DocumentThumb({ image, caption, verify, ...style }: ThumbProps) {
         padding="1 3"
         borderRadius={999}
         background={vars.color.accent}
-        color="#fff"
+        color={vars.color.white}
         fontSize={12}
         fontWeight={600}
         letterSpacing="0.06em"
@@ -113,34 +96,27 @@ export function Education({ documents }: { documents: DocumentImages }) {
             display={{ default: 'grid', print: 'block' }}
             gridTemplateColumns={{
               default: 'minmax(0, 1fr)',
-              lg: '260px minmax(0, 1fr) minmax(0, 220px)',
+              lg: `${PERIOD_WIDTH} minmax(0, 1fr) minmax(0, 220px)`,
             }}
             alignItems="start"
             gap={{ default: '3', lg: 'clamp(24px, 4vw, 56px)' }}
             padding={{ default: 'clamp(20px, 3vw, 36px) 0', print: '0 0 3' }}
             borderTop={{ default: `1px solid ${vars.color.line}`, print: 0 }}
             borderBottom={
-              i === education.length - 1 ? { default: `1px solid ${vars.color.line}`, print: 0 } : undefined
+              i === education.length - 1
+                ? { default: `1px solid ${vars.color.line}`, print: 0 }
+                : undefined
             }
             breakInside={{ print: 'avoid-page' }}
           >
-            <Period
-              dates={
-                <>
-                  <time dateTime={school.start.iso}>{school.start.label}</time>
-                  {' - '}
-                  <time dateTime={school.end.iso}>{school.end.label}</time>
-                </>
-              }
-              location={school.location}
-            />
+            <Period start={school.start} end={school.end} location={school.location} />
             <div>
               <Text
                 as="h3"
                 fontSize="clamp(19px, 2vw, 24px)"
                 fontWeight={600}
                 lineHeight={1.3}
-                color="#fff"
+                color={vars.color.white}
               >
                 {school.school}
               </Text>
@@ -209,7 +185,6 @@ export function Education({ documents }: { documents: DocumentImages }) {
                 verify={certificate.url}
               />
             )}
-            {/* Fills the rest of the card so Verify sits on the bottom edge across a row */}
             <Box
               flex={1}
               display={{ default: 'flex', print: 'block' }}
@@ -236,10 +211,7 @@ export function Education({ documents }: { documents: DocumentImages }) {
                   fontSize={{ default: 14, print: '10.5pt' }}
                   fontWeight={{ default: 600, print: 400 }}
                 >
-                  {/* On paper the link text is replaced by the verification address itself */}
-                  <Box as="span" display={{ print: 'none' }}>
-                    Verify
-                  </Box>
+                  <ScreenOnly>Verify</ScreenOnly>
                   <PrintOnly> ({certificate.url})</PrintOnly>
                 </TextLink>
               )}

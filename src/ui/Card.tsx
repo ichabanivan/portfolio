@@ -2,7 +2,6 @@ import type { ElementType } from 'react';
 import { Box, type BoxProps } from './Box';
 import { vars } from './theme.css';
 
-/** Bordered surface. On paper it collapses to plain content. */
 export function Card<E extends ElementType = 'div'>(props: BoxProps<E>) {
   return (
     <Box

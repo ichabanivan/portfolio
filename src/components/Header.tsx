@@ -12,7 +12,6 @@ const LINKS = [
 
 const navGap = 'clamp(16px, 2.4vw, 36px)';
 
-// Rendered to static HTML; the menu toggle and scroll state are wired up in src/scripts/main.ts.
 export default function Header() {
   return (
     <Box
@@ -54,7 +53,6 @@ export default function Header() {
             transform={{ groupHover: 'rotate(-8deg)' }}
             transition={`transform 0.5s ${vars.ease}`}
           />
-          {/* Bebas sits high on its line box */}
           <Box as="span" paddingTop="1" display={{ default: 'none', sm: 'inline' }}>
             {profile.name}
           </Box>
@@ -98,7 +96,6 @@ export default function Header() {
           aria-label="Sections"
           className={effects.navMenu}
           display="flex"
-          // Full-screen panel on small screens, inline bar from lg
           position={{ default: 'fixed', lg: 'static' }}
           inset={`${vars.space.headerH} 0 0 0`}
           flexDirection={{ default: 'column', lg: 'row' }}
@@ -125,7 +122,11 @@ export default function Header() {
                   padding="2 0"
                   fontSize={{ default: 44, lg: 14 }}
                   fontWeight={500}
-                  color={{ default: vars.color.text, lg: vars.color.muted, hover: '#fff' }}
+                  color={{
+                    default: vars.color.text,
+                    lg: vars.color.muted,
+                    hover: vars.color.white,
+                  }}
                   transition="color 0.3s"
                   fontFamily={{ default: vars.font.display, lg: vars.font.body }}
                   lineHeight={{ default: 1.15, lg: 'inherit' }}
@@ -137,7 +138,13 @@ export default function Header() {
               </li>
             ))}
           </Box>
-          <Button variant="primary" size="small" href={profile.cvDoc} target="_blank" rel="noopener">
+          <Button
+            variant="primary"
+            size="small"
+            href={profile.cvDoc}
+            target="_blank"
+            rel="noopener"
+          >
             CV
           </Button>
         </Box>
