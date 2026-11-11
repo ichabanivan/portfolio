@@ -1,15 +1,19 @@
 ---
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
+import { getImage } from 'astro:assets';
 import Base from '../layouts/Base.astro';
-import Header from '../components/Header.astro';
-import Hero from '../components/Hero.astro';
-import About from '../components/About.astro';
-import Marquee from '../components/Marquee.astro';
-import Experience from '../components/Experience.astro';
-import Skills from '../components/Skills.astro';
-import Education from '../components/Education.astro';
-import Contact from '../components/Contact.astro';
+import Header from '../components/Header';
+import Hero from '../components/Hero';
+import About from '../components/About';
+import Marquee from '../components/Marquee';
+import Experience from '../components/Experience';
+import Skills from '../components/Skills';
+import { Education, AdditionalInformation } from '../components/Education';
+import Contact from '../components/Contact';
+import Lightbox from '../components/Lightbox';
+import { getDocumentImages, logos } from '../lib/documents';
+import portrait from '../assets/portrait.jpg';
 import { profile } from '../data/cv';
 
 // The Download CV buttons appear once public/Ivan-Chaban-CV.pdf exists.
@@ -18,20 +22,38 @@ const cvHref = existsSync(join(process.cwd(), 'public', CV_FILE))
   ? `${import.meta.env.BASE_URL}${CV_FILE}`
   : null;
 
+// Optimised at build time, then handed to the React hero as plain props.
+const image = await getImage({ src: portrait, widths: [480, 800, 1200], format: 'webp', quality: 78 });
+const photo = {
+  src: image.src,
+  srcSet: image.srcSet.attribute,
+  width: portrait.width,
+  height: portrait.height,
+};
+
+// Certificate and diploma scans, resized at build time
+const documents = await getDocumentImages();
+
 const title = `${profile.name} | ${profile.title} (React, TypeScript, Node.js)`;
 const description =
   'Ivan Chaban is a Senior Software Engineer at Fiverr based in Poznań, Poland. React, TypeScript, Node.js, NestJS and Next.js. Experience, technical skills, education and contact details.';
 ---
 
 <Base title={title} description={description}>
-  <Header cvHref={cvHref} />
+  <!--
+    Components are React. Only the interactive pieces are hydrated: the hero (client:load) and
+    the document modal (client:idle). Everything else is static HTML with no client-side React.
+  -->
+  <Header />
   <main id="main">
-    <Hero cvHref={cvHref} />
+    <Hero client:load photo={photo} cvHref={cvHref} />
     <About />
     <Marquee />
-    <Experience />
+    <Experience logos={logos} />
     <Skills />
-    <Education />
-    <Contact cvHref={cvHref} />
+    <Education documents={documents} />
+    <AdditionalInformation />
+    <Contact cvHref={cvHref} year={new Date().getFullYear()} />
   </main>
+  <Lightbox client:idle />
 </Base>

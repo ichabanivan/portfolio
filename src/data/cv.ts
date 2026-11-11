@@ -7,8 +7,22 @@ export interface Project {
   responsibilities?: string;
 }
 
+export type LogoKey = 'fiverr' | 'auto1' | 'intelliceed' | 'brightgrove' | 'alevel';
+
+/** Keys of the certificate and diploma scans in src/assets (see src/lib/documents.ts). */
+export type DocumentKey =
+  | 'efset'
+  | 'htmlCss'
+  | 'javascript'
+  | 'php'
+  | 'masterComputerScience'
+  | 'masterOilGas'
+  | 'bachelorMining';
+
 export interface Role {
   company: string;
+  /** Optional: a role without a logo simply shows the company name. */
+  logo?: LogoKey;
   location: string;
   title: string;
   start: { label: string; iso: string };
@@ -29,19 +43,13 @@ export const profile = {
   // Set to a string such as '+48 ...' to show the phone number on the page.
   phone: null as string | null,
   linkedin: 'https://www.linkedin.com/in/ivanchaban/',
+  cvDoc: 'https://docs.google.com/document/d/1MK_L2FU4hosFpplFxnm-wJyn8X-SpZWBd6DNlu_4K70/edit?tab=t.0',
   github: 'https://github.com/ichabanivan',
   summary: [
     'Senior Software Engineer building web products since 2016, currently at Fiverr. I work across the stack with React, TypeScript, Node.js, NestJS and Next.js, with a focus on scalable front-end architecture, design systems and measurable product impact.',
     'I have led front-end teams, run interviews and code reviews, mentored engineers, and shipped everything from micro-frontends and SSR applications to React Native and Flutter apps.',
   ],
 };
-
-export const stats = [
-  { value: 15, prefix: '+', suffix: '%', label: 'sign-in success rate' },
-  { value: 18, prefix: '+', suffix: '%', label: 'registrations' },
-  { value: 22, prefix: '+', suffix: '%', label: 'average selling price' },
-  { value: 20, prefix: '-', suffix: '%', label: 'monorepo build time' },
-];
 
 export const marquee = [
   'React',
@@ -140,6 +148,7 @@ export const skills: { group: string; items: string[] }[] = [
 export const experience: Role[] = [
   {
     company: 'Fiverr',
+    logo: 'fiverr',
     location: 'Israel, Remote',
     title: 'Senior Software Engineer',
     start: { label: 'July 2023', iso: '2023-07' },
@@ -164,6 +173,7 @@ export const experience: Role[] = [
   },
   {
     company: 'Auto1 Group',
+    logo: 'auto1',
     location: 'Berlin, Germany, Remote',
     title: 'Senior Software Engineer',
     start: { label: 'December 2021', iso: '2021-12' },
@@ -181,6 +191,7 @@ export const experience: Role[] = [
   },
   {
     company: 'Intelliceed Inc.',
+    logo: 'intelliceed',
     location: 'Kharkiv, Ukraine, On-site',
     title: 'Team Lead',
     start: { label: 'May 2020', iso: '2020-05' },
@@ -197,6 +208,7 @@ export const experience: Role[] = [
   },
   {
     company: 'Brightgrove',
+    logo: 'brightgrove',
     location: 'Kharkiv, Ukraine, Subcontract from Intelliceed Inc.',
     title: 'Senior Software Engineer',
     start: { label: 'November 2020', iso: '2020-11' },
@@ -215,6 +227,7 @@ export const experience: Role[] = [
   },
   {
     company: 'Intelliceed Inc.',
+    logo: 'intelliceed',
     location: 'Kharkiv, Ukraine, On-site',
     title: 'Senior Software Engineer',
     start: { label: 'January 2020', iso: '2020-01' },
@@ -235,6 +248,7 @@ export const experience: Role[] = [
   },
   {
     company: 'Intelliceed Inc.',
+    logo: 'intelliceed',
     location: 'Kharkiv, Ukraine, On-site',
     title: 'Middle Software Engineer',
     start: { label: 'April 2018', iso: '2018-04' },
@@ -267,6 +281,7 @@ export const experience: Role[] = [
   },
   {
     company: 'A-level Ukraine',
+    logo: 'alevel',
     location: 'Kharkiv, Ukraine, On-site',
     title: 'Junior Software Engineer',
     start: { label: 'September 2016', iso: '2016-09' },
@@ -284,6 +299,7 @@ export const education = [
     school: 'National Technical University “Kharkiv Polytechnic Institute”',
     location: 'Kharkiv, Ukraine',
     degree: 'Master’s degree, Computer Sciences',
+    diploma: 'masterComputerScience' as DocumentKey,
     start: { label: 'September 2020', iso: '2020-09' },
     end: { label: 'December 2021', iso: '2021-12' },
     details: [
@@ -296,6 +312,7 @@ export const education = [
     school: 'National University “Yuri Kondratyuk Poltava Polytechnic”',
     location: 'Kharkiv, Ukraine',
     degree: 'Master’s degree, Oil and Gas Engineering',
+    diploma: 'masterOilGas' as DocumentKey,
     start: { label: 'September 2019', iso: '2019-09' },
     end: { label: 'December 2020', iso: '2020-12' },
     details: [
@@ -307,19 +324,52 @@ export const education = [
     school: 'National University “Yuri Kondratyuk Poltava Polytechnic”',
     location: 'Kharkiv, Ukraine',
     degree: 'Bachelor’s degree, Mining. Drilling Wells',
+    diploma: 'bachelorMining' as DocumentKey,
     start: { label: 'September 2016', iso: '2016-09' },
     end: { label: 'June 2019', iso: '2019-06' },
     details: ['Program Subject Area: Mining.', 'Educational Program: Drilling wells.'],
   },
 ];
 
-export const certifications = [
-  'EF SET English Certificate 57/100 (B2 Upper Intermediate), EF SET (2024)',
-  'HTML, CSS, Test Provider (2017)',
-  'JavaScript, Test Provider (2017)',
-  'PHP, Test Provider Certificate',
-  'Front-End, A-level Ukraine (2016)',
-  'Development Basics, A-level Ukraine (2016)',
+export interface Certification {
+  title: string;
+  issuer: string;
+  year?: number;
+  /** Public verification page at the issuer. */
+  url?: string;
+  image?: DocumentKey;
+}
+
+export const certifications: Certification[] = [
+  {
+    title: 'EF SET English Certificate 57/100 (B2 Upper Intermediate)',
+    issuer: 'EF SET',
+    year: 2024,
+    url: 'https://cert.efset.org/cbSU9g',
+    image: 'efset',
+  },
+  {
+    title: 'HTML, CSS',
+    issuer: 'Test Provider',
+    year: 2017,
+    url: 'https://testprovider.com/ru/Certificate/Search/TP50742782',
+    image: 'htmlCss',
+  },
+  {
+    title: 'JavaScript',
+    issuer: 'Test Provider',
+    year: 2017,
+    url: 'https://testprovider.com/ru/Certificate/Search/TP87878809',
+    image: 'javascript',
+  },
+  {
+    title: 'PHP',
+    issuer: 'Test Provider',
+    url: 'https://testprovider.com/ru/Certificate/Search/TP29131587',
+    image: 'php',
+  },
+  { title: 'Front-End', issuer: 'A-level Ukraine', year: 2016 },
+  { title: 'Development Basics', issuer: 'A-level Ukraine', year: 2016 },
 ];
 
 export const volunteering = [

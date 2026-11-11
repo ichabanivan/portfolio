@@ -1,7 +1,6 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
-import { initHero } from './hero';
 import { initScroll } from './scroll';
 
 declare global {
@@ -34,13 +33,13 @@ function initHeader(): void {
 
 initHeader();
 
-// Animations run only when the visitor has not asked for reduced motion.
+// Scroll animations run only when the visitor has not asked for reduced motion.
+// The hero animation lives in its React component (src/components/Hero.tsx).
 // The inline script in <head> adds the "js" class under the same condition.
 if (document.documentElement.classList.contains('js')) {
   gsap.registerPlugin(ScrollTrigger, SplitText);
   window.__motionReady = true;
 
-  initHero();
   initScroll();
 
   // Web fonts change text metrics, so trigger positions are measured again once they load.

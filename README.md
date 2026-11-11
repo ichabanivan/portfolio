@@ -1,7 +1,8 @@
 # Ivan Chaban: portfolio and CV
 
-Single-page portfolio built with [Astro](https://astro.build) (static HTML at build time) and
-[GSAP](https://gsap.com) for animation. Deployed to GitHub Pages.
+Single-page portfolio built with [Astro](https://astro.build) (static HTML at build time),
+[React](https://react.dev) components and [GSAP](https://gsap.com) for animation. Deployed to
+GitHub Pages.
 
 ## Commands
 
@@ -19,16 +20,25 @@ All text lives in `src/data/cv.ts` (profile, skills, experience, education, extr
 - **Download CV button**: put the file at `public/Ivan-Chaban-CV.pdf` and rebuild. The buttons
   appear automatically when the file exists.
 - **Phone number**: hidden by default. Set `profile.phone` in `src/data/cv.ts` to show it.
-- **Photo**: `src/assets/me.jpg`. Framing is controlled by `object-position` on `.strip img` in
+- **Header CV link**: `profile.cvDoc` in `src/data/cv.ts`.
+- **Certificates and diplomas**: entries in `src/data/cv.ts` (`certifications`, and `diploma` on
+  each `education` item); the scans are mapped in `src/lib/documents.ts` and resized at build.
+- **Company logos**: SVGs in `src/assets/logos/`, mapped in `src/lib/documents.ts`. They are
+  recoloured for the dark page (light lettering) and shown without a background. A role without
+  a `logo` shows only the company name.
+- **Photo**: `src/assets/portrait.jpg`. Framing is controlled by `object-position` on `.strip img` in
   `src/styles/global.css`.
 
 ## Structure
 
 - `src/pages/index.astro`: page composition, title and description
 - `src/layouts/Base.astro`: `<head>`, SEO meta, Open Graph, JSON-LD
-- `src/components/`: one component per section
-- `src/scripts/hero.ts`: the skewed-strip photo animation
-- `src/scripts/scroll.ts`: scroll reveals, progress bar, counters, active navigation
+- `src/components/`: React components, one per section. They are rendered to static HTML at
+  build time. Two are hydrated in the browser: `Hero.tsx` (`client:load`), which holds the
+  skewed-strip photo animation written with `useGSAP` from `@gsap/react`, and `Lightbox.tsx`
+  (`client:idle`), the modal for certificate and diploma scans.
+- `src/scripts/main.ts`, `src/scripts/scroll.ts`: mobile menu, scroll reveals, progress bar,
+  counters, active navigation (plain scripts that work on the static HTML)
 - `src/styles/print.css`: printing the page gives a plain single-column CV
 
 The page is fully readable without JavaScript and respects `prefers-reduced-motion`.

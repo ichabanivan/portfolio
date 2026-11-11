@@ -40,22 +40,6 @@ export function initScroll(): void {
       }),
   });
 
-  // Stat counters
-  gsap.utils.toArray<HTMLElement>('[data-count]').forEach((el) => {
-    const target = Number(el.dataset.count);
-    const counter = { value: 0 };
-    el.textContent = '0';
-    gsap.to(counter, {
-      value: target,
-      duration: 1.6,
-      ease: 'power2.out',
-      onUpdate: () => {
-        el.textContent = String(Math.round(counter.value));
-      },
-      scrollTrigger: { trigger: el, start: 'top 90%', once: true },
-    });
-  });
-
   // Technology marquee moves with the scroll, rows in opposite directions
   gsap.utils.toArray<HTMLElement>('[data-marquee-track]').forEach((track) => {
     const direction = Number(track.dataset.marqueeTrack);
