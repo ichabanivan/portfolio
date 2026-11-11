@@ -1,8 +1,8 @@
 ---
 import '@fontsource-variable/inter';
-import '../styles/tokens.css';
-import '../styles/global.css';
-import '../styles/print.css';
+import '../ui/theme.css';
+import '../ui/global.css';
+import { Box, vars } from '../ui';
 import { profile, experience, skills } from '../data/cv';
 
 interface Props {
@@ -84,7 +84,22 @@ const jsonLd = {
     </script>
   </head>
   <body>
-    <a class="skip-link" href="#main">Skip to content</a>
+    <Box
+      as="a"
+      href="#main"
+      position="fixed"
+      top={8}
+      left={8}
+      zIndex={100}
+      padding="3 4"
+      background={vars.color.accent}
+      color="#fff"
+      borderRadius={8}
+      transform={{ default: 'translateY(-200%)', hover: 'none' }}
+      display={{ print: 'none' }}
+    >
+      Skip to content
+    </Box>
     <slot />
     <script>
       import '../scripts/main.ts';

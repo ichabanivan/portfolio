@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from 'react';
 import gsap from 'gsap';
+import { Box, TextLink, effects, vars, type BoxProps, type StyleProps } from '../ui';
 
 interface Item {
   src: string;
@@ -93,64 +94,115 @@ export default function Lightbox() {
   }, [index, many, step]);
 
   return (
-    <dialog
-      className="lightbox"
+    <Box
+      as="dialog"
       ref={dialog}
+      className={effects.dialog}
       aria-label={item?.caption || 'Document'}
       onClose={() => setIndex(null)}
       // A click on the dialog element itself is a click on the backdrop
-      onClick={(event) => {
+      onClick={(event: ReactMouseEvent<HTMLDialogElement>) => {
         if (event.target === dialog.current) setIndex(null);
       }}
+      width="100vw"
+      maxWidth="none"
+      height="100dvh"
+      maxHeight="none"
+      margin="0"
+      padding="clamp(56px, 7vw, 72px) clamp(12px, 6vw, 88px) clamp(16px, 3vw, 32px)"
+      border={0}
+      background="rgba(8, 8, 9, 0.94)"
+      color={vars.color.text}
+      overflow="auto"
     >
       {item && (
-        <figure className="lightbox__figure" ref={figure}>
-          <img
-            className="lightbox__image"
+        <Box
+          as="figure"
+          ref={figure}
+          display="grid"
+          gap="4"
+          justifyItems="center"
+          margin="0"
+          maxWidth="100%"
+        >
+          <Box
+            as="img"
             src={item.src}
-            width={item.width}
-            height={item.height}
+            htmlWidth={item.width}
+            htmlHeight={item.height}
             alt={item.caption}
             key={item.src}
+            width="auto"
+            maxWidth="100%"
+            height="auto"
+            maxHeight="calc(100dvh - 190px)"
+            borderRadius={8}
+            background="#fff"
           />
-          <figcaption className="lightbox__caption">
+          <Box
+            as="figcaption"
+            display="flex"
+            flexWrap="wrap"
+            justifyContent="center"
+            gap="2 5"
+            fontSize={15}
+            textAlign="center"
+            color={vars.color.muted}
+          >
             <span>{item.caption}</span>
             {item.verify && (
-              <a className="link" href={item.verify} target="_blank" rel="noopener">
+              <TextLink href={item.verify} target="_blank" rel="noopener">
                 Verify certificate
-              </a>
+              </TextLink>
             )}
-          </figcaption>
-        </figure>
+          </Box>
+        </Box>
       )}
-      <button
-        className="lightbox__button lightbox__button--close"
-        type="button"
-        aria-label="Close"
-        onClick={() => setIndex(null)}
-      >
+      <RoundButton aria-label="Close" onClick={() => setIndex(null)} top={12} right={12}>
         ×
-      </button>
+      </RoundButton>
       {many && (
         <>
-          <button
-            className="lightbox__button lightbox__button--prev"
-            type="button"
-            aria-label="Previous document"
-            onClick={() => step(-1)}
-          >
+          <RoundButton aria-label="Previous document" onClick={() => step(-1)} left={12} {...SIDE}>
             ‹
-          </button>
-          <button
-            className="lightbox__button lightbox__button--next"
-            type="button"
-            aria-label="Next document"
-            onClick={() => step(1)}
-          >
+          </RoundButton>
+          <RoundButton aria-label="Next document" onClick={() => step(1)} right={12} {...SIDE}>
             ›
-          </button>
+          </RoundButton>
         </>
       )}
-    </dialog>
+    </Box>
+  );
+}
+
+// Previous/next sit at mid-height on wide screens and drop to the bottom corners on small ones
+const SIDE = {
+  top: { default: 'auto', lg: '50%' },
+  bottom: { default: 12, lg: 'auto' },
+  translate: { default: 'none', lg: '0 -50%' },
+} satisfies StyleProps;
+
+function RoundButton(props: BoxProps<'button'>) {
+  return (
+    <Box
+      as="button"
+      type="button"
+      position="fixed"
+      display="grid"
+      placeItems="center"
+      width={44}
+      height={44}
+      padding="0 0 1"
+      border="1px solid"
+      borderColor={{ default: vars.color.line, hover: vars.color.accent }}
+      borderRadius="50%"
+      background={{ default: 'rgba(20, 20, 22, 0.9)', hover: vars.color.accent }}
+      color="#fff"
+      fontSize={26}
+      lineHeight={1}
+      cursor="pointer"
+      transition="background-color 0.3s, border-color 0.3s"
+      {...props}
+    />
   );
 }

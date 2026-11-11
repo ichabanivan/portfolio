@@ -2,6 +2,7 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
 import react from '@astrojs/react';
+import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
 
 // Static build for GitHub Pages: https://ichabanivan.github.io/portfolio/
 export default defineConfig({
@@ -12,4 +13,6 @@ export default defineConfig({
   // "Ivan Chaban" and not "IvanChaban".
   compressHTML: false,
   integrations: [sitemap(), react()],
+  // All styles are vanilla-extract (*.css.ts), compiled to static CSS at build time.
+  vite: { plugins: [vanillaExtractPlugin()] },
 });

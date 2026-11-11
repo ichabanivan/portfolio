@@ -1,4 +1,6 @@
+import type { ReactNode } from 'react';
 import Section from './Section';
+import Period from './Period';
 import {
   education,
   certifications,
@@ -7,76 +9,199 @@ import {
   type Certification,
 } from '../data/cv';
 import type { DocumentImage, DocumentImages } from '../lib/documents';
+import { Box, Card, Text, TextLink, vars, type StyleProps } from '../ui';
 
-interface ThumbProps {
+const PrintOnly = ({ children }: { children: ReactNode }) => (
+  <Box as="span" display={{ default: 'none', print: 'inline' }}>
+    {children}
+  </Box>
+);
+
+type ThumbProps = StyleProps & {
   image: DocumentImage;
   caption: string;
   verify?: string;
-  className?: string;
-}
+};
 
 /**
  * A scan preview. It is a plain link to the large image; Lightbox.tsx upgrades the click to a
  * modal when JavaScript is available.
  */
-function DocumentThumb({ image, caption, verify, className }: ThumbProps) {
+function DocumentThumb({ image, caption, verify, ...style }: ThumbProps) {
   return (
-    <a
-      className={['doc', className].filter(Boolean).join(' ')}
+    <Box
+      as="a"
+      group
       href={image.full}
+      target="_blank"
+      rel="noopener"
       data-lightbox
       data-caption={caption}
       data-verify={verify}
       data-width={image.width}
       data-height={image.height}
       aria-label={`View document: ${caption}`}
+      position="relative"
+      display={{ default: 'block', print: 'none' }}
+      aspectRatio="16 / 10"
+      border="1px solid"
+      borderColor={{ default: vars.color.line, hover: 'rgba(205, 13, 46, 0.7)' }}
+      borderRadius={10}
+      // Some scans have transparent edges, so they sit on white like paper
+      background="#fff"
+      overflow="hidden"
+      cursor="zoom-in"
+      transform={{ hover: 'translateY(-3px)' }}
+      transition={`border-color 0.4s, transform 0.4s ${vars.ease}`}
+      {...style}
     >
-      <img src={image.thumb} alt="" loading="lazy" decoding="async" />
-    </a>
+      <Box
+        as="img"
+        src={image.thumb}
+        alt=""
+        loading="lazy"
+        decoding="async"
+        width="100%"
+        height="100%"
+        objectFit="cover"
+        objectPosition="top center"
+        opacity={{ groupHover: 0.8 }}
+        transition="opacity 0.4s"
+      />
+      <Box
+        as="span"
+        aria-hidden
+        position="absolute"
+        right={10}
+        bottom={10}
+        padding="1 3"
+        borderRadius={999}
+        background={vars.color.accent}
+        color="#fff"
+        fontSize={12}
+        fontWeight={600}
+        letterSpacing="0.06em"
+        textTransform="uppercase"
+        opacity={{ default: 0, groupHover: 1 }}
+        transform={{ default: 'translateY(6px)', groupHover: 'none' }}
+        transition={`opacity 0.3s, transform 0.4s ${vars.ease}`}
+      >
+        View
+      </Box>
+    </Box>
   );
 }
 
 const certificateMeta = (certificate: Certification) =>
   [certificate.issuer, certificate.year].filter(Boolean).join(', ');
 
+const printInline = {
+  display: { print: 'inline' },
+  fontSize: { print: '10.5pt' },
+  fontWeight: { print: 400 },
+} satisfies StyleProps;
+
 export function Education({ documents }: { documents: DocumentImages }) {
   return (
     <Section id="education" index="04" title="Education">
-      <div className="schools">
-        {education.map((school) => (
-          <article className="school" data-reveal key={`${school.school}-${school.start.iso}`}>
-            <div className="role__meta">
-              <p className="role__dates">
-                <time dateTime={school.start.iso}>{school.start.label}</time>
-                {' - '}
-                <time dateTime={school.end.iso}>{school.end.label}</time>
-              </p>
-              <p className="role__location">{school.location}</p>
-            </div>
+      <Box display="grid" gap="4">
+        {education.map((school, i) => (
+          <Box
+            as="article"
+            data-reveal
+            key={`${school.school}-${school.start.iso}`}
+            display={{ default: 'grid', print: 'block' }}
+            gridTemplateColumns={{
+              default: 'minmax(0, 1fr)',
+              lg: '260px minmax(0, 1fr) minmax(0, 220px)',
+            }}
+            alignItems="start"
+            gap={{ default: '3', lg: 'clamp(24px, 4vw, 56px)' }}
+            padding={{ default: 'clamp(20px, 3vw, 36px) 0', print: '0 0 3' }}
+            borderTop={{ default: `1px solid ${vars.color.line}`, print: 0 }}
+            borderBottom={
+              i === education.length - 1 ? { default: `1px solid ${vars.color.line}`, print: 0 } : undefined
+            }
+            breakInside={{ print: 'avoid-page' }}
+          >
+            <Period
+              dates={
+                <>
+                  <time dateTime={school.start.iso}>{school.start.label}</time>
+                  {' - '}
+                  <time dateTime={school.end.iso}>{school.end.label}</time>
+                </>
+              }
+              location={school.location}
+            />
             <div>
-              <h3 className="school__name">{school.school}</h3>
-              <p className="school__degree">{school.degree}</p>
-              <ul className="school__details">
+              <Text
+                as="h3"
+                fontSize="clamp(19px, 2vw, 24px)"
+                fontWeight={600}
+                lineHeight={1.3}
+                color="#fff"
+              >
+                {school.school}
+              </Text>
+              <Text marginTop="2" color={vars.color.text}>
+                {school.degree}
+              </Text>
+              <Box
+                as="ul"
+                display="grid"
+                gap="1"
+                marginTop="3"
+                fontSize={15}
+                color={vars.color.muted}
+              >
                 {school.details.map((detail) => (
                   <li key={detail}>{detail}</li>
                 ))}
-              </ul>
+              </Box>
             </div>
             <DocumentThumb
-              className="school__diploma"
               image={documents[school.diploma]}
               caption={`${school.degree}. ${school.school}`}
+              maxWidth={{ default: 320, lg: 'none' }}
             />
-          </article>
+          </Box>
         ))}
-      </div>
+      </Box>
 
-      <h3 className="subhead" data-reveal>
+      <Text
+        as="h3"
+        variant="display"
+        data-reveal
+        margin={{
+          default: 'clamp(48px, 7vw, 88px) 0 clamp(20px, 3vw, 32px)',
+          print: '3 0 1',
+        }}
+        fontFamily={{ default: vars.font.display, print: 'inherit' }}
+        fontSize={{ default: 'clamp(30px, 3.6vw, 46px)', print: '11pt' }}
+        fontWeight={{ print: 600 }}
+        letterSpacing={{ default: '0.03em', print: 0 }}
+        textTransform={{ default: 'uppercase', print: 'none' }}
+      >
         Certifications
-      </h3>
-      <ul className="certs">
+      </Text>
+      <Box
+        as="ul"
+        display={{ default: 'grid', print: 'block' }}
+        gridTemplateColumns="repeat(auto-fill, minmax(min(100%, 250px), 1fr))"
+        gap="4"
+      >
         {certifications.map((certificate) => (
-          <li className="cert" data-reveal key={certificate.title}>
+          <Card
+            as="li"
+            data-reveal
+            key={certificate.title}
+            display={{ default: 'flex', print: 'block' }}
+            flexDirection="column"
+            gap="4"
+            padding={{ default: '4', print: '0' }}
+            marginBottom={{ print: '1' }}
+          >
             {certificate.image && (
               <DocumentThumb
                 image={documents[certificate.image]}
@@ -84,45 +209,91 @@ export function Education({ documents }: { documents: DocumentImages }) {
                 verify={certificate.url}
               />
             )}
-            <div className="cert__body">
-              <h4 className="cert__title">{certificate.title}</h4>
-              <p className="cert__meta">{certificateMeta(certificate)}</p>
+            {/* Fills the rest of the card so Verify sits on the bottom edge across a row */}
+            <Box
+              flex={1}
+              display={{ default: 'flex', print: 'block' }}
+              flexDirection="column"
+              alignItems="flex-start"
+              gap="1"
+              padding={{ default: '1', print: '0' }}
+            >
+              <Text as="h4" variant="title" {...printInline}>
+                {certificate.title}
+                <PrintOnly>, </PrintOnly>
+              </Text>
+              <Text variant="meta" {...printInline}>
+                {certificateMeta(certificate)}
+              </Text>
               {certificate.url && (
-                <a className="cert__verify link" href={certificate.url} target="_blank" rel="noopener">
-                  Verify
-                </a>
+                <TextLink
+                  href={certificate.url}
+                  target="_blank"
+                  rel="noopener"
+                  marginTop="auto"
+                  paddingTop="2"
+                  display={{ print: 'inline' }}
+                  fontSize={{ default: 14, print: '10.5pt' }}
+                  fontWeight={{ default: 600, print: 400 }}
+                >
+                  {/* On paper the link text is replaced by the verification address itself */}
+                  <Box as="span" display={{ print: 'none' }}>
+                    Verify
+                  </Box>
+                  <PrintOnly> ({certificate.url})</PrintOnly>
+                </TextLink>
               )}
-            </div>
-          </li>
+            </Box>
+          </Card>
         ))}
-      </ul>
+      </Box>
     </Section>
+  );
+}
+
+function InfoCard({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <Card data-reveal marginBottom={{ print: '3' }}>
+      <Text as="h3" variant="eyebrow">
+        {title}
+      </Text>
+      <Box
+        as="ul"
+        display="grid"
+        gap={{ default: '3', print: '1' }}
+        marginTop={{ default: '4', print: '1' }}
+        color={vars.color.text}
+      >
+        {children}
+      </Box>
+    </Card>
   );
 }
 
 export function AdditionalInformation() {
   return (
     <Section id="additional" index="05" title="Additional Information">
-      <div className="extras">
-        <div className="extra" data-reveal>
-          <h3 className="extra__title">Languages</h3>
-          <ul className="extra__list">
-            {languages.map((language) => (
-              <li key={language.name}>
-                {language.name} <span>({language.level})</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="extra" data-reveal>
-          <h3 className="extra__title">Volunteering</h3>
-          <ul className="extra__list">
-            {volunteering.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </div>
-      </div>
+      <Box
+        display={{ default: 'grid', print: 'block' }}
+        gridTemplateColumns={{ default: 'minmax(0, 1fr)', md: 'repeat(2, minmax(0, 1fr))' }}
+        gap="4"
+      >
+        <InfoCard title="Languages">
+          {languages.map((language) => (
+            <li key={language.name}>
+              {language.name}{' '}
+              <Box as="span" color={vars.color.muted}>
+                ({language.level})
+              </Box>
+            </li>
+          ))}
+        </InfoCard>
+        <InfoCard title="Volunteering">
+          {volunteering.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </InfoCard>
+      </Box>
     </Section>
   );
 }

@@ -2,6 +2,8 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 import { initScroll } from './scroll';
+import { refreshTenures } from '../lib/tenure';
+import { media } from '../ui/media';
 
 declare global {
   interface Window {
@@ -28,10 +30,11 @@ function initHeader(): void {
   window.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') setOpen(false);
   });
-  window.matchMedia('(min-width: 900px)').addEventListener('change', () => setOpen(false));
+  window.matchMedia(media.lg).addEventListener('change', () => setOpen(false));
 }
 
 initHeader();
+refreshTenures();
 
 // Scroll animations run only when the visitor has not asked for reduced motion.
 // The hero animation lives in its React component (src/components/Hero.tsx).

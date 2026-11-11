@@ -1,9 +1,10 @@
-import { useRef, type CSSProperties } from 'react';
+import { useRef, type CSSProperties, type ReactNode } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 import { profile } from '../data/cv';
+import { Box, Button, Text, vars, type BoxProps } from '../ui';
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
 
@@ -100,7 +101,7 @@ export default function Hero({ photo, cvHref }: Props) {
       if (name) {
         // Each line is split on its own. The heading keeps one accessible name while the
         // per-letter boxes stay out of the accessibility tree.
-        const lines = gsap.utils.toArray<HTMLElement>('.hero__line', name);
+        const lines = gsap.utils.toArray<HTMLElement>('[data-hero-line]', name);
         const split = SplitText.create(lines, { type: 'chars', aria: 'none' });
         lines.forEach((line) => line.setAttribute('aria-hidden', 'true'));
         gsap.set(name, { visibility: 'visible' });
@@ -150,72 +151,198 @@ export default function Hero({ photo, cvHref }: Props) {
     { scope: root },
   );
 
+  const gutter = vars.space.gutter;
+
   return (
-    <section className="hero" id="top" ref={root}>
-      <div className="hero__text">
-        <h1 className="hero__name" data-hero-name aria-label={profile.name}>
-          <span className="hero__line">{profile.firstName}</span>{' '}
-          <span className="hero__line">{profile.lastName}</span>
-        </h1>
-        <p className="hero__title" data-hero-item>
+    <Box
+      as="section"
+      id="top"
+      ref={root}
+      position="relative"
+      display={{ default: 'grid', print: 'block' }}
+      gridTemplateColumns={{ default: 'minmax(0, 1fr)', lg: 'repeat(12, minmax(0, 1fr))' }}
+      alignItems={{ default: 'start', lg: 'center' }}
+      minHeight={{ default: 0, lg: '100svh', print: 0 }}
+      padding={{ default: `${vars.space.headerH} 0 6`, lg: `${vars.space.headerH} 0 0`, print: '0' }}
+      overflow="hidden"
+    >
+      <Box
+        position="relative"
+        zIndex={2}
+        gridColumn={{ default: '1', lg: '1 / 9' }}
+        gridRow={{ default: 2, lg: 1 }}
+        marginTop={{ default: '-19vw', lg: '0', print: '0' }}
+        padding={{ default: `0 ${gutter}`, lg: `8 0 8 ${gutter}`, print: '0' }}
+      >
+        <Box
+          as="h1"
+          data-hero-name
+          aria-label={profile.name}
+          fontFamily={vars.font.display}
+          fontSize={{
+            default: 'clamp(72px, 26vw, 190px)',
+            lg: 'clamp(96px, 15.5vw, 236px)',
+            print: '30pt',
+          }}
+          fontWeight={700}
+          lineHeight={{ default: 0.8, print: 1 }}
+          letterSpacing="0.04em"
+          textTransform="uppercase"
+          color={vars.color.accent}
+        >
+          <NameLine>{profile.firstName}</NameLine>{' '}
+          {/* Second line is pushed right, as in the original design */}
+          <NameLine paddingLeft={{ default: '0.5em', lg: '0.85em', print: '0' }}>
+            {profile.lastName}
+          </NameLine>
+        </Box>
+        <Text
+          data-hero-item
+          marginTop={{ default: 'clamp(20px, 3vw, 40px)', print: '1' }}
+          fontSize={{ default: 'clamp(18px, 2.2vw, 30px)', print: '12pt' }}
+          fontWeight={300}
+          letterSpacing={{ default: '0.16em', lg: '0.22em', print: '0.05em' }}
+          textTransform="uppercase"
+          color="#fff"
+        >
           {profile.title}
-        </p>
-        <address className="hero__contact" data-hero-item>
+        </Text>
+        <Box
+          as="address"
+          data-hero-item
+          display="flex"
+          flexWrap="wrap"
+          gap="1 5"
+          marginTop={{ default: '4', print: '1' }}
+          fontSize={{ default: 15, print: '10pt' }}
+          color={vars.color.muted}
+        >
           <span>{profile.location}</span>{' '}
-          <a href={`mailto:${profile.email}`}>{profile.email}</a>{' '}
+          <ContactLink href={`mailto:${profile.email}`}>{profile.email}</ContactLink>{' '}
           {profile.phone && (
             <>
-              <a href={`tel:${profile.phone.replace(/\s/g, '')}`}>{profile.phone}</a>{' '}
+              <ContactLink href={`tel:${profile.phone.replace(/\s/g, '')}`}>
+                {profile.phone}
+              </ContactLink>{' '}
             </>
           )}
-          <a href={profile.linkedin} rel="me noopener">
+          <ContactLink href={profile.linkedin} target="_blank" rel="me noopener noreferrer">
             LinkedIn
-          </a>
-        </address>
-        <div className="hero__actions" data-hero-item>
-          <a className="btn btn--primary" href="#experience">
+            <PrintOnly> ({profile.linkedin})</PrintOnly>
+          </ContactLink>
+        </Box>
+        <Box
+          data-hero-item
+          display={{ default: 'flex', print: 'none' }}
+          flexWrap="wrap"
+          gap="3"
+          marginTop="clamp(28px, 4vw, 48px)"
+        >
+          <Button variant="primary" href="#experience">
             View experience
-          </a>{' '}
-          <a className="btn" href={`mailto:${profile.email}`}>
-            Get in touch
-          </a>{' '}
+          </Button>{' '}
+          <Button href={`mailto:${profile.email}`}>Get in touch</Button>{' '}
           {cvHref && (
-            <a className="btn" href={cvHref} download>
+            <Button href={cvHref} target="_blank" rel="noopener" download>
               Download CV
-            </a>
+            </Button>
           )}
-        </div>
-      </div>
+        </Box>
+      </Box>
 
-      <div className="stage" data-stage>
+      <Box
+        data-stage
+        position="relative"
+        gridColumn={{ default: '1', lg: '6 / 13' }}
+        gridRow={1}
+        justifySelf={{ default: 'center', lg: 'end' }}
+        width={{ default: 'min(100%, 70svh)', lg: 'min(100%, 94svh)' }}
+        aspectRatio={1}
+        display={{ print: 'none' }}
+        // Horizontal lean of the strips, in % of stage width (about -18deg on a square)
+        style={{ '--k': 32.5 } as CSSProperties}
+      >
         {STRIPS.map((strip, i) => (
-          <div
-            className="strip"
-            style={stripStyle(strip)}
-            data-strip
-            aria-hidden={i === 0 ? undefined : true}
-            key={strip.l}
-          >
-            <img
+          <Strip style={stripStyle(strip)} aria-hidden={i === 0 ? undefined : true} key={strip.l}>
+            <Box
+              as="img"
               src={photo.src}
               srcSet={photo.srcSet}
-              sizes="(max-width: 899px) 100vw, 58vw"
-              width={photo.width}
-              height={photo.height}
+              sizes="(min-width: 992px) 58vw, 100vw"
+              htmlWidth={photo.width}
+              htmlHeight={photo.height}
               alt={i === 0 ? `Portrait of ${profile.name}` : ''}
               loading="eager"
               decoding="async"
               fetchPriority={i === 0 ? 'high' : undefined}
+              width="100%"
+              height="100%"
+              objectFit="cover"
+              // Frames the face and keeps the bottom of the photo out of view
+              objectPosition="50% 28%"
             />
-          </div>
+          </Strip>
         ))}
-        <div
-          className="strip strip--accent"
-          style={stripStyle(ACCENT_STRIP)}
-          data-strip
+        <Strip style={stripStyle(ACCENT_STRIP)} background={vars.color.accent} aria-hidden />
+        {/* Fades the bottom of the photo into the page */}
+        <Box
           aria-hidden
+          position="absolute"
+          inset="70% 0 0 0"
+          background={`linear-gradient(to bottom, transparent, ${vars.color.bg})`}
+          pointerEvents="none"
         />
-      </div>
-    </section>
+      </Box>
+    </Box>
+  );
+}
+
+/** One line of the name; the intro animation splits it into letters, the overflow masks them. */
+function NameLine(props: BoxProps<'span'>) {
+  return (
+    <Box
+      as="span"
+      data-hero-line
+      display={{ default: 'block', print: 'inline' }}
+      // Room for the reveal mask so glyph tops are not cut
+      paddingTop={{ default: '0.06em', print: '0' }}
+      overflow="hidden"
+      {...props}
+    />
+  );
+}
+
+function ContactLink(props: BoxProps<'a'>) {
+  return <Box as="a" color={{ hover: '#fff' }} {...props} />;
+}
+
+const PrintOnly = ({ children }: { children: ReactNode }) => (
+  <Box as="span" display={{ default: 'none', print: 'inline' }}>
+    {children}
+  </Box>
+);
+
+/*
+ * Each strip is a slanted window onto the same photo. --l and --w (left edge and width) are set
+ * inline; --t and --b (top and bottom edges) are animated by the hero. All are % of the stage.
+ */
+const STRIP_CLIP = `polygon(
+  calc((var(--l) + var(--k) * (50 - var(--t)) / 100) * 1%) calc(var(--t) * 1%),
+  calc((var(--l) + var(--w) + var(--k) * (50 - var(--t)) / 100) * 1%) calc(var(--t) * 1%),
+  calc((var(--l) + var(--w) + var(--k) * (50 - var(--b)) / 100) * 1%) calc(var(--b) * 1%),
+  calc((var(--l) + var(--k) * (50 - var(--b)) / 100) * 1%) calc(var(--b) * 1%)
+)`;
+
+function Strip(props: BoxProps<'div'>) {
+  return (
+    <Box
+      data-strip
+      position="absolute"
+      inset={0}
+      overflow="hidden"
+      clipPath={STRIP_CLIP}
+      willChange="clip-path"
+      {...props}
+    />
   );
 }

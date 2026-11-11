@@ -1,5 +1,6 @@
 import Section from './Section';
 import { profile } from '../data/cv';
+import { Box, Button, Text, underline, vars } from '../ui';
 
 interface Props {
   cvHref: string | null;
@@ -9,33 +10,71 @@ interface Props {
 export default function Contact({ cvHref, year }: Props) {
   return (
     <>
-      <Section id="contact" index="06" title="Contact" className="contact">
-        <p className="contact__lead" data-reveal>
+      <Section
+        id="contact"
+        index="06"
+        title="Contact"
+        borderTop={{ default: `1px solid ${vars.color.line}`, print: 0 }}
+      >
+        <Text variant="lead" data-reveal maxWidth="34ch" color={vars.color.muted}>
           Open to senior and lead engineering roles. The fastest way to reach me is email.
-        </p>
-        <a className="contact__email" href={`mailto:${profile.email}`} data-reveal>
+        </Text>
+        <Box
+          as="a"
+          href={`mailto:${profile.email}`}
+          data-reveal
+          display="inline-block"
+          maxWidth="100%"
+          marginTop="clamp(20px, 3vw, 36px)"
+          paddingBottom="2"
+          fontFamily={{ default: vars.font.display, print: 'inherit' }}
+          fontSize={{ default: 'clamp(30px, 6.6vw, 104px)', print: '10.5pt' }}
+          lineHeight={1}
+          letterSpacing="0.02em"
+          textTransform={{ default: 'uppercase', print: 'none' }}
+          overflowWrap="anywhere"
+          color={{ default: '#fff', hover: vars.color.accentText }}
+          background={{ default: underline('3px'), print: 'none' }}
+          transition="color 0.3s"
+        >
           {profile.email}
-        </a>
-        <div className="contact__links" data-reveal>
-          <a className="btn" href={profile.linkedin} rel="me noopener">
+        </Box>
+        <Box
+          data-reveal
+          display={{ default: 'flex', print: 'none' }}
+          flexWrap="wrap"
+          gap="3"
+          marginTop="clamp(28px, 4vw, 48px)"
+        >
+          <Button href={profile.linkedin} target="_blank" rel="me noopener noreferrer">
             LinkedIn
-          </a>{' '}
-          <a className="btn" href={profile.github} rel="me noopener">
+          </Button>{' '}
+          <Button href={profile.github} target="_blank" rel="me noopener noreferrer">
             GitHub
-          </a>{' '}
+          </Button>{' '}
           {cvHref && (
-            <a className="btn btn--primary" href={cvHref} download>
+            <Button variant="primary" href={cvHref} target="_blank" rel="noopener" download>
               Download CV
-            </a>
+            </Button>
           )}
-        </div>
+        </Box>
       </Section>
-      <footer className="footer">
+      <Box
+        as="footer"
+        display={{ default: 'flex', print: 'none' }}
+        flexWrap="wrap"
+        justifyContent="space-between"
+        gap="2 6"
+        padding={`7 ${vars.space.gutter}`}
+        borderTop={`1px solid ${vars.color.line}`}
+        fontSize={14}
+        color={vars.color.muted}
+      >
         <p>
           © {year} {profile.name}
         </p>
         <p>{profile.location}</p>
-      </footer>
+      </Box>
     </>
   );
 }
