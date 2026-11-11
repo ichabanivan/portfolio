@@ -1,0 +1,37 @@
+---
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
+import Marquee from '../components/Marquee.astro';
+import Experience from '../components/Experience.astro';
+import Skills from '../components/Skills.astro';
+import Education from '../components/Education.astro';
+import Contact from '../components/Contact.astro';
+import { profile } from '../data/cv';
+
+// The Download CV buttons appear once public/Ivan-Chaban-CV.pdf exists.
+const CV_FILE = 'Ivan-Chaban-CV.pdf';
+const cvHref = existsSync(join(process.cwd(), 'public', CV_FILE))
+  ? `${import.meta.env.BASE_URL}${CV_FILE}`
+  : null;
+
+const title = `${profile.name} | ${profile.title} (React, TypeScript, Node.js)`;
+const description =
+  'Ivan Chaban is a Senior Software Engineer at Fiverr based in Poznań, Poland. React, TypeScript, Node.js, NestJS and Next.js. Experience, technical skills, education and contact details.';
+---
+
+<Base title={title} description={description}>
+  <Header cvHref={cvHref} />
+  <main id="main">
+    <Hero cvHref={cvHref} />
+    <About />
+    <Marquee />
+    <Experience />
+    <Skills />
+    <Education />
+    <Contact cvHref={cvHref} />
+  </main>
+</Base>

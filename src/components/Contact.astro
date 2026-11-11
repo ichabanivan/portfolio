@@ -1,0 +1,36 @@
+---
+import SectionHead from './SectionHead.astro';
+import { profile } from '../data/cv';
+
+interface Props {
+  cvHref: string | null;
+}
+
+const { cvHref } = Astro.props;
+---
+
+<section class="section contact" id="contact" aria-labelledby="contact-title" data-section>
+  <div class="wrap">
+    <SectionHead index="06" title="Contact" id="contact-title" />
+    <p class="contact__lead" data-reveal>
+      Open to senior and lead engineering roles. The fastest way to reach me is email.
+    </p>
+    <a class="contact__email" href={`mailto:${profile.email}`} data-reveal>{profile.email}</a>
+    <div class="contact__links" data-reveal>
+      <a class="btn" href={profile.linkedin} rel="me noopener">LinkedIn</a>
+      <a class="btn" href={profile.github} rel="me noopener">GitHub</a>
+      {
+        cvHref && (
+          <a class="btn btn--primary" href={cvHref} download>
+            Download CV
+          </a>
+        )
+      }
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <p>© {new Date().getFullYear()} {profile.name}</p>
+  <p>{profile.location}</p>
+</footer>

@@ -1,0 +1,48 @@
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { SplitText } from 'gsap/SplitText';
+import { initHero } from './hero';
+import { initScroll } from './scroll';
+
+declare global {
+  interface Window {
+    __motionReady?: boolean;
+  }
+}
+
+function initHeader(): void {
+  const header = document.querySelector<HTMLElement>('[data-header]');
+  const toggle = document.querySelector<HTMLButtonElement>('[data-nav-toggle]');
+  if (!header) return;
+
+  const onScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 24);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  const setOpen = (open: boolean) => {
+    header.classList.toggle('is-open', open);
+    toggle?.setAttribute('aria-expanded', String(open));
+    document.body.style.overflow = open ? 'hidden' : '';
+  };
+  toggle?.addEventListener('click', () => setOpen(!header.classList.contains('is-open')));
+  header.querySelectorAll('nav a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+  window.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') setOpen(false);
+  });
+  window.matchMedia('(min-width: 900px)').addEventListener('change', () => setOpen(false));
+}
+
+initHeader();
+
+// Animations run only when the visitor has not asked for reduced motion.
+// The inline script in <head> adds the "js" class under the same condition.
+if (document.documentElement.classList.contains('js')) {
+  gsap.registerPlugin(ScrollTrigger, SplitText);
+  window.__motionReady = true;
+
+  initHero();
+  initScroll();
+
+  // Web fonts change text metrics, so trigger positions are measured again once they load.
+  document.fonts?.ready.then(() => ScrollTrigger.refresh());
+}

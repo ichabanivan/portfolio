@@ -1,0 +1,15 @@
+---
+import { marquee } from '../data/cv';
+
+// Decorative only: the same technologies are listed as text in the skills section.
+const row = [...marquee, ...marquee];
+---
+
+<div class="marquee" aria-hidden="true" data-marquee>
+  <div class="marquee__track" data-marquee-track="-1">
+    {row.map((word) => <span>{word} <i>/</i></span>)}
+  </div>
+  <div class="marquee__track" data-marquee-track="1">
+    {[...row].reverse().map((word) => <span>{word} <i>/</i></span>)}
+  </div>
+</div>

@@ -1,29 +1,42 @@
-# Gulpimize
+# Ivan Chaban: portfolio and CV
 
-<p>
-    <img src="https://raw.githubusercontent.com/zanusilker/cloud/master/gulpimize/gulpimize.png" alt="Basic template for quickly getting started">
-</p>
+Single-page portfolio built with [Astro](https://astro.build) (static HTML at build time) and
+[GSAP](https://gsap.com) for animation. Deployed to GitHub Pages.
 
-## Use
+## Commands
 
-```bash
-$ git clone https://github.com/zanusilker/gulpimize
-$ cd gulpimize/ && yarn install
-$ npm run gulp
+```sh
+npm install
+npm run dev      # local dev server
+npm run build    # static build into dist/
+npm run preview  # serve the built site
 ```
 
-Starting a fresh project
-If you plan on using this to start a new project, be sure and clear out the git data start a fresh history:
+## Editing content
 
-```
-rm -rf .git && git init
-git add .
-git commit -m "Initialized with Gulpimize"
-```
+All text lives in `src/data/cv.ts` (profile, skills, experience, education, extras).
 
-## Technologies
+- **Download CV button**: put the file at `public/Ivan-Chaban-CV.pdf` and rebuild. The buttons
+  appear automatically when the file exists.
+- **Phone number**: hidden by default. Set `profile.phone` in `src/data/cv.ts` to show it.
+- **Photo**: `src/assets/me.jpg`. Framing is controlled by `object-position` on `.strip img` in
+  `src/styles/global.css`.
 
-* Gulp - Automate and enhance your workflow
-* Pug - Terse language for writing HTML templates.
-* PostCSS - CSS with superpowers.
-* Babel - Use next generation JavaScript, today (ES5 => ES6).
+## Structure
+
+- `src/pages/index.astro`: page composition, title and description
+- `src/layouts/Base.astro`: `<head>`, SEO meta, Open Graph, JSON-LD
+- `src/components/`: one component per section
+- `src/scripts/hero.ts`: the skewed-strip photo animation
+- `src/scripts/scroll.ts`: scroll reveals, progress bar, counters, active navigation
+- `src/styles/print.css`: printing the page gives a plain single-column CV
+
+The page is fully readable without JavaScript and respects `prefers-reduced-motion`.
+
+## Deploy
+
+`.github/workflows/deploy.yml` builds and publishes on every push to `master`.
+In the repository settings, set **Pages → Source** to **GitHub Actions**.
+
+If the repository is renamed or a custom domain is used, update `site` and `base` in
+`astro.config.mjs` and the sitemap URL in `public/robots.txt`.

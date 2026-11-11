@@ -1,0 +1,67 @@
+---
+import SectionHead from './SectionHead.astro';
+import { education, certifications, volunteering, languages } from '../data/cv';
+---
+
+<section class="section" id="education" aria-labelledby="education-title" data-section>
+  <div class="wrap">
+    <SectionHead index="04" title="Education" id="education-title" />
+    <div class="schools">
+      {
+        education.map((school) => (
+          <article class="school" data-reveal>
+            <div class="role__meta">
+              <p class="role__dates">
+                <time datetime={school.start.iso}>{school.start.label}</time>
+                {' - '}
+                <time datetime={school.end.iso}>{school.end.label}</time>
+              </p>
+              <p class="role__location">{school.location}</p>
+            </div>
+            <div>
+              <h3 class="school__name">{school.school}</h3>
+              <p class="school__degree">{school.degree}</p>
+              <ul class="school__details">
+                {school.details.map((detail) => (
+                  <li>{detail}</li>
+                ))}
+              </ul>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<section class="section" id="additional" aria-labelledby="additional-title" data-section>
+  <div class="wrap">
+    <SectionHead index="05" title="Additional Information" id="additional-title" />
+    <div class="extras">
+      <div class="extra" data-reveal>
+        <h3 class="extra__title">Certifications</h3>
+        <ul class="extra__list">
+          {certifications.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+      <div class="extra" data-reveal>
+        <h3 class="extra__title">Languages</h3>
+        <ul class="extra__list">
+          {
+            languages.map((language) => (
+              <li>
+                {language.name} <span>({language.level})</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div class="extra" data-reveal>
+        <h3 class="extra__title">Volunteering</h3>
+        <ul class="extra__list">
+          {volunteering.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>

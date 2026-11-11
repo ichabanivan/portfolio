@@ -1,0 +1,24 @@
+---
+import SectionHead from './SectionHead.astro';
+import { skills } from '../data/cv';
+---
+
+<section class="section" id="skills" aria-labelledby="skills-title" data-section>
+  <div class="wrap">
+    <SectionHead index="03" title="Technical Skills" id="skills-title" />
+    <div class="skills">
+      {
+        skills.map((skill) => (
+          <div class="skill" data-reveal>
+            <h3 class="skill__group">{skill.group}</h3>
+            <ul class="chips">
+              {skill.items.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
