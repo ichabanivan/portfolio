@@ -41,6 +41,9 @@ export const profile = {
   cvDoc:
     'https://docs.google.com/document/d/1MK_L2FU4hosFpplFxnm-wJyn8X-SpZWBd6DNlu_4K70/edit?tab=t.0',
   github: 'https://github.com/ichabanivan',
+  stack: ['React', 'TypeScript', 'Node.js', 'NestJS', 'Next.js'],
+  address: { locality: 'Poznań', countryCode: 'PL' },
+  contactNote: 'The fastest way to reach me is email.',
   summary: [
     'Senior Software Engineer building web products since 2016, currently at Fiverr. I work across the stack with React, TypeScript, Node.js, NestJS and Next.js, with a focus on scalable front-end architecture, design systems and measurable product impact.',
     'I have led front-end teams, run interviews and code reviews, mentored engineers, and shipped everything from micro-frontends and SSR applications to React Native and Flutter apps.',
@@ -59,36 +62,26 @@ export const marquee = [
   'GSAP',
 ];
 
-export const skills: { group: string; items: string[] }[] = [
+export interface SkillGroup {
+  group: string;
+  items: string[];
+  printHidden?: true;
+}
+
+export const skills: SkillGroup[] = [
+  { group: 'Programming Languages', items: ['JavaScript', 'TypeScript', 'Dart'] },
   {
-    group: 'Programming Languages & Frameworks',
+    group: 'Frameworks & Runtimes',
     items: [
-      'JavaScript',
-      'TypeScript',
       'ReactJS',
+      'NextJS (SSR/CSR)',
       'React Native',
-      'Angular 2+',
       'NodeJS',
       'NestJS',
-      'Dart',
+      'Angular 2+',
+      'Astro',
       'Flutter',
-      'NextJS (SSR/CSR)',
       'Prisma.io',
-    ],
-  },
-  {
-    group: 'Frontend Development & CSS Methodologies',
-    items: [
-      'CSS',
-      'PostCSS',
-      'SCSS',
-      'Styled Components',
-      'BEM',
-      'OOCSS',
-      'Mobile/Desktop-first markup',
-      'HTML',
-      'Handlebars',
-      'Jade (Pug)',
     ],
   },
   {
@@ -118,10 +111,37 @@ export const skills: { group: string; items: string[] }[] = [
       'Yup',
     ],
   },
-  { group: 'Databases & Data Tools', items: ['MongoDB', 'PostgreSQL', 'Athena (AWS)'] },
+  {
+    group: 'Frontend Development & CSS Methodologies',
+    items: [
+      'CSS',
+      'PostCSS',
+      'SCSS',
+      'Styled Components',
+      'Tailwind CSS',
+      'BEM',
+      'OOCSS',
+      'Mobile/Desktop-first markup',
+      'HTML',
+      'Handlebars',
+      'Jade (Pug)',
+    ],
+  },
+  {
+    group: 'AI-Assisted Development',
+    items: [
+      'Claude Code',
+      'Claude',
+      'Cursor',
+      'MCP (Model Context Protocol)',
+      'Figma MCP',
+      'AI agents & subagents',
+    ],
+  },
+  { group: 'Databases & Data Tools', items: ['MongoDB', 'PostgreSQL', 'Athena (AWS)', 'BigQuery'] },
   {
     group: 'Testing & Build Tools',
-    items: ['Jest', 'Playwright', 'Docker', 'Gulp', 'Webpack', 'Rollup', 'CircleCI', 'Jenkins'],
+    items: ['Jest', 'Playwright', 'Docker', 'Gulp', 'Webpack', 'Vite', 'Rollup', 'CircleCI', 'Jenkins'],
   },
   {
     group: 'Monitoring, Logging & Analytics',
@@ -129,16 +149,25 @@ export const skills: { group: string; items: string[] }[] = [
   },
   {
     group: 'Design & UI Tools',
-    items: ['Figma', 'Figma MCP', 'Zeplin', 'Avocode', 'Adobe Photoshop', 'InDesign', 'Cursor'],
+    items: ['Figma', 'Zeplin', 'Avocode', 'Adobe Photoshop', 'InDesign'],
   },
   {
     group: 'Version Control & Collaboration Tools',
     items: ['Git (GitHub, GitLab, BitBucket)', 'Jira', 'Asana', 'Monday'],
+    printHidden: true,
   },
-  { group: 'Linters & Code Quality Tools', items: ['ESLint', 'Stylelint', 'Prettier'] },
-  { group: 'IDEs & Development Environments', items: ['IntelliJ IDEA', 'WebStorm', 'VS Code'] },
-  { group: 'Other DevOps & Infrastructure Tools', items: ['Consul'] },
-  { group: 'Operating Systems', items: ['Mac OS', 'Windows', 'Linux'] },
+  {
+    group: 'Linters & Code Quality Tools',
+    items: ['ESLint', 'Stylelint', 'Prettier'],
+    printHidden: true,
+  },
+  {
+    group: 'IDEs & Development Environments',
+    items: ['IntelliJ IDEA', 'WebStorm', 'VS Code'],
+    printHidden: true,
+  },
+  { group: 'Other DevOps & Infrastructure Tools', items: ['Consul'], printHidden: true },
+  { group: 'Operating Systems', items: ['Mac OS', 'Windows', 'Linux'], printHidden: true },
 ];
 
 export const experience: Role[] = [
@@ -205,7 +234,7 @@ export const experience: Role[] = [
   {
     company: 'Brightgrove',
     logo: 'brightgrove',
-    location: 'Kharkiv, Ukraine, Subcontract from Intelliceed Inc.',
+    location: 'Kharkiv, Ukraine, subcontracted from Intelliceed Inc.',
     title: 'Senior Software Engineer',
     start: { label: 'November 2020', iso: '2020-11' },
     end: { label: 'November 2021', iso: '2021-11' },
@@ -306,7 +335,7 @@ export const education = [
   },
   {
     school: 'National University “Yuri Kondratyuk Poltava Polytechnic”',
-    location: 'Kharkiv, Ukraine',
+    location: 'Poltava, Ukraine',
     degree: 'Master’s degree, Oil and Gas Engineering',
     diploma: 'masterOilGas' as DocumentKey,
     start: { label: 'September 2019', iso: '2019-09' },
@@ -318,7 +347,7 @@ export const education = [
   },
   {
     school: 'National University “Yuri Kondratyuk Poltava Polytechnic”',
-    location: 'Kharkiv, Ukraine',
+    location: 'Poltava, Ukraine',
     degree: 'Bachelor’s degree, Mining. Drilling Wells',
     diploma: 'bachelorMining' as DocumentKey,
     start: { label: 'September 2016', iso: '2016-09' },
@@ -367,13 +396,27 @@ export const certifications: Certification[] = [
   { title: 'Development Basics', issuer: 'A-level Ukraine', year: 2016 },
 ];
 
-export const volunteering = [
-  'A-Level Ukraine: Mentoring “Programming for Children”, June 2017 to September 2017. Project from the City Administration: #Itforyou.',
+export interface Volunteering {
+  organization: string;
+  role: string;
+  start: { label: string; iso: string };
+  end: { label: string; iso: string };
+  note: string;
+}
+
+export const volunteering: Volunteering[] = [
+  {
+    organization: 'A-Level Ukraine',
+    role: 'Mentoring “Programming for Children”',
+    start: { label: 'June 2017', iso: '2017-06' },
+    end: { label: 'September 2017', iso: '2017-09' },
+    note: 'Project from the City Administration: #Itforyou.',
+  },
 ];
 
 export const languages = [
   { name: 'English', level: 'B2, Upper Intermediate' },
-  { name: 'Ukrainian', level: 'C2, Fluent' },
+  { name: 'Polish', level: 'B2, Upper Intermediate' },
+  { name: 'Ukrainian', level: 'Native' },
   { name: 'Russian', level: 'C2, Fluent' },
-  { name: 'Polish', level: 'B1, Intermediate' },
 ];

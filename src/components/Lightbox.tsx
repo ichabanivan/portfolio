@@ -5,8 +5,11 @@ import {
   useState,
   type MouseEvent as ReactMouseEvent,
 } from 'react';
-import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+import { gsap } from '../lib/gsap';
+import { duration, ease } from '../lib/motion';
 import { Box, TextLink, effects, vars, type BoxProps, type StyleProps } from '../ui';
+import { motionOk } from '../ui/media';
 
 interface Item {
   src: string;
@@ -15,6 +18,8 @@ interface Item {
   width?: number;
   height?: number;
 }
+
+gsap.registerPlugin(useGSAP);
 
 const SELECTOR = 'a[data-lightbox]';
 
@@ -65,18 +70,20 @@ export default function Lightbox() {
     if (index === null && el.open) el.close();
   }, [index]);
 
-  useEffect(() => {
-    if (index === null || !figure.current) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const tween = gsap.fromTo(
-      figure.current,
-      { opacity: 0, y: 24 },
-      { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' },
-    );
-    return () => {
-      tween.kill();
-    };
-  }, [index]);
+  useGSAP(
+    () => {
+      if (index === null || !figure.current) return;
+      const mm = gsap.matchMedia();
+      mm.add(motionOk, () => {
+        gsap.fromTo(
+          figure.current,
+          { opacity: 0, y: 24 },
+          { opacity: 1, y: 0, duration: duration.fast, ease: ease.soft },
+        );
+      });
+    },
+    { dependencies: [index], revertOnUpdate: true, scope: dialog },
+  );
 
   useEffect(() => {
     if (index === null || !many) return;
@@ -105,7 +112,7 @@ export default function Lightbox() {
       margin="0"
       padding="clamp(56px, 7vw, 72px) clamp(12px, 6vw, 88px) clamp(16px, 3vw, 32px)"
       border={0}
-      background="rgba(8, 8, 9, 0.94)"
+      background={vars.color.scrim}
       color={vars.color.text}
       overflow="auto"
     >
@@ -142,8 +149,16 @@ export default function Lightbox() {
             fontSize={15}
             textAlign="center"
             color={vars.color.muted}
+            aria-live="polite"
           >
-            <span>{item.caption}</span>
+            <span>
+              {many && index !== null && (
+                <span className={effects.srOnly}>
+                  Document {index + 1} of {items.length}.{' '}
+                </span>
+              )}
+              {item.caption}
+            </span>
             {item.verify && (
               <TextLink href={item.verify} target="_blank" rel="noopener">
                 Verify certificate
@@ -189,7 +204,7 @@ function RoundButton(props: BoxProps<'button'>) {
       border="1px solid"
       borderColor={{ default: vars.color.line, hover: vars.color.accent }}
       borderRadius="50%"
-      background={{ default: 'rgba(20, 20, 22, 0.9)', hover: vars.color.accent }}
+      background={{ default: vars.color.control, hover: vars.color.accent }}
       color={vars.color.white}
       fontSize={26}
       lineHeight={1}

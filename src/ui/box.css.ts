@@ -73,7 +73,6 @@ const SURFACE_PROPS = [
   'objectFit',
   'objectPosition',
   'clipPath',
-  'willChange',
   'breakInside',
 ] as const;
 

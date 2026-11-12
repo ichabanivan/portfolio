@@ -8,3 +8,5 @@ export const media = {
 } as const;
 
 export const reducedMotion = '(prefers-reduced-motion: reduce)';
+export const motionOk = '(prefers-reduced-motion: no-preference)';
+export const finePointer = '(hover: hover) and (pointer: fine)';

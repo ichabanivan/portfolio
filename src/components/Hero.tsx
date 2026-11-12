@@ -1,12 +1,22 @@
 import { useRef, type CSSProperties } from 'react';
-import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { SplitText } from 'gsap/SplitText';
+import { gsap, ScrollTrigger } from '../lib/gsap';
+import { ease } from '../lib/motion';
 import { profile } from '../data/cv';
-import { Box, Button, PrintOnly, Text, vars, type BoxProps } from '../ui';
+import { motionOk } from '../ui/media';
+import {
+  Box,
+  Button,
+  effects,
+  intro,
+  NEW_TAB_HINT_ID,
+  PrintOnly,
+  Text,
+  vars,
+  type BoxProps,
+} from '../ui';
 
-gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
+gsap.registerPlugin(useGSAP);
 
 export interface HeroPhoto {
   src: string;
@@ -21,13 +31,13 @@ interface Props {
 }
 
 const STRIPS = [
-  { l: 14.4, w: 10.6, t: 16.7, b: 46.7 },
-  { l: 28, w: 18.9, t: 7.1, b: 82.1 },
-  { l: 47.2, w: 12.9, t: 15, b: 90 },
-  { l: 60.4, w: 18.9, t: 13.3, b: 98.3 },
-  { l: 79.7, w: 6.1, t: 26.3, b: 91.3 },
+  { l: 14.4, w: 10.6 },
+  { l: 28, w: 18.9 },
+  { l: 47.2, w: 12.9 },
+  { l: 60.4, w: 18.9 },
+  { l: 79.7, w: 6.1 },
 ];
-const ACCENT_STRIP = { l: 89.5, w: 1, t: 30, b: 74 };
+const ACCENT_STRIP = { l: 89.5, w: 1 };
 
 const WINDOWS: { top: (h: number) => number; bottom: (h: number) => number }[] = [
   { top: (h) => h / 3, bottom: (h) => 30 + h / 3 },
@@ -38,10 +48,33 @@ const WINDOWS: { top: (h: number) => number; bottom: (h: number) => number }[] =
   { top: (h) => 12 + h / 2.5, bottom: (h) => 52 + h / 2.5 },
 ];
 
-const clamp = gsap.utils.clamp(0, 100);
+const HERO_SIZES =
+  '(min-width: 992px) min(58vw, 94svh), (min-width: 768px) min(100vw, 56svh), min(100vw, 70svh)';
 
-const stripStyle = (s: typeof ACCENT_STRIP) =>
-  ({ '--l': s.l, '--w': s.w, '--t': s.t, '--b': s.b }) as CSSProperties;
+const FINE_POINTER = '(hover: hover) and (pointer: fine)';
+const REST = { fine: 50, coarse: 30 };
+
+const clamp = gsap.utils.clamp(0, 100);
+const round = (n: number) => Math.round(n * 100) / 100;
+
+const at = (i: number, h: number) => ({
+  t: round(WINDOWS[i].top(h)),
+  b: round(Math.min(100, WINDOWS[i].bottom(h))),
+});
+
+const stripStyle = (s: typeof ACCENT_STRIP, i: number) => {
+  const fine = at(i, REST.fine);
+  const coarse = at(i, REST.coarse);
+  return {
+    '--l': s.l,
+    '--w': s.w,
+    '--i': i,
+    '--t0': fine.t,
+    '--b0': fine.b,
+    '--t1': coarse.t,
+    '--b1': coarse.b,
+  } as CSSProperties;
+};
 
 export default function Hero({ photo, cvHref }: Props) {
   const root = useRef<HTMLElement>(null);
@@ -49,86 +82,57 @@ export default function Hero({ photo, cvHref }: Props) {
   useGSAP(
     () => {
       const hero = root.current;
-      if (!hero || !document.documentElement.classList.contains('js')) return;
+      if (!hero) return;
+      const strips = gsap.utils.toArray<HTMLElement>('[data-strip]', hero);
 
-      const stage = hero.querySelector<HTMLElement>('[data-stage]');
-      if (!stage) return;
+      const mm = gsap.matchMedia();
+      mm.add({ motion: motionOk, fine: FINE_POINTER }, (ctx) => {
+        const { motion, fine } = ctx.conditions as { motion: boolean; fine: boolean };
+        if (!motion) return;
 
-      const strips = gsap.utils.toArray<HTMLElement>('[data-strip]', stage);
-      const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+        const rest = fine ? REST.fine : REST.coarse;
+        const state = { h: rest };
+        let pointerH = rest;
+        let progress = 0;
 
-      const state = { h: 50 };
-      const reveal = strips.map(() => ({ r: 0 }));
-      let pointerH = finePointer ? 50 : 30;
-      let scrollProgress = 0;
+        const render = () =>
+          strips.forEach((strip, i) => {
+            const { t, b } = at(i, state.h);
+            strip.style.setProperty('--t', String(t));
+            strip.style.setProperty('--b', String(b));
+          });
 
-      const render = () => {
-        strips.forEach((strip, i) => {
-          const win = WINDOWS[i] ?? WINDOWS[0];
-          const top = win.top(state.h);
-          const bottom = Math.min(100, win.bottom(state.h));
-          const r = reveal[i].r;
-          const t = i % 2 ? top : bottom - (bottom - top) * r;
-          const b = i % 2 ? top + (bottom - top) * r : bottom;
-          strip.style.setProperty('--t', t.toFixed(2));
-          strip.style.setProperty('--b', b.toFixed(2));
+        const moveTo = gsap.quickTo(state, 'h', {
+          duration: 0.9,
+          ease: ease.soft,
+          onUpdate: render,
         });
-      };
+        const update = () => moveTo(clamp(pointerH + progress * 60));
 
-      const moveTo = gsap.quickTo(state, 'h', { duration: 0.9, ease: 'power3.out' });
-      const update = () => moveTo(clamp(pointerH + scrollProgress * 60));
-
-      render();
-      gsap.set(stage, { visibility: 'visible' });
-
-      const intro = gsap.timeline({ defaults: { ease: 'expo.out' } });
-      intro.to(reveal, { r: 1, duration: 1.5, stagger: 0.09 }, 0.1);
-
-      const name = hero.querySelector<HTMLElement>('[data-hero-name]');
-      if (name) {
-        const lines = gsap.utils.toArray<HTMLElement>('[data-hero-line]', name);
-        const split = SplitText.create(lines, { type: 'chars', aria: 'none' });
-        lines.forEach((line) => line.setAttribute('aria-hidden', 'true'));
-        gsap.set(name, { visibility: 'visible' });
-        intro.from(split.chars, { yPercent: 115, duration: 1.1, stagger: 0.045 }, 0.25);
-      }
-
-      intro.fromTo(
-        '[data-hero-item]',
-        { opacity: 0, y: 24 },
-        { opacity: 1, y: 0, duration: 0.9, stagger: 0.1, ease: 'power3.out' },
-        0.9,
-      );
-
-      const onPointerMove = (event: PointerEvent) => {
-        pointerH = (event.clientY / window.innerHeight) * 100;
-        update();
-      };
-      if (finePointer) window.addEventListener('pointermove', onPointerMove, { passive: true });
-      else update();
-
-      ScrollTrigger.create({
-        trigger: hero,
-        start: 'top top',
-        end: 'bottom top',
-        onUpdate: (self) => {
-          scrollProgress = self.progress;
+        const onPointerMove = (event: PointerEvent) => {
+          pointerH = (event.clientY / window.innerHeight) * 100;
           update();
-        },
-      });
+        };
+        if (fine) window.addEventListener('pointermove', onPointerMove, { passive: true });
 
-      gsap.ticker.add(render);
-      const observer = new IntersectionObserver(([entry]) => {
-        gsap.ticker.remove(render);
-        if (entry.isIntersecting) gsap.ticker.add(render);
-      });
-      observer.observe(hero);
+        ScrollTrigger.create({
+          trigger: hero,
+          start: 'top top',
+          end: 'bottom top',
+          onUpdate: (self) => {
+            progress = self.progress;
+            update();
+          },
+        });
 
-      return () => {
-        window.removeEventListener('pointermove', onPointerMove);
-        gsap.ticker.remove(render);
-        observer.disconnect();
-      };
+        return () => {
+          window.removeEventListener('pointermove', onPointerMove);
+          strips.forEach((strip) => {
+            strip.style.removeProperty('--t');
+            strip.style.removeProperty('--b');
+          });
+        };
+      });
     },
     { scope: root },
   );
@@ -162,13 +166,11 @@ export default function Hero({ photo, cvHref }: Props) {
       >
         <Box
           as="h1"
-          data-hero-name
-          aria-label={profile.name}
           fontFamily={vars.font.display}
           fontSize={{
             default: 'clamp(72px, 26vw, 190px)',
             lg: 'clamp(96px, 15.5vw, 236px)',
-            print: '30pt',
+            print: '26pt',
           }}
           fontWeight={700}
           lineHeight={{ default: 0.8, print: 1 }}
@@ -176,15 +178,15 @@ export default function Hero({ photo, cvHref }: Props) {
           textTransform="uppercase"
           color={vars.color.accent}
         >
-          <NameLine>{profile.firstName}</NameLine>{' '}
-          <NameLine paddingLeft={{ default: '0.5em', lg: '0.85em', print: '0' }}>
+          <NameLine line={0}>{profile.firstName}</NameLine>{' '}
+          <NameLine line={1} paddingLeft={{ default: '0.5em', lg: '0.85em', print: '0' }}>
             {profile.lastName}
           </NameLine>
         </Box>
         <Text
-          data-hero-item
+          className={intro.item[0]}
           marginTop={{ default: 'clamp(20px, 3vw, 40px)', print: '1' }}
-          fontSize={{ default: 'clamp(18px, 2.2vw, 30px)', print: '12pt' }}
+          fontSize={{ default: 'clamp(18px, 2.2vw, 30px)', print: '11pt' }}
           fontWeight={300}
           letterSpacing={{ default: '0.16em', lg: '0.22em', print: '0.05em' }}
           textTransform="uppercase"
@@ -194,12 +196,12 @@ export default function Hero({ photo, cvHref }: Props) {
         </Text>
         <Box
           as="address"
-          data-hero-item
+          className={intro.item[1]}
           display="flex"
           flexWrap="wrap"
-          gap="1 5"
+          gap={{ default: '1 5', print: '0 3' }}
           marginTop={{ default: '4', print: '1' }}
-          fontSize={{ default: 15, print: '10pt' }}
+          fontSize={{ default: 15, print: 'inherit' }}
           color={vars.color.muted}
         >
           <span>{profile.location}</span>{' '}
@@ -214,10 +216,13 @@ export default function Hero({ photo, cvHref }: Props) {
           <ContactLink href={profile.linkedin} target="_blank" rel="me noopener noreferrer">
             LinkedIn
             <PrintOnly> ({profile.linkedin})</PrintOnly>
-          </ContactLink>
+          </ContactLink>{' '}
+          <Box as="span" display={{ default: 'none', print: 'inline' }}>
+            GitHub ({profile.github})
+          </Box>
         </Box>
         <Box
-          data-hero-item
+          className={intro.item[2]}
           display={{ default: 'flex', print: 'none' }}
           flexWrap="wrap"
           gap="3"
@@ -226,9 +231,9 @@ export default function Hero({ photo, cvHref }: Props) {
           <Button variant="primary" href="#experience">
             View experience
           </Button>{' '}
-          <Button href={`mailto:${profile.email}`}>Get in touch</Button>{' '}
+          <Button href="#contact">Get in touch</Button>{' '}
           {cvHref && (
-            <Button href={cvHref} target="_blank" rel="noopener" download>
+            <Button href={cvHref} target="_blank" rel="noopener" download icon="↓">
               Download CV
             </Button>
           )}
@@ -236,23 +241,27 @@ export default function Hero({ photo, cvHref }: Props) {
       </Box>
 
       <Box
-        data-stage
         position="relative"
         gridColumn={{ default: '1', lg: '6 / 13' }}
         gridRow={1}
         justifySelf={{ default: 'center', lg: 'end' }}
-        width={{ default: 'min(100%, 70svh)', lg: 'min(100%, 94svh)' }}
+        width={{ default: 'min(100%, 70svh)', md: 'min(100%, 56svh)', lg: 'min(100%, 94svh)' }}
         aspectRatio={1}
         display={{ print: 'none' }}
         style={{ '--k': 32.5 } as CSSProperties}
       >
         {STRIPS.map((strip, i) => (
-          <Strip style={stripStyle(strip)} aria-hidden={i === 0 ? undefined : true} key={strip.l}>
+          <Strip
+            index={i}
+            style={stripStyle(strip, i)}
+            aria-hidden={i === 0 ? undefined : true}
+            key={strip.l}
+          >
             <Box
               as="img"
               src={photo.src}
               srcSet={photo.srcSet}
-              sizes="(min-width: 992px) 58vw, 100vw"
+              sizes={HERO_SIZES}
               htmlWidth={photo.width}
               htmlHeight={photo.height}
               alt={i === 0 ? `Portrait of ${profile.name}` : ''}
@@ -266,7 +275,12 @@ export default function Hero({ photo, cvHref }: Props) {
             />
           </Strip>
         ))}
-        <Strip style={stripStyle(ACCENT_STRIP)} background={vars.color.accent} aria-hidden />
+        <Strip
+          index={STRIPS.length}
+          style={stripStyle(ACCENT_STRIP, STRIPS.length)}
+          background={vars.color.accent}
+          aria-hidden
+        />
         <Box
           aria-hidden
           position="absolute"
@@ -279,39 +293,50 @@ export default function Hero({ photo, cvHref }: Props) {
   );
 }
 
-function NameLine(props: BoxProps<'span'>) {
+function NameLine({ line, children, ...props }: BoxProps<'span'> & { line: 0 | 1 }) {
   return (
     <Box
       as="span"
-      data-hero-line
       display={{ default: 'block', print: 'inline' }}
       paddingTop={{ default: '0.06em', print: '0' }}
       overflow="hidden"
+      {...props}
+    >
+      <Box
+        as="span"
+        className={intro.nameInner[line]}
+        display={{ default: 'block', print: 'inline' }}
+      >
+        {children}
+      </Box>
+    </Box>
+  );
+}
+
+function ContactLink(props: BoxProps<'a'>) {
+  const describedBy =
+    props.target === '_blank' && !props['aria-describedby'] ? NEW_TAB_HINT_ID : undefined;
+  return (
+    <Box
+      as="a"
+      className={effects.hitArea}
+      color={{ hover: vars.color.white }}
+      aria-describedby={describedBy}
       {...props}
     />
   );
 }
 
-function ContactLink(props: BoxProps<'a'>) {
-  return <Box as="a" color={{ hover: vars.color.white }} {...props} />;
-}
-
-const STRIP_CLIP = `polygon(
-  calc((var(--l) + var(--k) * (50 - var(--t)) / 100) * 1%) calc(var(--t) * 1%),
-  calc((var(--l) + var(--w) + var(--k) * (50 - var(--t)) / 100) * 1%) calc(var(--t) * 1%),
-  calc((var(--l) + var(--w) + var(--k) * (50 - var(--b)) / 100) * 1%) calc(var(--b) * 1%),
-  calc((var(--l) + var(--k) * (50 - var(--b)) / 100) * 1%) calc(var(--b) * 1%)
-)`;
-
-function Strip(props: BoxProps<'div'>) {
+function Strip({ index, className, ...props }: BoxProps<'div'> & { index: number }) {
   return (
     <Box
       data-strip
       position="absolute"
       inset={0}
       overflow="hidden"
-      clipPath={STRIP_CLIP}
-      willChange="clip-path"
+      className={[intro.strip, index % 2 ? intro.stripDown : intro.stripUp, className]
+        .filter(Boolean)
+        .join(' ')}
       {...props}
     />
   );

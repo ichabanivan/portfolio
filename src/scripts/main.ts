@@ -1,7 +1,6 @@
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { SplitText } from 'gsap/SplitText';
+import { ScrollTrigger } from '../lib/gsap';
 import { initScroll } from './scroll';
+import { initMagnetic } from './magnetic';
 import { refreshTenures } from '../lib/tenure';
 import { media } from '../ui/media';
 
@@ -20,29 +19,33 @@ function initHeader(): void {
   onScroll();
   window.addEventListener('scroll', onScroll, { passive: true });
 
+  const isOpen = () => header.classList.contains('is-open');
   const setOpen = (open: boolean) => {
     header.classList.toggle('is-open', open);
     toggle?.setAttribute('aria-expanded', String(open));
     document.body.style.overflow = open ? 'hidden' : '';
+    document.querySelectorAll<HTMLElement>('main, footer').forEach((el) => {
+      el.inert = open;
+    });
   };
-  toggle?.addEventListener('click', () => setOpen(!header.classList.contains('is-open')));
+  toggle?.addEventListener('click', () => setOpen(!isOpen()));
   header
     .querySelectorAll('nav a')
     .forEach((a) => a.addEventListener('click', () => setOpen(false)));
   window.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') setOpen(false);
+    if (event.key !== 'Escape' || !isOpen()) return;
+    setOpen(false);
+    toggle?.focus();
   });
   window.matchMedia(media.lg).addEventListener('change', () => setOpen(false));
+
+  document.documentElement.classList.add('nav-ready');
 }
 
 initHeader();
 refreshTenures();
-
-if (document.documentElement.classList.contains('js')) {
-  gsap.registerPlugin(ScrollTrigger, SplitText);
-  window.__motionReady = true;
-
-  initScroll();
-
-  document.fonts?.ready.then(() => ScrollTrigger.refresh());
-}
+const animate = document.documentElement.classList.contains('js');
+window.__motionReady = true;
+initScroll({ animate });
+initMagnetic();
+document.fonts?.ready.then(() => ScrollTrigger.refresh());

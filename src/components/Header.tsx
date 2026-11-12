@@ -3,7 +3,7 @@ import { Box, Button, effects, vars } from '../ui';
 import LogoMark from './Logo';
 
 const LINKS = [
-  { href: '#about', label: 'About' },
+  { href: '#about', label: 'Summary' },
   { href: '#experience', label: 'Experience' },
   { href: '#skills', label: 'Skills' },
   { href: '#education', label: 'Education' },
@@ -36,7 +36,8 @@ export default function Header() {
           as="a"
           group
           href="#top"
-          aria-label={`${profile.name}, back to top`}
+          className={effects.hitArea}
+          aria-label={`${profile.name}, home`}
           display="inline-flex"
           alignItems="center"
           gap="3"
@@ -46,13 +47,7 @@ export default function Header() {
           lineHeight={1}
           color={vars.color.text}
         >
-          <LogoMark
-            width={36}
-            height={36}
-            flex="none"
-            transform={{ groupHover: 'rotate(-8deg)' }}
-            transition={`transform 0.5s ${vars.ease}`}
-          />
+          <LogoMark width={36} height={36} flex="none" />
           <Box as="span" paddingTop="1" display={{ default: 'none', sm: 'inline' }}>
             {profile.name}
           </Box>
@@ -117,7 +112,7 @@ export default function Header() {
                   as="a"
                   href={link.href}
                   data-nav-link
-                  className={effects.navLink}
+                  className={`${effects.navLink} ${effects.hitArea}`}
                   position="relative"
                   padding="2 0"
                   fontSize={{ default: 44, lg: 14 }}
@@ -144,6 +139,7 @@ export default function Header() {
             href={profile.cvDoc}
             target="_blank"
             rel="noopener"
+            icon="↗"
           >
             CV
           </Button>

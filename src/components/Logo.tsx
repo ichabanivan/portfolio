@@ -1,19 +1,13 @@
-import { Box, type BoxProps } from '../ui';
+import { Box, logoStyles as s, type BoxProps } from '../ui';
+
+const ARC = 'M48 24v-5a7 7 0 0 0-7-7h-6a7 7 0 0 0-7 7v26a7 7 0 0 0 7 7h6a7 7 0 0 0 7-7v-5';
 
 export default function LogoMark(props: BoxProps<'svg'>) {
   return (
     <Box as="svg" viewBox="0 0 64 64" aria-hidden focusable="false" {...props}>
-      <rect
-        x="0.5"
-        y="0.5"
-        width="63"
-        height="63"
-        rx="15.5"
-        fill="#131315"
-        stroke="rgba(255,255,255,0.14)"
-      />
-      <rect x="13" y="17" width="8" height="30" rx="1.5" fill="#f4f4f5" />
-      <path d="M48.4 22.1A13 13 0 1 0 48.4 41.9" fill="none" stroke="#cd0d2e" strokeWidth="8" />
+      <rect className={s.tile} x="0.5" y="0.5" width="63" height="63" rx="15.5" />
+      <rect className={s.stem} x="12" y="8" width="8" height="48" />
+      <path className={s.arc} d={ARC} pathLength={1} />
     </Box>
   );
 }

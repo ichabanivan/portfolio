@@ -3,7 +3,17 @@ import Section from './Section';
 import Period, { PERIOD_WIDTH } from './Period';
 import { education, certifications, volunteering, languages, type Certification } from '../data/cv';
 import type { DocumentImage, DocumentImages } from '../lib/documents';
-import { Box, Card, PrintOnly, ScreenOnly, Text, TextLink, vars, type StyleProps } from '../ui';
+import {
+  Box,
+  Card,
+  PrintOnly,
+  ScreenOnly,
+  Text,
+  NEW_TAB_HINT_ID,
+  effects,
+  vars,
+  type StyleProps,
+} from '../ui';
 
 type ThumbProps = StyleProps & {
   image: DocumentImage;
@@ -46,8 +56,9 @@ function DocumentThumb({ image, caption, verify, ...style }: ThumbProps) {
         decoding="async"
         width="100%"
         height="100%"
-        objectFit="cover"
-        objectPosition="top center"
+        padding="2"
+        objectFit="contain"
+        objectPosition="center"
         opacity={{ groupHover: 0.8 }}
         transition="opacity 0.4s"
       />
@@ -80,14 +91,14 @@ const certificateMeta = (certificate: Certification) =>
 
 const printInline = {
   display: { print: 'inline' },
-  fontSize: { print: '10.5pt' },
+  fontSize: { print: 'inherit' },
   fontWeight: { print: 400 },
 } satisfies StyleProps;
 
 export function Education({ documents }: { documents: DocumentImages }) {
   return (
     <Section id="education" index="04" title="Education">
-      <Box display="grid" gap="4">
+      <Box display="grid" gap={{ default: '4', print: '0' }}>
         {education.map((school, i) => (
           <Box
             as="article"
@@ -100,7 +111,7 @@ export function Education({ documents }: { documents: DocumentImages }) {
             }}
             alignItems="start"
             gap={{ default: '3', lg: 'clamp(24px, 4vw, 56px)' }}
-            padding={{ default: 'clamp(20px, 3vw, 36px) 0', print: '0 0 3' }}
+            padding={{ default: 'clamp(20px, 3vw, 36px) 0', print: '0 0 2' }}
             borderTop={{ default: `1px solid ${vars.color.line}`, print: 0 }}
             borderBottom={
               i === education.length - 1
@@ -113,22 +124,28 @@ export function Education({ documents }: { documents: DocumentImages }) {
             <div>
               <Text
                 as="h3"
-                fontSize="clamp(19px, 2vw, 24px)"
+                display={{ print: 'inline' }}
+                fontSize={{ default: 'clamp(19px, 2vw, 24px)', print: '10.5pt' }}
                 fontWeight={600}
                 lineHeight={1.3}
                 color={vars.color.white}
               >
                 {school.school}
               </Text>
-              <Text marginTop="2" color={vars.color.text}>
+              <Text
+                display={{ print: 'inline' }}
+                marginTop={{ default: '2', print: '0' }}
+                color={vars.color.text}
+              >
+                <PrintOnly> — </PrintOnly>
                 {school.degree}
               </Text>
               <Box
                 as="ul"
-                display="grid"
+                display={{ default: 'grid', print: 'none' }}
                 gap="1"
                 marginTop="3"
-                fontSize={15}
+                fontSize={{ default: 15, print: 'inherit' }}
                 color={vars.color.muted}
               >
                 {school.details.map((detail) => (
@@ -145,79 +162,111 @@ export function Education({ documents }: { documents: DocumentImages }) {
         ))}
       </Box>
 
-      <Text
-        as="h3"
-        variant="display"
-        data-reveal
-        margin={{
-          default: 'clamp(48px, 7vw, 88px) 0 clamp(20px, 3vw, 32px)',
-          print: '3 0 1',
-        }}
-        fontFamily={{ default: vars.font.display, print: 'inherit' }}
-        fontSize={{ default: 'clamp(30px, 3.6vw, 46px)', print: '11pt' }}
-        fontWeight={{ print: 600 }}
-        letterSpacing={{ default: '0.03em', print: 0 }}
-        textTransform={{ default: 'uppercase', print: 'none' }}
-      >
-        Certifications
-      </Text>
-      <Box
-        as="ul"
-        display={{ default: 'grid', print: 'block' }}
-        gridTemplateColumns="repeat(auto-fill, minmax(min(100%, 250px), 1fr))"
-        gap="4"
-      >
-        {certifications.map((certificate) => (
-          <Card
-            as="li"
-            data-reveal
-            key={certificate.title}
-            display={{ default: 'flex', print: 'block' }}
-            flexDirection="column"
-            gap="4"
-            padding={{ default: '4', print: '0' }}
-            marginBottom={{ print: '1' }}
-          >
-            {certificate.image && (
-              <DocumentThumb
-                image={documents[certificate.image]}
-                caption={`${certificate.title}. ${certificateMeta(certificate)}`}
-                verify={certificate.url}
-              />
-            )}
-            <Box
-              flex={1}
+      <Box as="section" id="certifications" aria-labelledby="certifications-title">
+        <Text
+          as="h2"
+          variant="display"
+          id="certifications-title"
+          data-reveal
+          margin={{
+            default: 'clamp(48px, 7vw, 88px) 0 clamp(20px, 3vw, 32px)',
+            print: '3 0 1',
+          }}
+          fontFamily={{ default: vars.font.display, print: 'inherit' }}
+          fontSize={{ default: 'clamp(30px, 3.6vw, 46px)', print: '10.5pt' }}
+          fontWeight={{ print: 600 }}
+          letterSpacing={{ default: '0.03em', print: 0 }}
+          textTransform={{ default: 'uppercase', print: 'none' }}
+        >
+          Certifications
+        </Text>
+        <Box
+          as="ul"
+          display={{ default: 'grid', print: 'block' }}
+          gridTemplateColumns="repeat(auto-fill, minmax(min(100%, 250px), 1fr))"
+          gap="4"
+        >
+          {certifications.map((certificate) => (
+            <Card
+              as="li"
+              data-reveal
+              key={certificate.title}
               display={{ default: 'flex', print: 'block' }}
               flexDirection="column"
-              alignItems="flex-start"
-              gap="1"
-              padding={{ default: '1', print: '0' }}
+              gap="4"
+              padding={{ default: '4', print: '0' }}
+              marginBottom={{ print: '1' }}
             >
-              <Text as="h4" variant="title" {...printInline}>
-                {certificate.title}
-                <PrintOnly>, </PrintOnly>
-              </Text>
-              <Text variant="meta" {...printInline}>
-                {certificateMeta(certificate)}
-              </Text>
-              {certificate.url && (
-                <TextLink
-                  href={certificate.url}
-                  target="_blank"
-                  rel="noopener"
-                  marginTop="auto"
-                  paddingTop="2"
-                  display={{ print: 'inline' }}
-                  fontSize={{ default: 14, print: '10.5pt' }}
-                  fontWeight={{ default: 600, print: 400 }}
-                >
-                  <ScreenOnly>Verify</ScreenOnly>
-                  <PrintOnly> ({certificate.url})</PrintOnly>
-                </TextLink>
+              {certificate.image && (
+                <DocumentThumb
+                  image={documents[certificate.image]}
+                  caption={`${certificate.title}. ${certificateMeta(certificate)}`}
+                  verify={certificate.url}
+                />
               )}
-            </Box>
-          </Card>
-        ))}
+              <Box
+                flex={1}
+                display={{ default: 'flex', print: 'block' }}
+                flexDirection="column"
+                alignItems="flex-start"
+                gap="1"
+                padding={{ default: '1', print: '0' }}
+              >
+                <Text as="h3" variant="title" {...printInline}>
+                  {certificate.title}
+                  <PrintOnly>, </PrintOnly>
+                </Text>
+                <Text variant="meta" {...printInline}>
+                  {certificate.issuer}
+                  {certificate.year && (
+                    <>
+                      , <time dateTime={String(certificate.year)}>{certificate.year}</time>
+                    </>
+                  )}
+                </Text>
+                {certificate.url && (
+                  <Box
+                    as="a"
+                    group
+                    href={certificate.url}
+                    target="_blank"
+                    rel="noopener"
+                    aria-describedby={NEW_TAB_HINT_ID}
+                    display={{ default: 'flex', print: 'inline' }}
+                    alignItems="center"
+                    justifyContent="space-between"
+                    gap="3"
+                    width={{ default: '100%', print: 'auto' }}
+                    minHeight={{ default: 44, print: 0 }}
+                    marginTop={{ default: 'auto', print: '0' }}
+                    paddingTop={{ default: '2', print: '0' }}
+                    borderTop={{ default: `1px solid ${vars.color.line}`, print: 0 }}
+                    fontSize={{ default: 14, print: 'inherit' }}
+                    fontWeight={{ default: 500, print: 400 }}
+                    color={{ default: vars.color.muted, hover: vars.color.white }}
+                    transition="color 0.3s"
+                  >
+                    <ScreenOnly>
+                      Verify credential
+                      <span className={effects.srOnly}>: {certificate.title}</span>
+                    </ScreenOnly>
+                    <Box
+                      as="span"
+                      aria-hidden
+                      display={{ print: 'none' }}
+                      color={vars.color.accentText}
+                      transform={{ default: 'none', groupHover: 'translate(2px, -2px)' }}
+                      transition={`transform 0.4s ${vars.ease}`}
+                    >
+                      ↗
+                    </Box>
+                    <PrintOnly> ({certificate.url})</PrintOnly>
+                  </Box>
+                )}
+              </Box>
+            </Card>
+          ))}
+        </Box>
       </Box>
     </Section>
   );
@@ -225,13 +274,14 @@ export function Education({ documents }: { documents: DocumentImages }) {
 
 function InfoCard({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <Card data-reveal marginBottom={{ print: '3' }}>
-      <Text as="h3" variant="eyebrow">
+    <Card data-reveal marginBottom={{ print: '1' }}>
+      <Text as="h2" variant="eyebrow" display={{ print: 'inline' }}>
         {title}
+        <PrintOnly>: </PrintOnly>
       </Text>
       <Box
         as="ul"
-        display="grid"
+        display={{ default: 'grid', print: 'inline' }}
         gap={{ default: '3', print: '1' }}
         marginTop={{ default: '4', print: '1' }}
         color={vars.color.text}
@@ -251,18 +301,22 @@ export function AdditionalInformation() {
         gap="4"
       >
         <InfoCard title="Languages">
-          {languages.map((language) => (
-            <li key={language.name}>
+          {languages.map((language, i) => (
+            <Box as="li" key={language.name} display={{ print: 'inline' }}>
               {language.name}{' '}
               <Box as="span" color={vars.color.muted}>
                 ({language.level})
               </Box>
-            </li>
+              {i < languages.length - 1 && <PrintOnly>, </PrintOnly>}
+            </Box>
           ))}
         </InfoCard>
         <InfoCard title="Volunteering">
           {volunteering.map((item) => (
-            <li key={item}>{item}</li>
+            <Box as="li" key={item.organization + item.start.iso} display={{ print: 'inline' }}>
+              {item.organization}: {item.role}, <time dateTime={item.start.iso}>{item.start.label}</time> to{' '}
+              <time dateTime={item.end.iso}>{item.end.label}</time>. {item.note}
+            </Box>
           ))}
         </InfoCard>
       </Box>

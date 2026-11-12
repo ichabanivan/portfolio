@@ -5,10 +5,11 @@ type Props = StyleProps & {
   id: string;
   index: string;
   title: string;
+  className?: string;
   children: ReactNode;
 };
 
-export default function Section({ id, index, title, children, ...style }: Props) {
+export default function Section({ id, index, title, className, children, ...style }: Props) {
   const titleId = `${id}-title`;
   return (
     <Box
@@ -16,6 +17,7 @@ export default function Section({ id, index, title, children, ...style }: Props)
       id={id}
       aria-labelledby={titleId}
       data-section
+      className={className}
       paddingBlock={vars.space.section}
       {...style}
     >
@@ -25,8 +27,8 @@ export default function Section({ id, index, title, children, ...style }: Props)
           display="flex"
           alignItems="baseline"
           gap="4"
-          marginBottom={{ default: 'clamp(36px, 6vw, 72px)', print: '2' }}
-          borderBottom={{ print: '1px solid #000' }}
+          marginBottom={{ default: 'clamp(36px, 6vw, 72px)', print: '1' }}
+          borderBottom={{ print: `1px solid ${vars.color.text}` }}
         >
           <Box
             as="span"
@@ -44,7 +46,7 @@ export default function Section({ id, index, title, children, ...style }: Props)
             variant="display"
             id={titleId}
             data-split
-            fontSize={{ default: 'clamp(46px, 7.4vw, 104px)', print: '15pt' }}
+            fontSize={{ default: 'clamp(46px, 7.4vw, 104px)', print: '13pt' }}
             fontWeight={700}
             lineHeight={{ default: 0.95, print: 1.3 }}
           >

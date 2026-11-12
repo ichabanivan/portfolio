@@ -1,6 +1,6 @@
 import { globalStyle } from '@vanilla-extract/css';
 import { vars } from './theme.css';
-import { media, reducedMotion } from './media';
+import { media, motionOk, reducedMotion } from './media';
 
 const print = media.print;
 
@@ -38,40 +38,54 @@ globalStyle(':focus-visible', {
 
 globalStyle('::selection', { background: vars.color.accent, color: vars.color.white });
 
-globalStyle('.js [data-reveal], .js [data-hero-item]', { opacity: 0 });
-globalStyle('.js [data-stage], .js [data-hero-name], .js [data-split]', { visibility: 'hidden' });
+globalStyle('main:focus', { outline: 'none' });
 
-globalStyle('*', {
-  '@media': { [reducedMotion]: { transitionDuration: '0.01ms !important' } },
+globalStyle('html:has(dialog[open])', { overflow: 'hidden' });
+
+globalStyle('.js [data-reveal]', {
+  '@media': { [motionOk]: { opacity: 0 } },
+});
+globalStyle('.js [data-split], .js [data-skill-row]', {
+  '@media': { [motionOk]: { opacity: 0 } },
+});
+
+globalStyle('*, *::before, *::after', {
+  '@media': {
+    [reducedMotion]: {
+      transitionDuration: '0.01ms !important',
+      animationDuration: '0.01ms !important',
+      animationIterationCount: '1 !important',
+    },
+  },
 });
 
 globalStyle('html, body', {
   '@media': {
-    [print]: { background: vars.color.white, color: '#000', fontSize: '10.5pt', lineHeight: 1.4 },
+    [print]: { background: vars.color.white, color: vars.color.text, fontSize: '9pt', lineHeight: 1.3 },
   },
 });
 
-globalStyle(
-  '[data-reveal], [data-hero-item], [data-hero-name], [data-hero-name] *, [data-split], [data-split] *',
-  {
-    '@media': {
-      [print]: {
-        opacity: '1 !important',
-        visibility: 'visible !important' as 'visible',
-        transform: 'none !important',
-      },
+globalStyle('[data-reveal], [data-split], [data-split] *, [data-skill-row], [data-skill-row] *', {
+  '@media': {
+    [print]: {
+      opacity: '1 !important',
+      visibility: 'visible !important' as 'visible',
+      transform: 'none !important',
     },
   },
-);
+});
 
 globalStyle('*', {
   '@media': {
     [print]: {
-      color: '#000 !important',
+      color: `${vars.color.text} !important`,
+      animation: 'none !important',
       boxShadow: 'none !important',
       textShadow: 'none !important',
     },
   },
 });
 
-globalStyle('h2, h3', { '@media': { [print]: { breakAfter: 'avoid' } } });
+globalStyle('h2, h3, h4', { '@media': { [print]: { breakAfter: 'avoid' } } });
+
+globalStyle('p, li', { '@media': { [print]: { orphans: 3, widows: 3 } } });

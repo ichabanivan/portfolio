@@ -1,41 +1,56 @@
 import { Box, type BoxProps } from './Box';
 import { vars } from './theme.css';
+import * as effects from './effects.css';
+import { NEW_TAB_HINT_ID } from './hints';
 
 type Props = BoxProps<'a'> & {
   variant?: 'primary' | 'secondary';
   size?: 'medium' | 'small';
+  icon?: '↓' | '↗';
 };
 
-export function Button({ variant = 'secondary', size = 'medium', ...props }: Props) {
+export function Button({
+  variant = 'secondary',
+  size = 'medium',
+  icon,
+  className,
+  children,
+  ...props
+}: Props) {
   const primary = variant === 'primary';
   const small = size === 'small';
+
+  const classes = [effects.button, primary && effects.buttonPrimary, className]
+    .filter(Boolean)
+    .join(' ');
+
   return (
     <Box
       as="a"
+      data-magnetic
       display={{ default: 'inline-flex', print: 'none' }}
       alignItems="center"
       justifyContent="center"
-      gap="3"
-      minHeight={small ? 40 : 48}
+      minHeight={small ? 44 : 48}
       padding={small ? '0 5' : '0 6'}
       border="1px solid"
-      borderColor={
-        primary
-          ? { default: vars.color.accent, hover: vars.color.accentHover }
-          : { default: vars.color.line, hover: vars.color.lineHover }
-      }
+      borderColor={primary ? vars.color.accent : vars.color.line}
       borderRadius={999}
-      background={
-        primary ? { default: vars.color.accent, hover: vars.color.accentHover } : undefined
-      }
+      background={primary ? vars.color.accent : undefined}
       color={primary ? vars.color.white : undefined}
       fontSize={small ? 14 : 15}
       fontWeight={600}
       letterSpacing="0.01em"
       whiteSpace="nowrap"
-      transform={{ hover: 'translateY(-2px)' }}
-      transition={`background-color 0.3s, border-color 0.3s, color 0.3s, transform 0.3s ${vars.ease}`}
+      className={classes}
+      aria-describedby={props.target === '_blank' ? NEW_TAB_HINT_ID : undefined}
       {...props}
-    />
+    >
+      <span aria-hidden className={effects.buttonDeco} />
+      <Box as="span" data-magnetic-label display="inline-flex" alignItems="center" gap="3">
+        {children}
+        {icon && <span aria-hidden className={effects.buttonIcon} data-text={icon} />}
+      </Box>
+    </Box>
   );
 }
