@@ -1,0 +1,22 @@
+.skills
+  .skills__center
+    h2.skills__h2 Skills
+    .skills__list
+      each index, val in {'HTML': 6, 'CSS': 5 , 'JS': 5, 'Angular': 2, 'React': 2, 'SCSS': 5, 'SASS': 5, 'PostCSS': 5, 'jQuery': 4, "Photoshop": 4, "ES6": 5, 'GSAP': 2}
+        .skills__item
+          h3.skills__h3 #{val}
+          - var n = 0;
+          ul.skills__count
+            while n < 6
+              if n < index
+                li.skills__round.skills__round--red
+              else
+                li.skills__round.skills__round--white
+              -n++
+    p.skills__text <span class="skills__red">Professional skills:</span> knowledge of the principles of usability of sites, experience in visualization and design of user interfaces, experienced user of PC, Html5 & Css3, JavaScript, jQuery, ability to work in a short time.
+    p.skills__text <span class="skills__red">Knowledge of the programs:</span> working with graphic editors (Adobe: Photoshop), html-editors (Sublime Text, Atom), IDE (PHPStorm).
+    .button
+      button.button__submit
+        svg.right-straight-arrow
+          use(xlink:href='./img/symbols.svg#right-straight-arrow')
+        span View cv
