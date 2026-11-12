@@ -51,6 +51,9 @@ export default function Contact({ cvHref }: Props) {
         <Button href={profile.github} target="_blank" rel="me noopener noreferrer">
           GitHub
         </Button>{' '}
+        <Button href={profile.telegram} target="_blank" rel="me noopener noreferrer">
+          Telegram
+        </Button>{' '}
         {cvHref && (
           <Button
             variant="primary"

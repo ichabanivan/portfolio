@@ -52,7 +52,7 @@ export function buildJsonLd({ canonical, image, description, dateModified }: Jso
       name: profile.title,
       skills: profile.stack.join(', '),
     },
-    sameAs: [profile.linkedin, profile.github],
+    sameAs: [profile.linkedin, profile.github, profile.telegram],
     knowsAbout: skills.slice(0, 3).flatMap((s) => s.items),
     knowsLanguage: languages.map((l) => ({ '@type': 'Language', name: l.name })),
     alumniOf: schools.map((name) => ({ '@type': 'CollegeOrUniversity', name })),

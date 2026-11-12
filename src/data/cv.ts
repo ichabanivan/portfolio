@@ -41,6 +41,7 @@ export const profile = {
   cvDoc:
     'https://docs.google.com/document/d/1MK_L2FU4hosFpplFxnm-wJyn8X-SpZWBd6DNlu_4K70/edit?tab=t.0',
   github: 'https://github.com/ichabanivan',
+  telegram: 'https://t.me/ichabanivan',
   stack: ['React', 'TypeScript', 'Node.js', 'NestJS', 'Next.js'],
   address: { locality: 'Poznań', countryCode: 'PL' },
   contactNote: 'The fastest way to reach me is email.',

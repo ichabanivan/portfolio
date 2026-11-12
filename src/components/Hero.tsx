@@ -217,6 +217,10 @@ export default function Hero({ photo, cvHref }: Props) {
             LinkedIn
             <PrintOnly> ({profile.linkedin})</PrintOnly>
           </ContactLink>{' '}
+          <ContactLink href={profile.telegram} target="_blank" rel="me noopener noreferrer">
+            Telegram
+            <PrintOnly> ({profile.telegram})</PrintOnly>
+          </ContactLink>{' '}
           <Box as="span" display={{ default: 'none', print: 'inline' }}>
             GitHub ({profile.github})
           </Box>
