@@ -1,8 +1,14 @@
-# Ivan Chaban: portfolio and CV
+# Ivan Chaban: CV site
 
-Single-page portfolio built with [Astro](https://astro.build) (static HTML at build time),
-[React](https://react.dev) components and [GSAP](https://gsap.com) for animation. Deployed to
-GitHub Pages.
+**Live:** https://ichabanivan.github.io/
+
+Single-page CV built with [Astro](https://astro.build) (static HTML at build time),
+[React](https://react.dev) components, [vanilla-extract](https://vanilla-extract.style) styling and
+[GSAP](https://gsap.com) animation. Deployed to GitHub Pages with GitHub Actions.
+
+## Requirements
+
+- Node.js 26 (LTS)
 
 ## Commands
 
@@ -15,42 +21,52 @@ npm run preview  # serve the built site
 
 ## Editing content
 
-All text lives in `src/data/cv.ts` (profile, skills, experience, education, extras).
+All text lives in `src/data/cv.ts` (profile, skills, experience, education, certifications,
+languages, volunteering).
 
-- **Download CV button**: put the file at `public/Ivan-Chaban-CV.pdf` and rebuild. The buttons
-  appear automatically when the file exists.
-- **Phone number**: hidden by default. Set `profile.phone` in `src/data/cv.ts` to show it.
-- **Header CV link**: `profile.cvDoc` in `src/data/cv.ts`.
-- **Certificates and diplomas**: entries in `src/data/cv.ts` (`certifications`, and `diploma` on
-  each `education` item); the scans are mapped in `src/lib/documents.ts` and resized at build.
-- **Company logos**: SVGs in `src/assets/logos/`, mapped in `src/lib/documents.ts`. They are
-  recoloured for the dark page (light lettering) and shown without a background. A role without
+- **Download CV buttons**: link to the PDF export of the Google Doc in `profile.cvDoc`. To ship a
+  fixed copy instead, put the file at `public/Ivan-Chaban-CV.pdf`; it takes priority.
+- **Header CV link**: opens the Google Doc in `profile.cvDoc`.
+- **Years in the industry**: calculated from the start date of the earliest role in `experience`
+  and refreshed in the browser, so it never needs a manual update.
+- **Phone number**: hidden by default. Set `profile.phone` to show it.
+- **Certificates and diplomas**: entries in `certifications` and the `diploma` key on each
+  `education` item. Scans are mapped in `src/lib/documents.ts`, resized at build time and shown
+  uncropped in the thumbnails and the lightbox. Certificates with a `url` get a
+  "Verify credential" link.
+- **Company logos**: SVGs in `src/assets/logos/`, mapped in `src/lib/documents.ts`. A role without
   a `logo` shows only the company name.
-- **Photo**: `src/assets/portrait.jpg`. Framing is controlled by the `objectPosition` prop on the strip
-  `<img>` in `src/components/Hero.tsx`.
+- **Photo**: `src/assets/portrait.jpg`. Framing is set by `objectPosition` on the strip `<img>` in
+  `src/components/Hero.tsx`.
 
 ## Structure
 
-- `src/pages/index.astro`: page composition, title and description
-- `src/layouts/Base.astro`: `<head>`, SEO meta, Open Graph, JSON-LD
-- `src/components/`: React components, one per section. They are rendered to static HTML at
-  build time. Two are hydrated in the browser after the first paint (`client:afterpaint`, a
-  custom directive in `src/lib/after-paint-directive.ts`): `Hero.tsx`, which adds the pointer and
-  scroll movement of the skewed photo strips with `useGSAP` from `@gsap/react` (the hero intro
-  itself is CSS keyframes in `src/ui/intro.css.ts`, so it plays without JavaScript), and
-  `Lightbox.tsx`, the modal for certificate and diploma scans.
-- `src/scripts/main.ts`, `src/scripts/scroll.ts`: mobile menu, scroll reveals, progress bar,
-  counters, active navigation (plain scripts that work on the static HTML)
-- `src/ui/`: vanilla-extract styling and shared primitives (`theme.css.ts`, `global.css.ts`,
-  `Box`, `Text`, `Button`, ...). Print rules live in `global.css.ts` and the `print` media
-  condition, so printing the page gives a plain single-column CV
+- `src/pages/index.astro`: page composition, title, description and CV link.
+- `src/layouts/Base.astro`: `<head>`, SEO meta, Open Graph, JSON-LD (`src/lib/jsonld.ts`).
+- `src/components/`: one React component per section, rendered to static HTML at build time.
+  Two are hydrated after the first paint with the custom `client:afterpaint` directive
+  (`src/lib/after-paint-directive.ts`):
+  - `Hero.tsx`: pointer and scroll movement of the photo strips (`useGSAP`). The hero intro
+    itself is CSS keyframes in `src/ui/intro.css.ts`, so it plays without JavaScript.
+  - `Lightbox.tsx`: modal `<dialog>` for certificate and diploma scans.
+- `src/scripts/`: plain scripts that run on the static HTML, loaded after the first paint.
+  - `main.ts`: mobile menu, tenure and years counters, entry point.
+  - `scroll.ts`, `reveal.ts`: scroll reveals (ScrollTrigger and SplitText), progress bar, active
+    navigation, light-section transitions, marquee and timeline.
+  - `magnetic.ts`: magnetic hover and press effect for every `Button` (`[data-magnetic]`), only on
+    fine pointers with motion allowed.
+- `src/ui/`: vanilla-extract theme and styles (`theme.css.ts`, `global.css.ts`, `effects.css.ts`,
+  …) and shared primitives (`Box`, `Text`, `Button`, `Card`, …). Print rules use the `print`
+  media condition, so printing the page gives a plain single-column CV.
+- `scripts/generate-icons.mjs`: regenerates the favicon and app icons in `public/`.
 
 The page is fully readable without JavaScript and respects `prefers-reduced-motion`.
 
 ## Deploy
 
-`.github/workflows/deploy.yml` builds and publishes on every push to `master`.
-In the repository settings, set **Pages → Source** to **GitHub Actions**.
+`.github/workflows/deploy.yml` builds on Node 26 and publishes to GitHub Pages on every push to
+`master`. **Settings → Pages → Source** must be **GitHub Actions**.
 
-If the repository is renamed or a custom domain is used, update `site` and `base` in
+The site is served from the root because the repository is named `ichabanivan.github.io`. If it
+is renamed or moved to a custom domain, update `site` (and `base` for a sub-path) in
 `astro.config.mjs` and the sitemap URL in `public/robots.txt`.
