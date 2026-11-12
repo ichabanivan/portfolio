@@ -1,6 +1,4 @@
 ---
-import { existsSync } from 'node:fs';
-import { join } from 'node:path';
 import { getImage } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header';
@@ -16,11 +14,7 @@ import { getDocumentImages, logos } from '../lib/documents';
 import portrait from '../assets/portrait.jpg';
 import { profile, experience } from '../data/cv';
 
-const CV_FILE = 'Ivan-Chaban-CV.pdf';
-const cvExport = profile.cvDoc.replace(/\/edit.*$/, '/export?format=pdf');
-const cvHref = existsSync(join(process.cwd(), 'public', CV_FILE))
-  ? `${import.meta.env.BASE_URL}${CV_FILE}`
-  : cvExport;
+const cvHref = profile.cvPdf;
 
 const image = await getImage({ src: portrait, widths: [480, 640, 800, 960, 1200], format: 'webp', quality: 78 });
 const photo = {
@@ -39,7 +33,7 @@ const description = `${profile.name} is a ${current.title} at ${current.company}
 ---
 
 <Base title={title} description={description}>
-  <Header />
+  <Header cvHref={cvHref} />
   <main id="main" tabindex="-1">
     <Hero client:afterpaint photo={photo} cvHref={cvHref} />
     <About />

@@ -18,6 +18,7 @@ npm run preview  # serve the built site
 ## Content
 
 All text lives in `src/data/cv.ts`.
+The Download CV buttons download the PDF export of the CV Google Doc (`profile.cvPdf`), so edits to the doc show up automatically.
 
 ## Deploy
 

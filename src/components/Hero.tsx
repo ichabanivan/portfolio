@@ -27,7 +27,7 @@ export interface HeroPhoto {
 
 interface Props {
   photo: HeroPhoto;
-  cvHref: string | null;
+  cvHref: string;
 }
 
 const STRIPS = [
@@ -236,11 +236,9 @@ export default function Hero({ photo, cvHref }: Props) {
             View experience
           </Button>{' '}
           <Button href="#contact">Get in touch</Button>{' '}
-          {cvHref && (
-            <Button href={cvHref} target="_blank" rel="noopener" download icon="↓">
-              Download CV
-            </Button>
-          )}
+          <Button href={cvHref} download icon="↓">
+            Download CV
+          </Button>
         </Box>
       </Box>
 

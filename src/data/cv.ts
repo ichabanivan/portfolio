@@ -38,9 +38,10 @@ export const profile = {
   email: 'ichabanivan@gmail.com',
   phone: null as string | null,
   linkedin: 'https://www.linkedin.com/in/ivanchaban/',
-  cvDoc:
-    'https://docs.google.com/document/d/1MK_L2FU4hosFpplFxnm-wJyn8X-SpZWBd6DNlu_4K70/edit?tab=t.0',
   github: 'https://github.com/ichabanivan',
+  // PDF export of the CV Google Doc: always the current version, downloads directly
+  cvPdf:
+    'https://docs.google.com/document/d/1MK_L2FU4hosFpplFxnm-wJyn8X-SpZWBd6DNlu_4K70/export?format=pdf',
   telegram: 'https://t.me/ichabanivan',
   stack: ['React', 'TypeScript', 'Node.js', 'NestJS', 'Next.js'],
   address: { locality: 'Poznań', countryCode: 'PL' },

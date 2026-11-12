@@ -12,7 +12,7 @@ const LINKS = [
 
 const navGap = 'clamp(16px, 2.4vw, 36px)';
 
-export default function Header() {
+export default function Header({ cvHref }: { cvHref: string }) {
   return (
     <Box
       as="header"
@@ -136,10 +136,9 @@ export default function Header() {
           <Button
             variant="primary"
             size="small"
-            href={profile.cvDoc}
-            target="_blank"
-            rel="noopener"
-            icon="↗"
+            href={cvHref}
+            download
+            icon="↓"
           >
             CV
           </Button>

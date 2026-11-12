@@ -3,7 +3,7 @@ import { profile } from '../data/cv';
 import { Box, Button, Text, underline, vars } from '../ui';
 
 interface Props {
-  cvHref: string | null;
+  cvHref: string;
 }
 
 export default function Contact({ cvHref }: Props) {
@@ -54,18 +54,9 @@ export default function Contact({ cvHref }: Props) {
         <Button href={profile.telegram} target="_blank" rel="me noopener noreferrer">
           Telegram
         </Button>{' '}
-        {cvHref && (
-          <Button
-            variant="primary"
-            href={cvHref}
-            target="_blank"
-            rel="noopener"
-            download
-            icon="↓"
-          >
-            Download CV
-          </Button>
-        )}
+        <Button variant="primary" href={cvHref} download icon="↓">
+          Download CV
+        </Button>
       </Box>
     </Section>
   );
