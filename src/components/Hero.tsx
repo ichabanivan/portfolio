@@ -27,7 +27,6 @@ export interface HeroPhoto {
 
 interface Props {
   photo: HeroPhoto;
-  cvHref: string;
 }
 
 const STRIPS = [
@@ -76,7 +75,7 @@ const stripStyle = (s: typeof ACCENT_STRIP, i: number) => {
   } as CSSProperties;
 };
 
-export default function Hero({ photo, cvHref }: Props) {
+export default function Hero({ photo }: Props) {
   const root = useRef<HTMLElement>(null);
 
   useGSAP(
@@ -235,10 +234,7 @@ export default function Hero({ photo, cvHref }: Props) {
           <Button variant="primary" href="#experience">
             View experience
           </Button>{' '}
-          <Button href="#contact">Get in touch</Button>{' '}
-          <Button href={cvHref} download icon="↓">
-            Download CV
-          </Button>
+          <Button href="#contact">Get in touch</Button>
         </Box>
       </Box>
 

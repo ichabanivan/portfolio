@@ -140,7 +140,7 @@ export default function Header({ cvHref }: { cvHref: string }) {
             download
             icon="↓"
           >
-            CV
+            Download CV
           </Button>
         </Box>
       </Box>

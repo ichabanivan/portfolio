@@ -35,7 +35,7 @@ const description = `${profile.name} is a ${current.title} at ${current.company}
 <Base title={title} description={description}>
   <Header cvHref={cvHref} />
   <main id="main" tabindex="-1">
-    <Hero client:afterpaint photo={photo} cvHref={cvHref} />
+    <Hero client:afterpaint photo={photo} />
     <About />
     <Marquee />
     <Experience logos={logos} />
