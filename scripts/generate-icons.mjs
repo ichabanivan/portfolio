@@ -7,7 +7,7 @@ const INK = '#f4f4f5';
 const RED = '#cd0d2e';
 const out = (name) => new URL(`../public/${name}`, import.meta.url);
 
-const glyph = `<rect x="12" y="8" width="8" height="48" fill="${INK}"/><path d="M48 24v-5a7 7 0 0 0-7-7h-6a7 7 0 0 0-7 7v26a7 7 0 0 0 7 7h6a7 7 0 0 0 7-7v-5" fill="none" stroke="${RED}" stroke-width="8"/>`;
+const glyph = `<rect x="12" y="8" width="8" height="48" fill="${INK}"/><path d="M48 23v-4a8 8 0 0 0-8-8h-4a8 8 0 0 0-8 8v26a8 8 0 0 0 8 8h4a8 8 0 0 0 8-8v-4" fill="none" stroke="${RED}" stroke-width="8"/>`;
 const pixelGlyph = `<path fill="${INK}" d="M3 2h2v12H3z"/><path fill="${RED}" d="M7 2h5v1h1v3h-2V4H8v8h3v-2h2v3h-1v1H7v-1H6V3h1z"/>`;
 
 const svg = (size, viewBox, body) =>

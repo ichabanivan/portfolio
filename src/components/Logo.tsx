@@ -1,6 +1,6 @@
 import { Box, logoStyles as s, type BoxProps } from '../ui';
 
-const ARC = 'M48 24v-5a7 7 0 0 0-7-7h-6a7 7 0 0 0-7 7v26a7 7 0 0 0 7 7h6a7 7 0 0 0 7-7v-5';
+const ARC = 'M48 23v-4a8 8 0 0 0-8-8h-4a8 8 0 0 0-8 8v26a8 8 0 0 0 8 8h4a8 8 0 0 0 8-8v-4';
 
 export default function LogoMark(props: BoxProps<'svg'>) {
   return (
